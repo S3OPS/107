@@ -3,61 +3,36 @@ let currentIdx = 0;
 let demonicPower = 0;
 let combo = 0;
 
+// Initialize when page loads
 async function initGame() {
     try {
-        // Fetching the 60 questions from your data folder
         const response = await fetch('../data/questions.json');
         const data = await response.json();
-        
-        // ANAL-RETENTIVE CHECK: Ensure data is loaded
-        if (!data.questions || data.questions.length === 0) {
-            throw new Error("No questions found in JSON file.");
-        }
-
         quizData = data.questions;
-        console.log("Game Initialized. Questions Loaded: " + quizData.length);
         
-        renderQuestion();
+        // Setup Begin Button
+        document.getElementById('begin-btn').onclick = () => {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-wrapper').classList.remove('hidden');
+            renderQuestion();
+        };
     } catch (err) {
         console.error("Critical Failure:", err);
-        document.getElementById('question-text').innerText = "Failed to summon questions. Check JSON syntax.";
     }
 }
 
-function updateRank(power) {
-    const rankDisplay = document.getElementById('rank-display');
-    let rank = "Lower-Class Devil";
-    let cssClass = "rank-low";
-
-    if (power >= 5000) { 
-        rank = "Ultimate-Class Devil"; 
-        cssClass = "rank-ultimate";
-    } else if (power >= 2500) { 
-        rank = "High-Class Devil"; 
-        cssClass = "rank-high";
-    } else if (power >= 1000) { 
-        rank = "Middle-Class Devil"; 
-        cssClass = "rank-middle";
-    }
-
-    rankDisplay.innerText = `Rank: ${rank}`;
-    rankDisplay.className = cssClass;
-}
-
-function updateMentorImage(imageFileName) {
-    const imgElement = document.getElementById('mentor-img');
-    // Default to Rias if image is missing
-    const path = `../assets/images/${imageFileName || 'rias_neutral.png'}`;
-    imgElement.src = path;
+function updateProgress() {
+    const percent = ((currentIdx) / quizData.length) * 100;
+    document.getElementById('progress-bar').style.width = percent + "%";
 }
 
 function renderQuestion() {
-    // ANAL-RETENTIVE CHECK: End game if out of questions
     if (currentIdx >= quizData.length) {
         showFinalResults();
         return;
     }
 
+    updateProgress();
     const q = quizData[currentIdx];
     document.getElementById('question-text').innerText = `[${currentIdx + 1}/${quizData.length}] ${q.question}`;
     
@@ -66,15 +41,13 @@ function renderQuestion() {
     container.classList.remove('hidden');
     document.getElementById('feedback-area').classList.add('hidden');
 
-    updateMentorImage(q.mentor);
+    // Update Mentor Image
+    document.getElementById('mentor-img').src = `../assets/images/${q.mentor || 'rias_neutral.png'}`;
 
-    // Boosted Gear Logic
+    // Boost Glow
     const wrapper = document.getElementById('game-wrapper');
-    if (combo >= 3) {
-        wrapper.classList.add('boost-active');
-    } else {
-        wrapper.classList.remove('boost-active');
-    }
+    if (combo >= 3) { wrapper.classList.add('boost-active'); } 
+    else { wrapper.classList.remove('boost-active'); }
 
     q.options.forEach((opt, i) => {
         const btn = document.createElement('button');
@@ -93,10 +66,10 @@ function handleAnswer(choice) {
         combo++;
         let points = (combo >= 3) ? 200 : 100;
         demonicPower += points;
-        explanation.innerHTML = `<span style="color:var(--dxd-gold); font-weight:bold;">BOOSTED! CRITICAL HIT!</span><br><br>${q.explanation}`;
+        explanation.innerHTML = `<span style="color:var(--dxd-gold); font-weight:bold;">CRITICAL HIT!</span><br><br>${q.explanation}`;
     } else {
         combo = 0;
-        explanation.innerHTML = `<span style="color:red; font-weight:bold;">RETIRED! DAMAGE TAKEN!</span><br><br>${q.explanation}`;
+        explanation.innerHTML = `<span style="color:red; font-weight:bold;">DAMAGE TAKEN!</span><br><br>${q.explanation}`;
     }
 
     document.getElementById('score-display').innerText = `Demonic Power: ${demonicPower}`;
@@ -106,15 +79,27 @@ function handleAnswer(choice) {
     document.getElementById('options-container').classList.add('hidden');
 }
 
+function updateRank(power) {
+    const rankDisplay = document.getElementById('rank-display');
+    let rank = "Lower-Class Devil";
+    let cssClass = "rank-low";
+
+    if (power >= 8000) { rank = "Ultimate-Class Devil"; cssClass = "rank-ultimate"; }
+    else if (power >= 4000) { rank = "High-Class Devil"; cssClass = "rank-high"; }
+    else if (power >= 1500) { rank = "Middle-Class Devil"; cssClass = "rank-middle"; }
+
+    rankDisplay.innerText = `Rank: ${rank}`;
+    rankDisplay.className = cssClass;
+}
+
 function showFinalResults() {
     const finalRank = document.getElementById('rank-display').innerText;
-    const container = document.getElementById('ui-container');
-    container.innerHTML = `
+    document.getElementById('ui-container').innerHTML = `
         <div style="text-align:center; padding: 20px;">
             <h2 style="color:var(--dxd-gold)">RATING GAME SETTLED</h2>
-            <p style="font-size: 1.5rem;">Total Power: ${demonicPower}</p>
+            <p style="font-size: 1.5rem;">Final Demonic Power: ${demonicPower}</p>
             <h3 class="rank-ultimate">${finalRank}</h3>
-            <button onclick="location.reload()">Re-Enter the Academy</button>
+            <button onclick="location.reload()">RE-TRAIN AT THE ACADEMY</button>
         </div>
     `;
 }
