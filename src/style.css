@@ -33,3 +33,26 @@
     <script src="game.js"></script>
 </body>
 </html>
+/* ... [All your previous CSS code is up here] ... */
+
+.hidden { display: none; }
+
+/* --- NEW ENHANCEMENTS BELOW --- */
+
+/* Animation for Issei's Boost */
+@keyframes boost-glow {
+    0% { box-shadow: 0 0 5px #ff0000; }
+    50% { box-shadow: 0 0 30px #ff0000; border-color: var(--dxd-gold); }
+    100% { box-shadow: 0 0 5px #ff0000; }
+}
+
+.boost-active {
+    animation: boost-glow 1s infinite;
+    border: 2px solid var(--dxd-gold) !important;
+}
+
+/* Rank Colors */
+.rank-low { color: #aaaaaa; }
+.rank-middle { color: #00ff00; }
+.rank-high { color: #00ffff; }
+.rank-ultimate { color: var(--dxd-gold); text-shadow: 0 0 10px red; }
