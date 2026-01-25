@@ -1,9 +1,20 @@
 {
   "questions": [
     {
-      "question": "What class of airspace is generally from the surface to 2,500 feet above the airport elevation?",
-      "options": ["Class B", "Class D", "Class G"],
-      "answer": 1
+      "id": 1,
+      "category": "Regulations",
+      "question": "According to 14 CFR Part 107, who is responsible for the overall safety of a small UAS operation?",
+      "options": ["The Visual Observer", "The Remote Pilot in Command", "The FAA Inspector"],
+      "answer": 1,
+      "explanation": "The Remote Pilot in Command (Remote PIC) is directly responsible for the operation."
+    },
+    {
+      "id": 2,
+      "category": "Airspace",
+      "question": "What is the maximum altitude a remote pilot can fly above ground level (AGL)?",
+      "options": ["200 feet", "400 feet", "500 feet"],
+      "answer": 1,
+      "explanation": "Under Part 107, the altitude limit is 400 feet AGL unless staying within 400 feet of a structure."
     }
   ]
 }
