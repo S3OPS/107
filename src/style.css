@@ -54,6 +54,49 @@ button:hover {
 
 .hidden { display: none; }
 
+/* Progress Bar Style */
+#progress-container {
+    width: 100%;
+    height: 10px;
+    background: #333;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--dxd-red);
+    box-shadow: 0 0 10px var(--dxd-red);
+    transition: width 0.3s ease;
+}
+
+/* Start Screen Layout */
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--dxd-black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    text-align: center;
+}
+
+#start-content {
+    border: 2px solid var(--dxd-red);
+    padding: 40px;
+    background: rgba(0,0,0,0.8);
+    box-shadow: 0 0 50px var(--dxd-red);
+}
+
+.hidden { display: none !important; }
+
+
 /* Animation for Issei's Boost */
 @keyframes boost-glow {
     0% { box-shadow: 0 0 5px #ff0000; }
