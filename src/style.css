@@ -1,1 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DxD Academy: Part 107 Rating Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-wrapper">
+        <div id="character-portrait">
+            <!-- This is where your High School DxD character will appear -->
+            <img id="mentor-img" src="../assets/images/rias_neutral.png" alt="Mentor">
+        </div>
 
+        <div id="ui-container">
+            <div id="status-bar">
+                <span id="rank-display">Rank: Lower-Class Devil</span>
+                <span id="score-display">Demonic Power: 0</span>
+            </div>
+
+            <div id="quiz-box">
+                <h2 id="question-text">Initializing Rating Game...</h2>
+                <div id="options-container"></div>
+            </div>
+            
+            <div id="feedback-area" class="hidden">
+                <p id="explanation"></p>
+                <button id="next-btn">Continue Battle</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
