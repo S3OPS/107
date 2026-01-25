@@ -2,15 +2,14 @@ let quizData = [];
 let currentIdx = 0;
 let demonicPower = 0;
 let combo = 0;
+let scoreCorrect = 0; // Track number of correct answers
 
-// Initialize when page loads
 async function initGame() {
     try {
         const response = await fetch('../data/questions.json');
         const data = await response.json();
         quizData = data.questions;
         
-        // Setup Begin Button
         document.getElementById('begin-btn').onclick = () => {
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('game-wrapper').classList.remove('hidden');
@@ -41,10 +40,8 @@ function renderQuestion() {
     container.classList.remove('hidden');
     document.getElementById('feedback-area').classList.add('hidden');
 
-    // Update Mentor Image
     document.getElementById('mentor-img').src = `../assets/images/${q.mentor || 'rias_neutral.png'}`;
 
-    // Boost Glow
     const wrapper = document.getElementById('game-wrapper');
     if (combo >= 3) { wrapper.classList.add('boost-active'); } 
     else { wrapper.classList.remove('boost-active'); }
@@ -63,6 +60,7 @@ function handleAnswer(choice) {
     const explanation = document.getElementById('explanation');
     
     if (choice === q.answer) {
+        scoreCorrect++; // Increment correct count
         combo++;
         let points = (combo >= 3) ? 200 : 100;
         demonicPower += points;
@@ -93,15 +91,32 @@ function updateRank(power) {
 }
 
 function showFinalResults() {
+    const container = document.getElementById('ui-container');
+    const finalScore = (scoreCorrect / quizData.length) * 100;
     const finalRank = document.getElementById('rank-display').innerText;
-    document.getElementById('ui-container').innerHTML = `
-        <div style="text-align:center; padding: 20px;">
-            <h2 style="color:var(--dxd-gold)">RATING GAME SETTLED</h2>
-            <p style="font-size: 1.5rem;">Final Demonic Power: ${demonicPower}</p>
-            <h3 class="rank-ultimate">${finalRank}</h3>
-            <button onclick="location.reload()">RE-TRAIN AT THE ACADEMY</button>
-        </div>
-    `;
+
+    let resultsHTML = '';
+
+    if (finalScore >= 70) {
+        resultsHTML = `
+            <div style="text-align:center; padding: 20px; border: 3px solid green; background: #003300;">
+                <h2 style="color: greenyellow;">FAA PART 107 CERTIFICATE EARNED!</h2>
+                <p>Congratulations, Devil! You passed the FAA Rating Game with a score of: <strong>${finalScore.toFixed(1)}%</strong></p>
+                <h3 class="rank-ultimate">${finalRank}</h3>
+                <button onclick="location.reload()">Re-Train at the Academy</button>
+            </div>
+        `;
+    } else {
+        resultsHTML = `
+            <div style="text-align:center; padding: 20px;">
+                <h2 style="color: var(--dxd-red);">RATING GAME FAILED!</h2>
+                <p>You scored ${finalScore.toFixed(1)}%. The minimum passing score is 70%. You must retry the academy!</p>
+                <button onclick="location.reload()">Retry the Academy</button>
+            </div>
+        `;
+    }
+    
+    container.innerHTML = resultsHTML;
 }
 
 document.getElementById('next-btn').onclick = () => {
