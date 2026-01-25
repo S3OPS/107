@@ -6,20 +6,34 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-wrapper">
+    <!-- NEW: Start Screen Overlay -->
+    <div id="start-screen">
+        <div id="start-content">
+            <h1 style="color:var(--dxd-gold); font-size: 3rem;">DxD ACADEMY</h1>
+            <p>FAA PART 107 RATING GAME</p>
+            <img src="../assets/images/rias_neutral.png" style="max-width: 250px;">
+            <button id="begin-btn" style="font-size: 1.5rem;">ENTER THE ACADEMY</button>
+        </div>
+    </div>
+
+    <div id="game-wrapper" class="hidden">
         <div id="character-portrait">
-            <!-- This is where your High School DxD character will appear -->
             <img id="mentor-img" src="../assets/images/rias_neutral.png" alt="Mentor">
         </div>
 
         <div id="ui-container">
+            <!-- NEW: Progress Bar Container -->
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+
             <div id="status-bar">
                 <span id="rank-display">Rank: Lower-Class Devil</span>
                 <span id="score-display">Demonic Power: 0</span>
             </div>
 
             <div id="quiz-box">
-                <h2 id="question-text">Initializing Rating Game...</h2>
+                <h2 id="question-text">Initializing...</h2>
                 <div id="options-container"></div>
             </div>
             
