@@ -8,7 +8,7 @@
  *   - quiz.js: Quiz mechanics and scoring
  *   - ui.js: Rendering and DOM operations
  * 
- * @version 2.0.0 - Refactored for modularity and performance
+ * @version 2.1.0 - Added accessibility and error handling improvements
  */
 
 import GameConfig from './modules/config.js';
@@ -25,10 +25,23 @@ async function initGame() {
         // Initialize UI element cache (performance optimization)
         UI.initUI();
         
+        // Show loading indicator while fetching data
+        UI.showLoading();
+        
         // Load quiz data with validation
         const success = await Quiz.loadQuizData();
+        
+        // Hide loading indicator
+        UI.hideLoading();
+        
         if (!success) {
-            console.error("Critical Failure: Could not load quiz data");
+            UI.showError(
+                "Failed to load quiz data. Please check your connection and try again.",
+                () => {
+                    UI.hideError();
+                    initGame(); // Retry initialization
+                }
+            );
             return;
         }
         
@@ -38,6 +51,11 @@ async function initGame() {
         
     } catch (err) {
         console.error("Critical Failure:", err);
+        UI.hideLoading();
+        UI.showError(
+            "An unexpected error occurred. Please refresh the page.",
+            () => location.reload()
+        );
     }
 }
 

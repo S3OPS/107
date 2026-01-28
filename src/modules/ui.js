@@ -18,6 +18,7 @@ function initUI() {
         gameWrapper: document.getElementById(ids.gameWrapper),
         beginBtn: document.getElementById(ids.beginBtn),
         progressBar: document.getElementById(ids.progressBar),
+        progressContainer: document.getElementById(ids.progressContainer),
         questionText: document.getElementById(ids.questionText),
         optionsContainer: document.getElementById(ids.optionsContainer),
         feedbackArea: document.getElementById(ids.feedbackArea),
@@ -26,8 +27,15 @@ function initUI() {
         scoreDisplay: document.getElementById(ids.scoreDisplay),
         rankDisplay: document.getElementById(ids.rankDisplay),
         uiContainer: document.getElementById(ids.uiContainer),
-        nextBtn: document.getElementById(ids.nextBtn)
+        nextBtn: document.getElementById(ids.nextBtn),
+        loadingIndicator: document.getElementById(ids.loadingIndicator),
+        errorDisplay: document.getElementById(ids.errorDisplay),
+        errorMessage: document.getElementById(ids.errorMessage),
+        retryBtn: document.getElementById(ids.retryBtn)
     };
+    
+    // Setup keyboard navigation for quiz options
+    setupKeyboardNavigation();
 }
 
 /**
@@ -52,8 +60,13 @@ function showGameScreen() {
  * @param {number} percent - Progress percentage (0-100)
  */
 function updateProgressBar(percent) {
+    const clampedPercent = Math.min(100, Math.max(0, percent));
     if (elementCache.progressBar) {
-        elementCache.progressBar.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+        elementCache.progressBar.style.width = `${clampedPercent}%`;
+    }
+    // Update ARIA attributes for accessibility
+    if (elementCache.progressContainer) {
+        elementCache.progressContainer.setAttribute('aria-valuenow', Math.round(clampedPercent));
     }
 }
 
@@ -102,6 +115,9 @@ function renderOptions(options, onSelect) {
     const container = elementCache.optionsContainer;
     if (!container) return;
 
+    // Store callback for keyboard navigation
+    container._onSelect = onSelect;
+
     // Use DocumentFragment for batch DOM insertion (performance optimization)
     const fragment = document.createDocumentFragment();
     
@@ -109,6 +125,8 @@ function renderOptions(options, onSelect) {
         const btn = document.createElement('button');
         btn.textContent = opt; // Using textContent prevents XSS
         btn.type = 'button';
+        btn.setAttribute('data-option-index', i);
+        btn.setAttribute('aria-label', `Option ${i + 1}: ${opt}`);
         btn.addEventListener('click', () => onSelect(i), { once: true });
         fragment.appendChild(btn);
     });
@@ -116,6 +134,12 @@ function renderOptions(options, onSelect) {
     // Replace content in single operation for better performance
     container.replaceChildren(fragment);
     container.classList.remove('hidden');
+    
+    // Focus first option for accessibility
+    const firstButton = container.querySelector('button');
+    if (firstButton) {
+        firstButton.focus();
+    }
 }
 
 /**
@@ -270,6 +294,113 @@ function onNextClick(handler) {
     }
 }
 
+/**
+ * Show loading indicator
+ */
+function showLoading() {
+    elementCache.loadingIndicator?.classList.remove('hidden');
+    elementCache.errorDisplay?.classList.add('hidden');
+}
+
+/**
+ * Hide loading indicator
+ */
+function hideLoading() {
+    elementCache.loadingIndicator?.classList.add('hidden');
+}
+
+/**
+ * Show error message with retry option
+ * @param {string} message - Error message to display
+ * @param {Function} onRetry - Callback for retry button
+ */
+function showError(message, onRetry) {
+    hideLoading();
+    
+    if (elementCache.errorMessage) {
+        elementCache.errorMessage.textContent = message;
+    }
+    
+    elementCache.errorDisplay?.classList.remove('hidden');
+    
+    if (elementCache.retryBtn && onRetry) {
+        // Remove any existing listeners and add new one
+        const newRetryBtn = elementCache.retryBtn.cloneNode(true);
+        elementCache.retryBtn.parentNode.replaceChild(newRetryBtn, elementCache.retryBtn);
+        elementCache.retryBtn = newRetryBtn;
+        elementCache.retryBtn.addEventListener('click', onRetry);
+    }
+}
+
+/**
+ * Hide error display
+ */
+function hideError() {
+    elementCache.errorDisplay?.classList.add('hidden');
+}
+
+/**
+ * Set up keyboard navigation for quiz options
+ * Allows arrow keys to navigate and Enter/Space to select
+ */
+function setupKeyboardNavigation() {
+    document.addEventListener('keydown', (e) => {
+        const container = elementCache.optionsContainer;
+        if (!container || container.classList.contains('hidden')) return;
+        
+        const buttons = Array.from(container.querySelectorAll('button'));
+        if (buttons.length === 0) return;
+        
+        const currentFocused = document.activeElement;
+        const currentIndex = buttons.indexOf(currentFocused);
+        
+        switch (e.key) {
+            case 'ArrowDown':
+            case 'ArrowRight':
+                e.preventDefault();
+                if (currentIndex < buttons.length - 1) {
+                    buttons[currentIndex + 1].focus();
+                } else {
+                    buttons[0].focus(); // Wrap to first
+                }
+                break;
+                
+            case 'ArrowUp':
+            case 'ArrowLeft':
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    buttons[currentIndex - 1].focus();
+                } else {
+                    buttons[buttons.length - 1].focus(); // Wrap to last
+                }
+                break;
+                
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+                // Number keys for quick selection (1-5)
+                const numIndex = parseInt(e.key, 10) - 1;
+                if (numIndex < buttons.length) {
+                    e.preventDefault();
+                    buttons[numIndex].click();
+                }
+                break;
+        }
+    });
+}
+
+/**
+ * Set click handler for retry button
+ * @param {Function} handler - Click handler function
+ */
+function onRetryClick(handler) {
+    if (elementCache.retryBtn) {
+        elementCache.retryBtn.addEventListener('click', handler);
+    }
+}
+
 export {
     initUI,
     getElement,
@@ -286,5 +417,10 @@ export {
     renderResults,
     onBeginClick,
     onNextClick,
+    showLoading,
+    hideLoading,
+    showError,
+    hideError,
+    onRetryClick,
     escapeHtml
 };

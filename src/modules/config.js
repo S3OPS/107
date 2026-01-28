@@ -30,6 +30,7 @@ const GameConfig = {
         gameWrapper: 'game-wrapper',
         beginBtn: 'begin-btn',
         progressBar: 'progress-bar',
+        progressContainer: 'progress-container',
         questionText: 'question-text',
         optionsContainer: 'options-container',
         feedbackArea: 'feedback-area',
@@ -38,7 +39,11 @@ const GameConfig = {
         scoreDisplay: 'score-display',
         rankDisplay: 'rank-display',
         uiContainer: 'ui-container',
-        nextBtn: 'next-btn'
+        nextBtn: 'next-btn',
+        loadingIndicator: 'loading-indicator',
+        errorDisplay: 'error-display',
+        errorMessage: 'error-message',
+        retryBtn: 'retry-btn'
     },
 
     // Default images
