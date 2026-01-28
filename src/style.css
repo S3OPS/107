@@ -119,6 +119,53 @@ button:hover {
 .feedback-correct { color: var(--dxd-gold); font-weight: bold; }
 .feedback-incorrect { color: red; font-weight: bold; }
 
+/* Points earned display */
+.points-earned {
+    color: #00ff00;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* Answer highlighting after selection */
+.answer-correct {
+    background-color: #006600 !important;
+    border-color: #00ff00 !important;
+    color: white !important;
+    box-shadow: 0 0 15px #00ff00 !important;
+}
+
+.answer-incorrect {
+    background-color: #660000 !important;
+    border-color: #ff0000 !important;
+    color: white !important;
+    box-shadow: 0 0 15px #ff0000 !important;
+}
+
+/* Category badge in question */
+#question-text {
+    line-height: 1.4;
+}
+
+/* Pulse animation for new high score */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Results wrapper styling */
+.results-wrapper {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.final-stats p {
+    margin: 8px 0;
+}
+
+.new-high-score {
+    animation: pulse 1s infinite;
+}
+
 #mentor-img {
     max-width: 200px;
     height: auto;

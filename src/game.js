@@ -8,7 +8,7 @@
  *   - quiz.js: Quiz mechanics and scoring
  *   - ui.js: Rendering and DOM operations
  * 
- * @version 2.1.0 - Added accessibility and error handling improvements
+ * @version 2.2.0 - Added sound effects, question shuffling, visual feedback, high scores
  */
 
 import GameConfig from './modules/config.js';
@@ -19,6 +19,9 @@ import * as Quiz from './modules/quiz.js';
 // Maximum number of retry attempts for loading data
 const MAX_RETRY_ATTEMPTS = 3;
 let retryAttempts = 0;
+
+// Track current selected answer for highlighting
+let currentSelectedAnswer = -1;
 
 /**
  * Initialize the game application
@@ -32,7 +35,7 @@ async function initGame() {
         // Show loading indicator while fetching data
         UI.showLoading();
         
-        // Load quiz data with validation
+        // Load quiz data with validation (questions are shuffled)
         const success = await Quiz.loadQuizData();
         
         // Hide loading indicator
@@ -94,11 +97,17 @@ function renderQuestion() {
     const info = Quiz.getQuestionInfo();
     if (!info) return;
 
+    // Reset selected answer tracking
+    currentSelectedAnswer = -1;
+
     // Update progress bar
     UI.updateProgressBar(GameState.getProgress());
     
-    // Update question text
-    UI.updateQuestion(info.current, info.total, info.text);
+    // Update question text with category
+    const questionText = info.category 
+        ? `[${info.category}] ${info.text}`
+        : info.text;
+    UI.updateQuestion(info.current, info.total, questionText);
     
     // Update mentor image
     UI.updateMentor(info.mentor);
@@ -118,10 +127,17 @@ function renderQuestion() {
  * @param {number} choice - Index of selected option
  */
 function handleAnswer(choice) {
+    currentSelectedAnswer = choice;
     const result = Quiz.processAnswer(choice);
     
-    // Update UI with result
-    UI.showFeedback(result.isCorrect, result.explanation);
+    // Update UI with enhanced feedback including visual highlighting
+    UI.showFeedback(result.isCorrect, result.explanation, {
+        selectedIndex: choice,
+        correctIndex: result.correctAnswer,
+        combo: result.combo,
+        points: result.points
+    });
+    
     UI.updateScore(GameState.demonicPower);
     
     // Update rank display
@@ -145,7 +161,19 @@ function showFinalResults() {
     const rank = Quiz.getRank(GameState.demonicPower);
     const passed = Quiz.hasPassed();
     
-    UI.renderResults(finalScore, `Rank: ${rank.name}`, passed);
+    // Save high score and check if it's a new record
+    const isNewHighScore = Quiz.saveHighScore();
+    const highScoreInfo = Quiz.getHighScoreInfo();
+    
+    // Prepare stats for display
+    const stats = {
+        demonicPower: GameState.demonicPower,
+        maxCombo: GameState.maxCombo,
+        isNewHighScore: isNewHighScore,
+        highScore: highScoreInfo.highScore
+    };
+    
+    UI.renderResults(finalScore, `Rank: ${rank.name}`, passed, stats);
 }
 
 // Initialize game when DOM is ready

@@ -7,6 +7,48 @@ import GameConfig from './config.js';
 // Element cache for performance optimization
 let elementCache = {};
 
+// Audio elements cache
+let audioCache = {
+    correct: null,
+    incorrect: null
+};
+
+/**
+ * Initialize audio elements
+ */
+function initAudio() {
+    if (GameConfig.audio.enabled) {
+        try {
+            audioCache.correct = new Audio(GameConfig.audio.correctSound);
+            audioCache.correct.volume = GameConfig.audio.volume;
+            // Pre-load audio
+            audioCache.correct.load();
+        } catch (err) {
+            console.warn('Could not initialize audio:', err);
+        }
+    }
+}
+
+/**
+ * Play sound effect
+ * @param {boolean} isCorrect - Whether the answer was correct
+ */
+function playSound(isCorrect) {
+    if (!GameConfig.audio.enabled) return;
+    
+    try {
+        if (audioCache.correct) {
+            // Reset and play
+            audioCache.correct.currentTime = 0;
+            audioCache.correct.play().catch(() => {
+                // Audio play may fail due to user interaction requirements
+            });
+        }
+    } catch (err) {
+        // Silently fail - audio is non-critical
+    }
+}
+
 /**
  * Initialize UI by caching DOM element references
  * Called once at startup to avoid repeated DOM queries
@@ -36,6 +78,9 @@ function initUI() {
     
     // Setup keyboard navigation for quiz options
     setupKeyboardNavigation();
+    
+    // Initialize audio
+    initAudio();
 }
 
 /**
@@ -134,20 +179,71 @@ function renderOptions(options, onSelect) {
 }
 
 /**
+ * Highlight the correct and selected answers visually
+ * @param {number} selectedIndex - Index of selected option
+ * @param {number} correctIndex - Index of correct option
+ */
+function highlightAnswers(selectedIndex, correctIndex) {
+    const container = elementCache.optionsContainer;
+    if (!container) return;
+    
+    const buttons = container.querySelectorAll('button');
+    buttons.forEach((btn, i) => {
+        btn.disabled = true; // Disable all buttons after answering
+        if (i === correctIndex) {
+            btn.classList.add('answer-correct');
+        }
+        if (i === selectedIndex && selectedIndex !== correctIndex) {
+            btn.classList.add('answer-incorrect');
+        }
+    });
+}
+
+/**
  * Show feedback area with explanation
  * @param {boolean} isCorrect - Whether answer was correct
  * @param {string} explanation - Explanation text
+ * @param {Object} options - Additional options (combo, points, selectedIndex, correctIndex)
  */
-function showFeedback(isCorrect, explanation) {
+function showFeedback(isCorrect, explanation, options = {}) {
+    // Play sound effect
+    if (isCorrect) {
+        playSound(true);
+    }
+    
+    // Highlight answers if indices provided
+    if (typeof options.selectedIndex === 'number' && typeof options.correctIndex === 'number') {
+        highlightAnswers(options.selectedIndex, options.correctIndex);
+    }
+    
     if (elementCache.explanation) {
         // Create status span programmatically for CSP compliance
         const statusSpan = document.createElement('span');
         statusSpan.className = isCorrect ? 'feedback-correct' : 'feedback-incorrect';
-        statusSpan.textContent = isCorrect ? 'CRITICAL HIT!' : 'DAMAGE TAKEN!';
+        
+        // Enhanced feedback messages
+        let statusText = isCorrect ? 'CRITICAL HIT!' : 'DAMAGE TAKEN!';
+        if (isCorrect && options.combo && options.combo >= 3) {
+            statusText = `🔥 COMBO x${options.combo}! CRITICAL HIT!`;
+        }
+        statusSpan.textContent = statusText;
+        
+        // Show points earned
+        const pointsText = isCorrect && options.points 
+            ? ` (+${options.points} Demonic Power)` 
+            : '';
         
         // Clear and rebuild content safely
         elementCache.explanation.textContent = '';
         elementCache.explanation.appendChild(statusSpan);
+        
+        if (pointsText) {
+            const pointsSpan = document.createElement('span');
+            pointsSpan.className = 'points-earned';
+            pointsSpan.textContent = pointsText;
+            elementCache.explanation.appendChild(pointsSpan);
+        }
+        
         elementCache.explanation.appendChild(document.createElement('br'));
         elementCache.explanation.appendChild(document.createElement('br'));
         elementCache.explanation.appendChild(document.createTextNode(explanation));
@@ -216,9 +312,10 @@ function setBoostEffect(active) {
  * @param {number} score - Final score percentage
  * @param {string} rank - Final rank text
  * @param {boolean} passed - Whether passed the exam
+ * @param {Object} stats - Additional stats (demonicPower, maxCombo, isNewHighScore, highScore)
  * @param {Function} onRestart - Callback for restart button
  */
-function renderResults(score, rank, passed, onRestart) {
+function renderResults(score, rank, passed, stats = {}, onRestart) {
     const container = elementCache.uiContainer;
     if (!container) return;
 
@@ -227,6 +324,7 @@ function renderResults(score, rank, passed, onRestart) {
     // Create elements programmatically for better security and CSP compliance
     const wrapper = document.createElement('div');
     wrapper.style.cssText = 'text-align:center; padding: 20px;';
+    wrapper.className = 'results-wrapper';
     
     const heading = document.createElement('h2');
     const message = document.createElement('p');
@@ -257,6 +355,38 @@ function renderResults(score, rank, passed, onRestart) {
         
         wrapper.appendChild(heading);
         wrapper.appendChild(message);
+    }
+    
+    // Add stats section
+    if (stats.demonicPower !== undefined) {
+        const statsDiv = document.createElement('div');
+        statsDiv.className = 'final-stats';
+        statsDiv.style.cssText = 'margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;';
+        
+        const powerStat = document.createElement('p');
+        powerStat.innerHTML = `<strong>Final Demonic Power:</strong> ${stats.demonicPower}`;
+        statsDiv.appendChild(powerStat);
+        
+        if (stats.maxCombo !== undefined && stats.maxCombo > 0) {
+            const comboStat = document.createElement('p');
+            comboStat.innerHTML = `<strong>Max Combo:</strong> ${stats.maxCombo}x 🔥`;
+            statsDiv.appendChild(comboStat);
+        }
+        
+        if (stats.isNewHighScore) {
+            const newHighScore = document.createElement('p');
+            newHighScore.className = 'new-high-score';
+            newHighScore.innerHTML = `🎉 <strong>NEW HIGH SCORE!</strong> 🎉`;
+            newHighScore.style.cssText = 'color: var(--dxd-gold); font-size: 1.3em; animation: pulse 1s infinite;';
+            statsDiv.appendChild(newHighScore);
+        } else if (stats.highScore > 0) {
+            const highScoreStat = document.createElement('p');
+            highScoreStat.innerHTML = `<strong>High Score:</strong> ${stats.highScore}`;
+            highScoreStat.style.color = '#888';
+            statsDiv.appendChild(highScoreStat);
+        }
+        
+        wrapper.appendChild(statsDiv);
     }
     
     wrapper.appendChild(button);
@@ -400,6 +530,15 @@ function onRetryClick(handler) {
     }
 }
 
+/**
+ * Update combo display
+ * @param {number} combo - Current combo count
+ */
+function updateComboDisplay(combo) {
+    // This could be extended to show a dedicated combo counter
+    // For now, combo info is shown through the boost effect and feedback
+}
+
 export {
     initUI,
     getElement,
@@ -421,5 +560,8 @@ export {
     showError,
     hideError,
     onRetryClick,
-    escapeHtml
+    escapeHtml,
+    highlightAnswers,
+    playSound,
+    updateComboDisplay
 };

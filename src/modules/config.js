@@ -48,7 +48,20 @@ const GameConfig = {
 
     // Default images
     defaultMentor: 'rias_neutral.png',
-    assetsPath: '../assets/images/'
+    assetsPath: '../assets/images/',
+
+    // Audio settings
+    audio: {
+        enabled: true,
+        correctSound: '../assets/audio/audio.wav',
+        volume: 0.5
+    },
+
+    // Storage keys for localStorage
+    storage: {
+        highScore: 'dxd_academy_high_score',
+        bestRank: 'dxd_academy_best_rank'
+    }
 };
 
 // Freeze config to prevent accidental modifications (security)
@@ -59,5 +72,7 @@ Object.freeze(GameConfig.scoring);
 Object.freeze(GameConfig.ranks);
 Object.freeze(GameConfig.rules);
 Object.freeze(GameConfig.elements);
+Object.freeze(GameConfig.audio);
+Object.freeze(GameConfig.storage);
 
 export default GameConfig;

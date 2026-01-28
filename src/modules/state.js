@@ -7,8 +7,11 @@ const GameState = {
     currentIdx: 0,
     demonicPower: 0,
     combo: 0,
+    maxCombo: 0,
     scoreCorrect: 0,
     isInitialized: false,
+    highScore: 0,
+    bestRank: null,
 
     /**
      * Reset all state values to initial defaults
@@ -18,6 +21,7 @@ const GameState = {
         this.currentIdx = 0;
         this.demonicPower = 0;
         this.combo = 0;
+        this.maxCombo = 0;
         this.scoreCorrect = 0;
         this.isInitialized = false;
     },
@@ -49,6 +53,9 @@ const GameState = {
     recordCorrect(points) {
         this.scoreCorrect++;
         this.combo++;
+        if (this.combo > this.maxCombo) {
+            this.maxCombo = this.combo;
+        }
         this.demonicPower += points;
     },
 
