@@ -83,12 +83,14 @@ function updateMentor(imageName) {
 
 /**
  * Sanitize filename to prevent path traversal attacks
+ * Allows: alphanumeric, dots, hyphens, underscores
  * @param {string} filename - Raw filename
  * @returns {string} Sanitized filename
  */
 function sanitizeFilename(filename) {
     // Remove any path traversal attempts and invalid characters
-    return filename.replace(/[^a-zA-Z0-9._-]/g, '').replace(/\.+/g, '.');
+    // Underscores allowed as they're common in filenames
+    return filename.replace(/[^a-zA-Z0-9._\-]/g, '').replace(/\.+/g, '.');
 }
 
 /**
@@ -111,8 +113,8 @@ function renderOptions(options, onSelect) {
         fragment.appendChild(btn);
     });
 
-    container.innerHTML = '';
-    container.appendChild(fragment);
+    // Replace content in single operation for better performance
+    container.replaceChildren(fragment);
     container.classList.remove('hidden');
 }
 
@@ -123,11 +125,17 @@ function renderOptions(options, onSelect) {
  */
 function showFeedback(isCorrect, explanation) {
     if (elementCache.explanation) {
-        const status = isCorrect 
-            ? '<span style="color:var(--dxd-gold); font-weight:bold;">CRITICAL HIT!</span>'
-            : '<span style="color:red; font-weight:bold;">DAMAGE TAKEN!</span>';
-        // Note: explanation comes from trusted JSON data source
-        elementCache.explanation.innerHTML = `${status}<br><br>${escapeHtml(explanation)}`;
+        // Create status span programmatically for CSP compliance
+        const statusSpan = document.createElement('span');
+        statusSpan.className = isCorrect ? 'feedback-correct' : 'feedback-incorrect';
+        statusSpan.textContent = isCorrect ? 'CRITICAL HIT!' : 'DAMAGE TAKEN!';
+        
+        // Clear and rebuild content safely
+        elementCache.explanation.textContent = '';
+        elementCache.explanation.appendChild(statusSpan);
+        elementCache.explanation.appendChild(document.createElement('br'));
+        elementCache.explanation.appendChild(document.createElement('br'));
+        elementCache.explanation.appendChild(document.createTextNode(explanation));
     }
     
     elementCache.feedbackArea?.classList.remove('hidden');
@@ -193,31 +201,53 @@ function setBoostEffect(active) {
  * @param {number} score - Final score percentage
  * @param {string} rank - Final rank text
  * @param {boolean} passed - Whether passed the exam
+ * @param {Function} onRestart - Callback for restart button
  */
-function renderResults(score, rank, passed) {
+function renderResults(score, rank, passed, onRestart) {
     const container = elementCache.uiContainer;
     if (!container) return;
 
     const scoreText = score.toFixed(1);
     
+    // Create elements programmatically for better security and CSP compliance
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'text-align:center; padding: 20px;';
+    
+    const heading = document.createElement('h2');
+    const message = document.createElement('p');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = passed ? 'Re-Train at the Academy' : 'Retry the Academy';
+    button.addEventListener('click', onRestart || (() => location.reload()));
+    
     if (passed) {
-        container.innerHTML = `
-            <div style="text-align:center; padding: 20px; border: 3px solid green; background: #003300;">
-                <h2 style="color: greenyellow;">FAA PART 107 CERTIFICATE EARNED!</h2>
-                <p>Congratulations, Devil! You passed the FAA Rating Game with a score of: <strong>${scoreText}%</strong></p>
-                <h3 class="rank-ultimate">${escapeHtml(rank)}</h3>
-                <button type="button" onclick="location.reload()">Re-Train at the Academy</button>
-            </div>
-        `;
+        wrapper.style.border = '3px solid green';
+        wrapper.style.background = '#003300';
+        heading.style.color = 'greenyellow';
+        heading.textContent = 'FAA PART 107 CERTIFICATE EARNED!';
+        
+        message.innerHTML = `Congratulations, Devil! You passed the FAA Rating Game with a score of: <strong>${scoreText}%</strong>`;
+        
+        const rankHeading = document.createElement('h3');
+        rankHeading.className = 'rank-ultimate';
+        rankHeading.textContent = rank;
+        
+        wrapper.appendChild(heading);
+        wrapper.appendChild(message);
+        wrapper.appendChild(rankHeading);
     } else {
-        container.innerHTML = `
-            <div style="text-align:center; padding: 20px;">
-                <h2 style="color: var(--dxd-red);">RATING GAME FAILED!</h2>
-                <p>You scored ${scoreText}%. The minimum passing score is 70%. You must retry the academy!</p>
-                <button type="button" onclick="location.reload()">Retry the Academy</button>
-            </div>
-        `;
+        heading.style.color = 'var(--dxd-red)';
+        heading.textContent = 'RATING GAME FAILED!';
+        message.textContent = `You scored ${scoreText}%. The minimum passing score is 70%. You must retry the academy!`;
+        
+        wrapper.appendChild(heading);
+        wrapper.appendChild(message);
     }
+    
+    wrapper.appendChild(button);
+    
+    // Clear and append in one operation
+    container.replaceChildren(wrapper);
 }
 
 /**

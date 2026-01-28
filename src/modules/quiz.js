@@ -90,10 +90,26 @@ async function loadQuizData() {
         for (const q of data.questions) {
             if (typeof q.question !== 'string' || 
                 !Array.isArray(q.options) || 
+                q.options.length < 2 ||
                 typeof q.answer !== 'number' ||
                 q.answer < 0 || 
                 q.answer >= q.options.length) {
                 throw new Error('Invalid question format');
+            }
+            
+            // Validate each option is a string
+            for (const opt of q.options) {
+                if (typeof opt !== 'string') {
+                    throw new Error('Invalid option format: options must be strings');
+                }
+            }
+            
+            // Validate optional fields if present
+            if (q.explanation !== undefined && typeof q.explanation !== 'string') {
+                throw new Error('Invalid explanation format: must be a string');
+            }
+            if (q.mentor !== undefined && typeof q.mentor !== 'string') {
+                throw new Error('Invalid mentor format: must be a string');
             }
         }
 

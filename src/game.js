@@ -2,11 +2,11 @@
  * DxD Academy: FAA Part 107 Rating Game
  * 
  * Main entry point - orchestrates game flow using modular components.
- * Modular architecture enables:
- *   - Aragorn (config.js): Mission parameters and constants
- *   - Legolas (state.js): Sharp-eyed state tracking
- *   - Gimli (quiz.js): Heavy lifting for quiz mechanics
- *   - UI (ui.js): Rendering and DOM operations
+ * Modular architecture enables separation of concerns:
+ *   - config.js: Mission parameters and constants
+ *   - state.js: Game state tracking
+ *   - quiz.js: Quiz mechanics and scoring
+ *   - ui.js: Rendering and DOM operations
  * 
  * @version 2.0.0 - Refactored for modularity and performance
  */

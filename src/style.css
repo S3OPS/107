@@ -115,6 +115,10 @@ button:hover {
 .rank-high { color: #00ffff; }
 .rank-ultimate { color: var(--dxd-gold); text-shadow: 0 0 10px red; }
 
+/* Feedback Status Styles */
+.feedback-correct { color: var(--dxd-gold); font-weight: bold; }
+.feedback-incorrect { color: red; font-weight: bold; }
+
 #mentor-img {
     max-width: 200px;
     height: auto;

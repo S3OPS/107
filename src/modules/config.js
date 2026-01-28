@@ -47,6 +47,8 @@ const GameConfig = {
 };
 
 // Freeze config to prevent accidental modifications (security)
+// Deep freeze rank objects individually
+GameConfig.ranks.forEach(rank => Object.freeze(rank));
 Object.freeze(GameConfig);
 Object.freeze(GameConfig.scoring);
 Object.freeze(GameConfig.ranks);
