@@ -12,10 +12,18 @@ const GameState = {
     isInitialized: false,
     highScore: 0,
     bestRank: null,
+    
+    // Game mode state
+    gameMode: 'study', // 'study' or 'timed'
+    timerInterval: null,
+    timeRemaining: 30,
+    
+    // Category performance tracking
+    categoryStats: {},
 
     /**
      * Reset all state values to initial defaults
-     * Note: highScore and bestRank are intentionally NOT reset as they persist across game sessions
+     * Note: highScore, bestRank, and categoryStats are intentionally NOT reset as they persist across game sessions
      */
     reset() {
         this.quizData = [];
@@ -25,6 +33,52 @@ const GameState = {
         this.maxCombo = 0;
         this.scoreCorrect = 0;
         this.isInitialized = false;
+        this.gameMode = 'study';
+        this.clearTimer();
+        this.timeRemaining = 30;
+    },
+
+    /**
+     * Clear the timer interval
+     */
+    clearTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+    },
+
+    /**
+     * Record category performance
+     * @param {string} category - Category name
+     * @param {boolean} isCorrect - Whether answer was correct
+     */
+    recordCategoryResult(category, isCorrect) {
+        if (!category) return;
+        
+        if (!this.categoryStats[category]) {
+            this.categoryStats[category] = { correct: 0, total: 0 };
+        }
+        
+        this.categoryStats[category].total++;
+        if (isCorrect) {
+            this.categoryStats[category].correct++;
+        }
+    },
+
+    /**
+     * Get category performance summary
+     * @returns {Array} Array of category stats sorted by performance (worst first)
+     */
+    getCategoryPerformance() {
+        return Object.entries(this.categoryStats)
+            .map(([category, stats]) => ({
+                category,
+                correct: stats.correct,
+                total: stats.total,
+                percentage: stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0
+            }))
+            .sort((a, b) => a.percentage - b.percentage);
     },
 
     /**

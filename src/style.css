@@ -319,3 +319,80 @@ button:focus-visible {
         border: 4px solid var(--dxd-gold);
     }
 }
+
+/* ==============================
+   GAME MODE SELECTION
+   ============================== */
+
+.mode-btn {
+    width: auto;
+    padding: 12px 20px;
+    font-size: 1rem;
+    background-color: #333;
+    border: 2px solid #555;
+    transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+    background-color: #444;
+    border-color: var(--dxd-gold);
+}
+
+.mode-btn.mode-selected {
+    background-color: var(--dxd-red);
+    border-color: var(--dxd-gold);
+    box-shadow: 0 0 10px var(--dxd-gold);
+}
+
+/* ==============================
+   TIMER DISPLAY
+   ============================== */
+
+#timer-display {
+    padding: 5px 15px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+#timer-display.timer-low {
+    color: #ff9900;
+    animation: timerPulse 1s infinite;
+}
+
+#timer-display.timer-critical {
+    color: #ff0000;
+    animation: timerPulse 0.5s infinite;
+}
+
+@keyframes timerPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Respect reduced motion for timer */
+@media (prefers-reduced-motion: reduce) {
+    #timer-display.timer-low,
+    #timer-display.timer-critical {
+        animation: none;
+    }
+}
+
+/* ==============================
+   CATEGORY STATS
+   ============================== */
+
+.category-stats {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.category-stats h4 {
+    position: sticky;
+    top: 0;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 5px 0;
+    margin: 0 0 10px 0;
+}

@@ -140,8 +140,9 @@ async function loadQuizData() {
         GameState.quizData = shuffleArray(data.questions);
         GameState.isInitialized = true;
         
-        // Load high score from localStorage
+        // Load high score and category stats from localStorage
         loadHighScore();
+        loadCategoryStats();
         
         return true;
     } catch (err) {
@@ -230,6 +231,54 @@ function getHighScoreInfo() {
     };
 }
 
+/**
+ * Load category stats from localStorage
+ */
+function loadCategoryStats() {
+    try {
+        const savedStats = localStorage.getItem(GameConfig.storage.categoryStats);
+        if (savedStats) {
+            GameState.categoryStats = JSON.parse(savedStats);
+        }
+    } catch (err) {
+        console.warn('Could not load category stats:', err);
+    }
+}
+
+/**
+ * Save category stats to localStorage
+ */
+function saveCategoryStats() {
+    try {
+        localStorage.setItem(
+            GameConfig.storage.categoryStats, 
+            JSON.stringify(GameState.categoryStats)
+        );
+    } catch (err) {
+        console.warn('Could not save category stats:', err);
+    }
+}
+
+/**
+ * Get category performance data
+ * @returns {Array} Category performance array
+ */
+function getCategoryPerformance() {
+    return GameState.getCategoryPerformance();
+}
+
+/**
+ * Calculate time bonus points
+ * @param {number} timeRemaining - Seconds remaining when answered
+ * @returns {number} Bonus points earned
+ */
+function calculateTimeBonus(timeRemaining) {
+    if (timeRemaining >= GameConfig.timer.bonusTimeThreshold) {
+        return GameConfig.timer.bonusPoints;
+    }
+    return 0;
+}
+
 export {
     calculatePoints,
     processAnswer,
@@ -239,5 +288,9 @@ export {
     hasMoreQuestions,
     getQuestionInfo,
     saveHighScore,
-    getHighScoreInfo
+    getHighScoreInfo,
+    loadCategoryStats,
+    saveCategoryStats,
+    getCategoryPerformance,
+    calculateTimeBonus
 };
