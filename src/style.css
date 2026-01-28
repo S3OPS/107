@@ -116,8 +116,12 @@ button:hover {
 .rank-ultimate { color: var(--dxd-gold); text-shadow: 0 0 10px red; }
 
 #mentor-img {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 15px;
+}
 
-/* Add this to the bottom of style.css */
+/* Smooth transitions for game elements */
 #game-wrapper, #start-screen {
     transition: opacity 0.5s ease-in-out;
 }
@@ -129,9 +133,4 @@ button:hover {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-    max-width: 200px;
-    height: auto;
-    margin-bottom: 15px;
 }
