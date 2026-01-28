@@ -7,6 +7,46 @@ import GameConfig from './config.js';
 // Element cache for performance optimization
 let elementCache = {};
 
+// Audio elements cache
+let audioCache = {
+    correct: null
+};
+
+/**
+ * Initialize audio elements
+ */
+function initAudio() {
+    if (GameConfig.audio.enabled) {
+        try {
+            audioCache.correct = new Audio(GameConfig.audio.correctSound);
+            audioCache.correct.volume = GameConfig.audio.volume;
+            // Pre-load audio
+            audioCache.correct.load();
+        } catch (err) {
+            console.warn('Could not initialize audio:', err);
+        }
+    }
+}
+
+/**
+ * Play sound effect for correct answers
+ */
+function playSound() {
+    if (!GameConfig.audio.enabled) return;
+    
+    try {
+        if (audioCache.correct) {
+            // Reset and play
+            audioCache.correct.currentTime = 0;
+            audioCache.correct.play().catch(() => {
+                // Audio play may fail due to user interaction requirements
+            });
+        }
+    } catch (err) {
+        // Silently fail - audio is non-critical
+    }
+}
+
 /**
  * Initialize UI by caching DOM element references
  * Called once at startup to avoid repeated DOM queries
@@ -31,11 +71,21 @@ function initUI() {
         loadingIndicator: document.getElementById(ids.loadingIndicator),
         errorDisplay: document.getElementById(ids.errorDisplay),
         errorMessage: document.getElementById(ids.errorMessage),
-        retryBtn: document.getElementById(ids.retryBtn)
+        retryBtn: document.getElementById(ids.retryBtn),
+        timerDisplay: document.getElementById(ids.timerDisplay),
+        modeNormal: document.getElementById(ids.modeNormal),
+        modeTimed: document.getElementById(ids.modeTimed),
+        modeDescription: document.getElementById(ids.modeDescription)
     };
     
     // Setup keyboard navigation for quiz options
     setupKeyboardNavigation();
+    
+    // Initialize audio
+    initAudio();
+    
+    // Setup mode selection handlers
+    setupModeSelection();
 }
 
 /**
@@ -134,20 +184,71 @@ function renderOptions(options, onSelect) {
 }
 
 /**
+ * Highlight the correct and selected answers visually
+ * @param {number} selectedIndex - Index of selected option
+ * @param {number} correctIndex - Index of correct option
+ */
+function highlightAnswers(selectedIndex, correctIndex) {
+    const container = elementCache.optionsContainer;
+    if (!container) return;
+    
+    const buttons = container.querySelectorAll('button');
+    buttons.forEach((btn, i) => {
+        btn.disabled = true; // Disable all buttons after answering
+        if (i === correctIndex) {
+            btn.classList.add('answer-correct');
+        }
+        if (i === selectedIndex && selectedIndex !== correctIndex) {
+            btn.classList.add('answer-incorrect');
+        }
+    });
+}
+
+/**
  * Show feedback area with explanation
  * @param {boolean} isCorrect - Whether answer was correct
  * @param {string} explanation - Explanation text
+ * @param {Object} options - Additional options (combo, points, selectedIndex, correctIndex)
  */
-function showFeedback(isCorrect, explanation) {
+function showFeedback(isCorrect, explanation, options = {}) {
+    // Play sound effect
+    if (isCorrect) {
+        playSound(true);
+    }
+    
+    // Highlight answers if indices provided
+    if (typeof options.selectedIndex === 'number' && typeof options.correctIndex === 'number') {
+        highlightAnswers(options.selectedIndex, options.correctIndex);
+    }
+    
     if (elementCache.explanation) {
         // Create status span programmatically for CSP compliance
         const statusSpan = document.createElement('span');
         statusSpan.className = isCorrect ? 'feedback-correct' : 'feedback-incorrect';
-        statusSpan.textContent = isCorrect ? 'CRITICAL HIT!' : 'DAMAGE TAKEN!';
+        
+        // Enhanced feedback messages
+        let statusText = isCorrect ? 'CRITICAL HIT!' : 'DAMAGE TAKEN!';
+        if (isCorrect && options.combo && options.combo >= 3) {
+            statusText = `🔥 COMBO x${options.combo}! CRITICAL HIT!`;
+        }
+        statusSpan.textContent = statusText;
+        
+        // Show points earned
+        const pointsText = isCorrect && options.points 
+            ? ` (+${options.points} Demonic Power)` 
+            : '';
         
         // Clear and rebuild content safely
         elementCache.explanation.textContent = '';
         elementCache.explanation.appendChild(statusSpan);
+        
+        if (pointsText) {
+            const pointsSpan = document.createElement('span');
+            pointsSpan.className = 'points-earned';
+            pointsSpan.textContent = pointsText;
+            elementCache.explanation.appendChild(pointsSpan);
+        }
+        
         elementCache.explanation.appendChild(document.createElement('br'));
         elementCache.explanation.appendChild(document.createElement('br'));
         elementCache.explanation.appendChild(document.createTextNode(explanation));
@@ -216,9 +317,10 @@ function setBoostEffect(active) {
  * @param {number} score - Final score percentage
  * @param {string} rank - Final rank text
  * @param {boolean} passed - Whether passed the exam
+ * @param {Object} stats - Additional stats (demonicPower, maxCombo, isNewHighScore, highScore)
  * @param {Function} onRestart - Callback for restart button
  */
-function renderResults(score, rank, passed, onRestart) {
+function renderResults(score, rank, passed, stats = {}, onRestart) {
     const container = elementCache.uiContainer;
     if (!container) return;
 
@@ -227,6 +329,7 @@ function renderResults(score, rank, passed, onRestart) {
     // Create elements programmatically for better security and CSP compliance
     const wrapper = document.createElement('div');
     wrapper.style.cssText = 'text-align:center; padding: 20px;';
+    wrapper.className = 'results-wrapper';
     
     const heading = document.createElement('h2');
     const message = document.createElement('p');
@@ -241,7 +344,8 @@ function renderResults(score, rank, passed, onRestart) {
         heading.style.color = 'greenyellow';
         heading.textContent = 'FAA PART 107 CERTIFICATE EARNED!';
         
-        message.innerHTML = `Congratulations, Devil! You passed the FAA Rating Game with a score of: <strong>${scoreText}%</strong>`;
+        // Build message safely using textContent
+        message.textContent = `Congratulations, Devil! You passed the FAA Rating Game with a score of: ${scoreText}%`;
         
         const rankHeading = document.createElement('h3');
         rankHeading.className = 'rank-ultimate';
@@ -257,6 +361,61 @@ function renderResults(score, rank, passed, onRestart) {
         
         wrapper.appendChild(heading);
         wrapper.appendChild(message);
+    }
+    
+    // Add stats section
+    if (stats.demonicPower !== undefined) {
+        const statsDiv = document.createElement('div');
+        statsDiv.className = 'final-stats';
+        statsDiv.style.cssText = 'margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;';
+        
+        // Show game mode if timed
+        if (stats.gameMode === 'timed') {
+            const modeStat = document.createElement('p');
+            modeStat.textContent = '⏱️ Timed Mode';
+            modeStat.style.cssText = 'color: var(--dxd-gold); font-weight: bold; margin-bottom: 10px;';
+            statsDiv.appendChild(modeStat);
+        }
+        
+        // Create power stat safely
+        const powerStat = document.createElement('p');
+        const powerLabel = document.createElement('strong');
+        powerLabel.textContent = 'Final Demonic Power: ';
+        powerStat.appendChild(powerLabel);
+        powerStat.appendChild(document.createTextNode(stats.demonicPower.toString()));
+        statsDiv.appendChild(powerStat);
+        
+        if (stats.maxCombo !== undefined && stats.maxCombo > 0) {
+            const comboStat = document.createElement('p');
+            const comboLabel = document.createElement('strong');
+            comboLabel.textContent = 'Max Combo: ';
+            comboStat.appendChild(comboLabel);
+            comboStat.appendChild(document.createTextNode(`${stats.maxCombo}x 🔥`));
+            statsDiv.appendChild(comboStat);
+        }
+        
+        if (stats.isNewHighScore) {
+            const newHighScore = document.createElement('p');
+            newHighScore.className = 'new-high-score';
+            newHighScore.textContent = '🎉 NEW HIGH SCORE! 🎉';
+            statsDiv.appendChild(newHighScore);
+        } else if (stats.highScore > 0) {
+            const highScoreStat = document.createElement('p');
+            const highScoreLabel = document.createElement('strong');
+            highScoreLabel.textContent = 'High Score: ';
+            highScoreStat.appendChild(highScoreLabel);
+            highScoreStat.appendChild(document.createTextNode(stats.highScore.toString()));
+            highScoreStat.style.color = '#888';
+            statsDiv.appendChild(highScoreStat);
+        }
+        
+        wrapper.appendChild(statsDiv);
+    }
+    
+    // Add category performance section
+    if (stats.categoryStats && stats.categoryStats.length > 0) {
+        const categorySection = renderCategoryStats(stats.categoryStats);
+        wrapper.appendChild(categorySection);
     }
     
     wrapper.appendChild(button);
@@ -400,6 +559,146 @@ function onRetryClick(handler) {
     }
 }
 
+// Track currently selected game mode
+let selectedMode = 'study';
+
+/**
+ * Setup mode selection button handlers
+ */
+function setupModeSelection() {
+    const modeDescriptions = {
+        study: 'Take your time to learn - no time pressure',
+        timed: '30 seconds per question - bonus points for fast answers!'
+    };
+
+    if (elementCache.modeNormal) {
+        elementCache.modeNormal.addEventListener('click', () => {
+            setSelectedMode('study');
+            if (elementCache.modeDescription) {
+                elementCache.modeDescription.textContent = modeDescriptions.study;
+            }
+        });
+    }
+
+    if (elementCache.modeTimed) {
+        elementCache.modeTimed.addEventListener('click', () => {
+            setSelectedMode('timed');
+            if (elementCache.modeDescription) {
+                elementCache.modeDescription.textContent = modeDescriptions.timed;
+            }
+        });
+    }
+}
+
+/**
+ * Set the selected game mode
+ * @param {string} mode - 'study' or 'timed'
+ */
+function setSelectedMode(mode) {
+    selectedMode = mode;
+    
+    // Update button states
+    if (elementCache.modeNormal) {
+        elementCache.modeNormal.classList.toggle('mode-selected', mode === 'study');
+        elementCache.modeNormal.setAttribute('aria-pressed', mode === 'study');
+    }
+    if (elementCache.modeTimed) {
+        elementCache.modeTimed.classList.toggle('mode-selected', mode === 'timed');
+        elementCache.modeTimed.setAttribute('aria-pressed', mode === 'timed');
+    }
+}
+
+/**
+ * Get the selected game mode
+ * @returns {string} Selected mode
+ */
+function getSelectedMode() {
+    return selectedMode;
+}
+
+/**
+ * Show/hide timer display
+ * @param {boolean} show - Whether to show timer
+ */
+function showTimer(show) {
+    if (elementCache.timerDisplay) {
+        elementCache.timerDisplay.classList.toggle('hidden', !show);
+    }
+}
+
+/**
+ * Update timer display
+ * @param {number} seconds - Seconds remaining
+ */
+function updateTimer(seconds) {
+    if (elementCache.timerDisplay) {
+        const isLow = seconds <= 10;
+        elementCache.timerDisplay.textContent = `⏱️ ${seconds}s`;
+        elementCache.timerDisplay.classList.toggle('timer-low', isLow);
+        elementCache.timerDisplay.classList.toggle('timer-critical', seconds <= 5);
+    }
+}
+
+/**
+ * Render category performance in results
+ * @param {Array} categoryStats - Array of category performance objects
+ * @returns {HTMLElement} Category stats element
+ */
+function renderCategoryStats(categoryStats) {
+    const container = document.createElement('div');
+    container.className = 'category-stats';
+    container.style.cssText = 'margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; text-align: left;';
+    
+    const heading = document.createElement('h4');
+    heading.textContent = '📊 Category Performance';
+    heading.style.cssText = 'color: var(--dxd-gold); margin-bottom: 10px; text-align: center;';
+    container.appendChild(heading);
+    
+    if (categoryStats.length === 0) {
+        const noData = document.createElement('p');
+        noData.textContent = 'No category data available';
+        noData.style.color = '#888';
+        container.appendChild(noData);
+        return container;
+    }
+    
+    // Find weak areas (below 70%)
+    const weakAreas = categoryStats.filter(cat => cat.percentage < 70);
+    
+    categoryStats.forEach(cat => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display: flex; justify-content: space-between; margin: 5px 0; padding: 5px; border-radius: 4px;';
+        
+        const isWeak = cat.percentage < 70;
+        if (isWeak) {
+            row.style.background = 'rgba(139, 0, 0, 0.3)';
+        }
+        
+        const label = document.createElement('span');
+        label.textContent = cat.category;
+        label.style.color = isWeak ? '#ff6666' : 'white';
+        
+        const score = document.createElement('span');
+        score.textContent = `${cat.correct}/${cat.total} (${cat.percentage}%)`;
+        score.style.color = isWeak ? '#ff6666' : '#4ade80';
+        score.style.fontWeight = 'bold';
+        
+        row.appendChild(label);
+        row.appendChild(score);
+        container.appendChild(row);
+    });
+    
+    // Add weak area summary
+    if (weakAreas.length > 0) {
+        const weakSummary = document.createElement('p');
+        weakSummary.style.cssText = 'margin-top: 15px; padding: 10px; background: rgba(139, 0, 0, 0.2); border-radius: 4px; color: #ff9999; font-size: 0.9em;';
+        weakSummary.textContent = `⚠️ Focus on: ${weakAreas.map(w => w.category).join(', ')}`;
+        container.appendChild(weakSummary);
+    }
+    
+    return container;
+}
+
 export {
     initUI,
     getElement,
@@ -421,5 +720,11 @@ export {
     showError,
     hideError,
     onRetryClick,
-    escapeHtml
+    escapeHtml,
+    highlightAnswers,
+    playSound,
+    getSelectedMode,
+    showTimer,
+    updateTimer,
+    renderCategoryStats
 };

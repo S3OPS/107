@@ -8,7 +8,7 @@
  *   - quiz.js: Quiz mechanics and scoring
  *   - ui.js: Rendering and DOM operations
  * 
- * @version 2.1.0 - Added accessibility and error handling improvements
+ * @version 2.3.0 - Added PWA support, timed mode, category performance tracking
  */
 
 import GameConfig from './modules/config.js';
@@ -32,7 +32,7 @@ async function initGame() {
         // Show loading indicator while fetching data
         UI.showLoading();
         
-        // Load quiz data with validation
+        // Load quiz data with validation (questions are shuffled)
         const success = await Quiz.loadQuizData();
         
         // Hide loading indicator
@@ -78,6 +78,13 @@ async function initGame() {
  * Start the game when user clicks begin
  */
 function startGame() {
+    // Set game mode from UI selection
+    GameState.gameMode = UI.getSelectedMode();
+    
+    // Show timer if in timed mode
+    const isTimedMode = GameState.gameMode === 'timed';
+    UI.showTimer(isTimedMode);
+    
     UI.showGameScreen();
     renderQuestion();
 }
@@ -86,6 +93,9 @@ function startGame() {
  * Render the current question
  */
 function renderQuestion() {
+    // Clear any existing timer
+    GameState.clearTimer();
+    
     if (!Quiz.hasMoreQuestions()) {
         showFinalResults();
         return;
@@ -97,8 +107,11 @@ function renderQuestion() {
     // Update progress bar
     UI.updateProgressBar(GameState.getProgress());
     
-    // Update question text
-    UI.updateQuestion(info.current, info.total, info.text);
+    // Update question text with category
+    const questionText = info.category 
+        ? `[${info.category}] ${info.text}`
+        : info.text;
+    UI.updateQuestion(info.current, info.total, questionText);
     
     // Update mentor image
     UI.updateMentor(info.mentor);
@@ -111,6 +124,52 @@ function renderQuestion() {
     
     // Hide feedback from previous question
     UI.hideFeedback();
+    
+    // Start timer if in timed mode
+    if (GameState.gameMode === 'timed') {
+        startQuestionTimer();
+    }
+}
+
+/**
+ * Start the timer for timed mode
+ */
+function startQuestionTimer() {
+    GameState.timeRemaining = GameConfig.timer.questionTime;
+    UI.updateTimer(GameState.timeRemaining);
+    
+    GameState.timerInterval = setInterval(() => {
+        GameState.timeRemaining--;
+        UI.updateTimer(GameState.timeRemaining);
+        
+        if (GameState.timeRemaining <= 0) {
+            // Time's up - auto-submit wrong answer
+            GameState.clearTimer();
+            handleTimeUp();
+        }
+    }, 1000);
+}
+
+/**
+ * Handle time running out
+ */
+function handleTimeUp() {
+    const question = GameState.getCurrentQuestion();
+    const category = question ? question.category : '';
+    
+    // Record as incorrect with category tracking
+    GameState.recordIncorrect();
+    GameState.recordCategoryResult(category, false);
+    
+    // Show feedback
+    UI.showFeedback(false, 'Time\'s up! The answer was: ' + (question ? question.options[question.answer] : 'Unknown'), {
+        selectedIndex: -1,
+        correctIndex: question ? question.answer : 0,
+        combo: 0,
+        points: 0
+    });
+    
+    UI.updateScore(GameState.demonicPower);
 }
 
 /**
@@ -118,10 +177,42 @@ function renderQuestion() {
  * @param {number} choice - Index of selected option
  */
 function handleAnswer(choice) {
+    // Stop timer if in timed mode
+    GameState.clearTimer();
+    
+    const question = GameState.getCurrentQuestion();
+    const category = question ? question.category : '';
+    
     const result = Quiz.processAnswer(choice);
     
-    // Update UI with result
-    UI.showFeedback(result.isCorrect, result.explanation);
+    // Track category performance
+    GameState.recordCategoryResult(category, result.isCorrect);
+    
+    // Calculate time bonus if in timed mode
+    let timeBonus = 0;
+    if (GameState.gameMode === 'timed' && result.isCorrect) {
+        timeBonus = Quiz.calculateTimeBonus(GameState.timeRemaining);
+        if (timeBonus > 0) {
+            GameState.demonicPower += timeBonus;
+        }
+    }
+    
+    // Update UI with enhanced feedback including visual highlighting
+    const totalPoints = result.points + timeBonus;
+    const feedbackOptions = {
+        selectedIndex: choice,
+        correctIndex: result.correctAnswer,
+        combo: result.combo,
+        points: result.points
+    };
+    
+    // Add time bonus info to feedback
+    let explanation = result.explanation;
+    if (timeBonus > 0) {
+        explanation += ` ⚡ Time Bonus: +${timeBonus}!`;
+    }
+    
+    UI.showFeedback(result.isCorrect, explanation, feedbackOptions);
     UI.updateScore(GameState.demonicPower);
     
     // Update rank display
@@ -141,11 +232,31 @@ function advanceQuestion() {
  * Show final results screen
  */
 function showFinalResults() {
+    // Clear any timer
+    GameState.clearTimer();
+    
     const finalScore = GameState.getFinalScore();
     const rank = Quiz.getRank(GameState.demonicPower);
     const passed = Quiz.hasPassed();
     
-    UI.renderResults(finalScore, `Rank: ${rank.name}`, passed);
+    // Save high score and category stats
+    const isNewHighScore = Quiz.saveHighScore();
+    Quiz.saveCategoryStats();
+    
+    const highScoreInfo = Quiz.getHighScoreInfo();
+    const categoryPerformance = Quiz.getCategoryPerformance();
+    
+    // Prepare stats for display
+    const stats = {
+        demonicPower: GameState.demonicPower,
+        maxCombo: GameState.maxCombo,
+        isNewHighScore: isNewHighScore,
+        highScore: highScoreInfo.highScore,
+        categoryStats: categoryPerformance,
+        gameMode: GameState.gameMode
+    };
+    
+    UI.renderResults(finalScore, `Rank: ${rank.name}`, passed, stats);
 }
 
 // Initialize game when DOM is ready

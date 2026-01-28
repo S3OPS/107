@@ -99,35 +99,54 @@ Status: COMPLETED
 
 ### Phase 2: Medium-term Enhancements (1-2 months)
 
-#### 2.1 Progressive Web App (PWA)
+#### 2.0 Gameplay Enhancements ✅
+```
+Priority: HIGH
+Effort: Medium
+Status: COMPLETED
+```
+- ✅ Question shuffling for replay variety (Fisher-Yates algorithm)
+- ✅ Category display on questions (e.g., [Weather], [Regulations])
+- ✅ Enhanced combo display (🔥 COMBO xN!)
+- ✅ Points earned display in feedback (+100/+200 Demonic Power)
+- ✅ Visual answer highlighting (green/red for correct/incorrect)
+- ✅ High score tracking with localStorage
+- ✅ Sound effects for correct answers
+- ✅ Max combo tracking in final results
+
+#### 2.1 Progressive Web App (PWA) ✅
 ```
 Priority: MEDIUM
 Effort: Medium
+Status: COMPLETED
 ```
-- Add service worker for offline support
-- Create manifest.json for installability
-- Cache questions.json for offline play
-- Add push notifications for daily practice reminders
+- ✅ Add service worker for offline support
+- ✅ Create manifest.json for installability
+- ✅ Cache questions.json for offline play
+- ✅ Add PWA meta tags and icons
+- ⬜ Add push notifications for daily practice reminders (future enhancement)
 
 #### 2.2 Question Bank Expansion
 ```
 Priority: MEDIUM
 Effort: High
+Status: PARTIAL
 ```
-- Organize questions by difficulty level
-- Add timed mode option
-- Implement adaptive difficulty (increase/decrease based on performance)
-- Add more question categories
+- ⬜ Organize questions by difficulty level
+- ✅ Add timed mode option (30 seconds per question with time bonus)
+- ⬜ Implement adaptive difficulty (increase/decrease based on performance)
+- ⬜ Add more question categories
 
-#### 2.3 Analytics & Progress Tracking
+#### 2.3 Analytics & Progress Tracking ✅
 ```
 Priority: MEDIUM
 Effort: Medium
+Status: COMPLETED
 ```
-- Local storage for progress persistence
-- Track category-specific performance
-- Show weak areas after quiz completion
-- Historical score trends
+- ✅ Local storage for high score persistence
+- ✅ Track category-specific performance
+- ✅ Show weak areas after quiz completion (highlighted in red with focus suggestions)
+- ⬜ Historical score trends (future enhancement)
 
 ### Phase 3: Long-term Vision (3-6 months)
 
@@ -193,9 +212,12 @@ The project will be considered fully optimized when:
 1. ✅ All code follows modular architecture
 2. ✅ Security vulnerabilities addressed
 3. ⬜ 80%+ test coverage
-4. ⬜ PWA support implemented
+4. ✅ PWA support implemented (Phase 2.1 completed)
 5. ⬜ Lighthouse score 95+
 6. ✅ Accessibility audit passed (Phase 1.2 completed)
+7. ✅ Gameplay enhancements implemented (Phase 2.0 completed)
+8. ✅ Timed mode implemented (Phase 2.2 partial)
+9. ✅ Category performance tracking (Phase 2.3 completed)
 
 ---
 
@@ -213,11 +235,11 @@ Before any release:
 - [ ] Run tests
 - [ ] Check accessibility
 - [ ] Test on mobile devices
-- [ ] Verify offline functionality (when PWA added)
+- [x] Verify offline functionality (PWA added)
 
 ---
 
 *"Even the smallest person can change the course of the future."* - Galadriel
 
 **Last Updated**: 2026-01-28
-**Version**: 2.1.0
+**Version**: 2.3.0

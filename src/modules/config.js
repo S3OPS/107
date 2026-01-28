@@ -43,12 +43,43 @@ const GameConfig = {
         loadingIndicator: 'loading-indicator',
         errorDisplay: 'error-display',
         errorMessage: 'error-message',
-        retryBtn: 'retry-btn'
+        retryBtn: 'retry-btn',
+        timerDisplay: 'timer-display',
+        modeNormal: 'mode-normal',
+        modeTimed: 'mode-timed',
+        modeDescription: 'mode-description'
     },
 
     // Default images
     defaultMentor: 'rias_neutral.png',
-    assetsPath: '../assets/images/'
+    assetsPath: '../assets/images/',
+
+    // Audio settings
+    audio: {
+        enabled: true,
+        correctSound: '../assets/audio/audio.wav',
+        volume: 0.5
+    },
+
+    // Storage keys for localStorage
+    storage: {
+        highScore: 'dxd_academy_high_score',
+        bestRank: 'dxd_academy_best_rank',
+        categoryStats: 'dxd_academy_category_stats'
+    },
+
+    // Timer settings for timed mode
+    timer: {
+        questionTime: 30, // seconds per question
+        bonusTimeThreshold: 15, // seconds remaining to get time bonus
+        bonusPoints: 50 // bonus points for fast answers
+    },
+
+    // Game modes
+    modes: {
+        STUDY: 'study',
+        TIMED: 'timed'
+    }
 };
 
 // Freeze config to prevent accidental modifications (security)
@@ -59,5 +90,9 @@ Object.freeze(GameConfig.scoring);
 Object.freeze(GameConfig.ranks);
 Object.freeze(GameConfig.rules);
 Object.freeze(GameConfig.elements);
+Object.freeze(GameConfig.audio);
+Object.freeze(GameConfig.storage);
+Object.freeze(GameConfig.timer);
+Object.freeze(GameConfig.modes);
 
 export default GameConfig;

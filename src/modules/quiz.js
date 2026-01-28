@@ -6,6 +6,20 @@ import GameConfig from './config.js';
 import GameState from './state.js';
 
 /**
+ * Fisher-Yates shuffle algorithm for randomizing questions
+ * @param {Array} array - Array to shuffle
+ * @returns {Array} Shuffled array
+ */
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+/**
  * Calculate points for a correct answer
  * @returns {number} Points earned
  */
@@ -19,12 +33,18 @@ function calculatePoints() {
 /**
  * Process an answer selection
  * @param {number} choice - Index of selected option
- * @returns {Object} Result with isCorrect, points, and explanation
+ * @returns {Object} Result object containing:
+ *   - isCorrect {boolean} Whether the answer was correct
+ *   - points {number} Points earned for this answer
+ *   - explanation {string} Explanation text for the answer
+ *   - correctAnswer {number} Index of the correct answer
+ *   - category {string} Question category
+ *   - combo {number} Current combo streak count
  */
 function processAnswer(choice) {
     const question = GameState.getCurrentQuestion();
     if (!question) {
-        return { isCorrect: false, points: 0, explanation: 'Error: No question loaded.' };
+        return { isCorrect: false, points: 0, explanation: 'Error: No question loaded.', correctAnswer: -1, category: '', combo: 0 };
     }
 
     const isCorrect = choice === question.answer;
@@ -40,7 +60,10 @@ function processAnswer(choice) {
     return {
         isCorrect,
         points,
-        explanation: question.explanation || ''
+        explanation: question.explanation || '',
+        correctAnswer: question.answer,
+        category: question.category || '',
+        combo: GameState.combo
     };
 }
 
@@ -113,8 +136,14 @@ async function loadQuizData() {
             }
         }
 
-        GameState.quizData = data.questions;
+        // Shuffle questions for replay variety
+        GameState.quizData = shuffleArray(data.questions);
         GameState.isInitialized = true;
+        
+        // Load high score and category stats from localStorage
+        loadHighScore();
+        loadCategoryStats();
+        
         return true;
     } catch (err) {
         console.error("Failed to load quiz data:", err);
@@ -143,8 +172,111 @@ function getQuestionInfo() {
         total: GameState.quizData.length,
         text: question.question,
         options: question.options,
-        mentor: question.mentor
+        mentor: question.mentor,
+        category: question.category || 'General',
+        combo: GameState.combo
     };
+}
+
+/**
+ * Load high score from localStorage
+ */
+function loadHighScore() {
+    try {
+        const savedScore = localStorage.getItem(GameConfig.storage.highScore);
+        const savedRank = localStorage.getItem(GameConfig.storage.bestRank);
+        if (savedScore) {
+            GameState.highScore = parseInt(savedScore, 10) || 0;
+        }
+        if (savedRank) {
+            GameState.bestRank = savedRank;
+        }
+    } catch (err) {
+        // localStorage may be unavailable (private browsing, etc.)
+        console.warn('Could not load high score:', err);
+    }
+}
+
+/**
+ * Save high score to localStorage
+ * @returns {boolean} Whether a new high score was set
+ */
+function saveHighScore() {
+    const currentPower = GameState.demonicPower;
+    const isNewHighScore = currentPower > GameState.highScore;
+    
+    if (isNewHighScore) {
+        try {
+            localStorage.setItem(GameConfig.storage.highScore, currentPower.toString());
+            const rank = getRank(currentPower);
+            localStorage.setItem(GameConfig.storage.bestRank, rank.name);
+            GameState.highScore = currentPower;
+            GameState.bestRank = rank.name;
+        } catch (err) {
+            console.warn('Could not save high score:', err);
+        }
+    }
+    
+    return isNewHighScore;
+}
+
+/**
+ * Get high score info
+ * @returns {Object} High score data
+ */
+function getHighScoreInfo() {
+    return {
+        highScore: GameState.highScore,
+        bestRank: GameState.bestRank
+    };
+}
+
+/**
+ * Load category stats from localStorage
+ */
+function loadCategoryStats() {
+    try {
+        const savedStats = localStorage.getItem(GameConfig.storage.categoryStats);
+        if (savedStats) {
+            GameState.categoryStats = JSON.parse(savedStats);
+        }
+    } catch (err) {
+        console.warn('Could not load category stats:', err);
+    }
+}
+
+/**
+ * Save category stats to localStorage
+ */
+function saveCategoryStats() {
+    try {
+        localStorage.setItem(
+            GameConfig.storage.categoryStats, 
+            JSON.stringify(GameState.categoryStats)
+        );
+    } catch (err) {
+        console.warn('Could not save category stats:', err);
+    }
+}
+
+/**
+ * Get category performance data
+ * @returns {Array} Category performance array
+ */
+function getCategoryPerformance() {
+    return GameState.getCategoryPerformance();
+}
+
+/**
+ * Calculate time bonus points
+ * @param {number} timeRemaining - Seconds remaining when answered
+ * @returns {number} Bonus points earned
+ */
+function calculateTimeBonus(timeRemaining) {
+    if (timeRemaining >= GameConfig.timer.bonusTimeThreshold) {
+        return GameConfig.timer.bonusPoints;
+    }
+    return 0;
 }
 
 export {
@@ -154,5 +286,11 @@ export {
     hasPassed,
     loadQuizData,
     hasMoreQuestions,
-    getQuestionInfo
+    getQuestionInfo,
+    saveHighScore,
+    getHighScoreInfo,
+    loadCategoryStats,
+    saveCategoryStats,
+    getCategoryPerformance,
+    calculateTimeBonus
 };

@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DxD Academy: Part 107 Rating Game</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="A gamified quiz application for FAA Part 107 Remote Pilot Certificate preparation">
+    <meta name="theme-color" content="#8b0000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DxD Academy">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="../assets/images/rias_neutral.png">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,6 +26,23 @@
             <h1 id="start-title" style="color:var(--dxd-gold); font-size: 3rem;">DxD ACADEMY</h1>
             <p id="start-description">FAA PART 107 RATING GAME</p>
             <img src="../assets/images/rias_neutral.png" style="max-width: 250px;" alt="Rias - Academy Guide">
+            
+            <!-- Game Mode Selection -->
+            <div id="mode-selection" style="margin: 20px 0;">
+                <label style="display: block; margin-bottom: 10px; color: var(--dxd-gold);">Select Game Mode:</label>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button id="mode-normal" type="button" class="mode-btn mode-selected" aria-pressed="true">
+                        📚 Study Mode
+                    </button>
+                    <button id="mode-timed" type="button" class="mode-btn" aria-pressed="false">
+                        ⏱️ Timed Mode
+                    </button>
+                </div>
+                <p id="mode-description" style="font-size: 0.9rem; color: #aaa; margin-top: 10px;">
+                    Take your time to learn - no time pressure
+                </p>
+            </div>
+            
             <button id="begin-btn" type="button" style="font-size: 1.5rem;" aria-label="Enter the Academy and start the quiz">ENTER THE ACADEMY</button>
         </div>
     </div>
@@ -46,6 +73,7 @@
 
                 <div id="status-bar" aria-live="polite">
                     <span id="rank-display" aria-label="Current rank">Rank: Lower-Class Devil</span>
+                    <span id="timer-display" class="hidden" aria-label="Time remaining">⏱️ 30s</span>
                     <span id="score-display" aria-label="Current score">Demonic Power: 0</span>
                 </div>
 
@@ -63,5 +91,20 @@
     </main>
 
     <script type="module" src="game.js"></script>
+    
+    <!-- Service Worker Registration for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('SW registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('SW registration failed:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
