@@ -15,6 +15,7 @@ const GameState = {
 
     /**
      * Reset all state values to initial defaults
+     * Note: highScore and bestRank are intentionally NOT reset as they persist across game sessions
      */
     reset() {
         this.quizData = [];

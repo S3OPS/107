@@ -33,12 +33,18 @@ function calculatePoints() {
 /**
  * Process an answer selection
  * @param {number} choice - Index of selected option
- * @returns {Object} Result with isCorrect, points, explanation, correctAnswer, and category
+ * @returns {Object} Result object containing:
+ *   - isCorrect {boolean} Whether the answer was correct
+ *   - points {number} Points earned for this answer
+ *   - explanation {string} Explanation text for the answer
+ *   - correctAnswer {number} Index of the correct answer
+ *   - category {string} Question category
+ *   - combo {number} Current combo streak count
  */
 function processAnswer(choice) {
     const question = GameState.getCurrentQuestion();
     if (!question) {
-        return { isCorrect: false, points: 0, explanation: 'Error: No question loaded.', correctAnswer: -1, category: '' };
+        return { isCorrect: false, points: 0, explanation: 'Error: No question loaded.', correctAnswer: -1, category: '', combo: 0 };
     }
 
     const isCorrect = choice === question.answer;
@@ -56,7 +62,6 @@ function processAnswer(choice) {
         points,
         explanation: question.explanation || '',
         correctAnswer: question.answer,
-        correctText: question.options[question.answer],
         category: question.category || '',
         combo: GameState.combo
     };

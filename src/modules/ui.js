@@ -9,8 +9,7 @@ let elementCache = {};
 
 // Audio elements cache
 let audioCache = {
-    correct: null,
-    incorrect: null
+    correct: null
 };
 
 /**
@@ -30,10 +29,9 @@ function initAudio() {
 }
 
 /**
- * Play sound effect
- * @param {boolean} isCorrect - Whether the answer was correct
+ * Play sound effect for correct answers
  */
-function playSound(isCorrect) {
+function playSound() {
     if (!GameConfig.audio.enabled) return;
     
     try {
@@ -339,7 +337,8 @@ function renderResults(score, rank, passed, stats = {}, onRestart) {
         heading.style.color = 'greenyellow';
         heading.textContent = 'FAA PART 107 CERTIFICATE EARNED!';
         
-        message.innerHTML = `Congratulations, Devil! You passed the FAA Rating Game with a score of: <strong>${scoreText}%</strong>`;
+        // Build message safely using textContent
+        message.textContent = `Congratulations, Devil! You passed the FAA Rating Game with a score of: ${scoreText}%`;
         
         const rankHeading = document.createElement('h3');
         rankHeading.className = 'rank-ultimate';
@@ -363,25 +362,34 @@ function renderResults(score, rank, passed, stats = {}, onRestart) {
         statsDiv.className = 'final-stats';
         statsDiv.style.cssText = 'margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;';
         
+        // Create power stat safely
         const powerStat = document.createElement('p');
-        powerStat.innerHTML = `<strong>Final Demonic Power:</strong> ${stats.demonicPower}`;
+        const powerLabel = document.createElement('strong');
+        powerLabel.textContent = 'Final Demonic Power: ';
+        powerStat.appendChild(powerLabel);
+        powerStat.appendChild(document.createTextNode(stats.demonicPower.toString()));
         statsDiv.appendChild(powerStat);
         
         if (stats.maxCombo !== undefined && stats.maxCombo > 0) {
             const comboStat = document.createElement('p');
-            comboStat.innerHTML = `<strong>Max Combo:</strong> ${stats.maxCombo}x 🔥`;
+            const comboLabel = document.createElement('strong');
+            comboLabel.textContent = 'Max Combo: ';
+            comboStat.appendChild(comboLabel);
+            comboStat.appendChild(document.createTextNode(`${stats.maxCombo}x 🔥`));
             statsDiv.appendChild(comboStat);
         }
         
         if (stats.isNewHighScore) {
             const newHighScore = document.createElement('p');
             newHighScore.className = 'new-high-score';
-            newHighScore.innerHTML = `🎉 <strong>NEW HIGH SCORE!</strong> 🎉`;
-            newHighScore.style.cssText = 'color: var(--dxd-gold); font-size: 1.3em; animation: pulse 1s infinite;';
+            newHighScore.textContent = '🎉 NEW HIGH SCORE! 🎉';
             statsDiv.appendChild(newHighScore);
         } else if (stats.highScore > 0) {
             const highScoreStat = document.createElement('p');
-            highScoreStat.innerHTML = `<strong>High Score:</strong> ${stats.highScore}`;
+            const highScoreLabel = document.createElement('strong');
+            highScoreLabel.textContent = 'High Score: ';
+            highScoreStat.appendChild(highScoreLabel);
+            highScoreStat.appendChild(document.createTextNode(stats.highScore.toString()));
             highScoreStat.style.color = '#888';
             statsDiv.appendChild(highScoreStat);
         }
@@ -530,15 +538,6 @@ function onRetryClick(handler) {
     }
 }
 
-/**
- * Update combo display
- * @param {number} combo - Current combo count
- */
-function updateComboDisplay(combo) {
-    // This could be extended to show a dedicated combo counter
-    // For now, combo info is shown through the boost effect and feedback
-}
-
 export {
     initUI,
     getElement,
@@ -562,6 +561,5 @@ export {
     onRetryClick,
     escapeHtml,
     highlightAnswers,
-    playSound,
-    updateComboDisplay
+    playSound
 };

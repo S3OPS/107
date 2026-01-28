@@ -20,9 +20,6 @@ import * as Quiz from './modules/quiz.js';
 const MAX_RETRY_ATTEMPTS = 3;
 let retryAttempts = 0;
 
-// Track current selected answer for highlighting
-let currentSelectedAnswer = -1;
-
 /**
  * Initialize the game application
  * Uses the Great Eagles approach - fast async initialization
@@ -97,9 +94,6 @@ function renderQuestion() {
     const info = Quiz.getQuestionInfo();
     if (!info) return;
 
-    // Reset selected answer tracking
-    currentSelectedAnswer = -1;
-
     // Update progress bar
     UI.updateProgressBar(GameState.getProgress());
     
@@ -127,7 +121,6 @@ function renderQuestion() {
  * @param {number} choice - Index of selected option
  */
 function handleAnswer(choice) {
-    currentSelectedAnswer = choice;
     const result = Quiz.processAnswer(choice);
     
     // Update UI with enhanced feedback including visual highlighting

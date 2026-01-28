@@ -121,7 +121,7 @@ button:hover {
 
 /* Points earned display */
 .points-earned {
-    color: #00ff00;
+    color: #4ade80;
     font-weight: bold;
     margin-left: 10px;
 }
@@ -129,9 +129,9 @@ button:hover {
 /* Answer highlighting after selection */
 .answer-correct {
     background-color: #006600 !important;
-    border-color: #00ff00 !important;
+    border-color: #4ade80 !important;
     color: white !important;
-    box-shadow: 0 0 15px #00ff00 !important;
+    box-shadow: 0 0 15px #4ade80 !important;
 }
 
 .answer-incorrect {
@@ -163,7 +163,17 @@ button:hover {
 }
 
 .new-high-score {
+    color: var(--dxd-gold);
+    font-size: 1.3em;
+    font-weight: bold;
     animation: pulse 1s infinite;
+}
+
+/* Respect reduced motion preferences for new-high-score animation */
+@media (prefers-reduced-motion: reduce) {
+    .new-high-score {
+        animation: none;
+    }
 }
 
 #mentor-img {
