@@ -1,127 +1,123 @@
-let quizData = [];
-let currentIdx = 0;
-let demonicPower = 0;
-let combo = 0;
-let scoreCorrect = 0; // Track number of correct answers
+/**
+ * DxD Academy: FAA Part 107 Rating Game
+ * 
+ * Main entry point - orchestrates game flow using modular components.
+ * Modular architecture enables separation of concerns:
+ *   - config.js: Mission parameters and constants
+ *   - state.js: Game state tracking
+ *   - quiz.js: Quiz mechanics and scoring
+ *   - ui.js: Rendering and DOM operations
+ * 
+ * @version 2.0.0 - Refactored for modularity and performance
+ */
 
+import GameConfig from './modules/config.js';
+import GameState from './modules/state.js';
+import * as UI from './modules/ui.js';
+import * as Quiz from './modules/quiz.js';
+
+/**
+ * Initialize the game application
+ * Uses the Great Eagles approach - fast async initialization
+ */
 async function initGame() {
     try {
-        const response = await fetch('../data/questions.json');
-        const data = await response.json();
-        quizData = data.questions;
+        // Initialize UI element cache (performance optimization)
+        UI.initUI();
         
-        document.getElementById('begin-btn').onclick = () => {
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('game-wrapper').classList.remove('hidden');
-            renderQuestion();
-        };
+        // Load quiz data with validation
+        const success = await Quiz.loadQuizData();
+        if (!success) {
+            console.error("Critical Failure: Could not load quiz data");
+            return;
+        }
+        
+        // Set up event handlers
+        UI.onBeginClick(startGame);
+        UI.onNextClick(advanceQuestion);
+        
     } catch (err) {
         console.error("Critical Failure:", err);
     }
 }
 
-function updateProgress() {
-    const percent = ((currentIdx) / quizData.length) * 100;
-    document.getElementById('progress-bar').style.width = percent + "%";
+/**
+ * Start the game when user clicks begin
+ */
+function startGame() {
+    UI.showGameScreen();
+    renderQuestion();
 }
 
+/**
+ * Render the current question
+ */
 function renderQuestion() {
-    if (currentIdx >= quizData.length) {
+    if (!Quiz.hasMoreQuestions()) {
         showFinalResults();
         return;
     }
 
-    updateProgress();
-    const q = quizData[currentIdx];
-    document.getElementById('question-text').innerText = `[${currentIdx + 1}/${quizData.length}] ${q.question}`;
+    const info = Quiz.getQuestionInfo();
+    if (!info) return;
+
+    // Update progress bar
+    UI.updateProgressBar(GameState.getProgress());
     
-    const container = document.getElementById('options-container');
-    container.innerHTML = '';
-    container.classList.remove('hidden');
-    document.getElementById('feedback-area').classList.add('hidden');
-
-    document.getElementById('mentor-img').src = `../assets/images/${q.mentor || 'rias_neutral.png'}`;
-
-    const wrapper = document.getElementById('game-wrapper');
-    if (combo >= 3) { wrapper.classList.add('boost-active'); } 
-    else { wrapper.classList.remove('boost-active'); }
-
-    q.options.forEach((opt, i) => {
-        const btn = document.createElement('button');
-        btn.innerText = opt;
-        btn.onclick = () => handleAnswer(i);
-        container.appendChild(btn);
-    });
+    // Update question text
+    UI.updateQuestion(info.current, info.total, info.text);
+    
+    // Update mentor image
+    UI.updateMentor(info.mentor);
+    
+    // Apply combo effect
+    UI.setBoostEffect(GameState.isComboActive(GameConfig.scoring.comboThreshold));
+    
+    // Render options with click handler
+    UI.renderOptions(info.options, handleAnswer);
+    
+    // Hide feedback from previous question
+    UI.hideFeedback();
 }
 
+/**
+ * Handle answer selection
+ * @param {number} choice - Index of selected option
+ */
 function handleAnswer(choice) {
-    const q = quizData[currentIdx];
-    const feedback = document.getElementById('feedback-area');
-    const explanation = document.getElementById('explanation');
+    const result = Quiz.processAnswer(choice);
     
-    if (choice === q.answer) {
-        scoreCorrect++; // Increment correct count
-        combo++;
-        let points = (combo >= 3) ? 200 : 100;
-        demonicPower += points;
-        explanation.innerHTML = `<span style="color:var(--dxd-gold); font-weight:bold;">CRITICAL HIT!</span><br><br>${q.explanation}`;
-    } else {
-        combo = 0;
-        explanation.innerHTML = `<span style="color:red; font-weight:bold;">DAMAGE TAKEN!</span><br><br>${q.explanation}`;
-    }
-
-    document.getElementById('score-display').innerText = `Demonic Power: ${demonicPower}`;
-    updateRank(demonicPower);
+    // Update UI with result
+    UI.showFeedback(result.isCorrect, result.explanation);
+    UI.updateScore(GameState.demonicPower);
     
-    feedback.classList.remove('hidden');
-    document.getElementById('options-container').classList.add('hidden');
+    // Update rank display
+    const rank = Quiz.getRank(GameState.demonicPower);
+    UI.updateRank(rank.name, rank.cssClass);
 }
 
-function updateRank(power) {
-    const rankDisplay = document.getElementById('rank-display');
-    let rank = "Lower-Class Devil";
-    let cssClass = "rank-low";
-
-    if (power >= 8000) { rank = "Ultimate-Class Devil"; cssClass = "rank-ultimate"; }
-    else if (power >= 4000) { rank = "High-Class Devil"; cssClass = "rank-high"; }
-    else if (power >= 1500) { rank = "Middle-Class Devil"; cssClass = "rank-middle"; }
-
-    rankDisplay.innerText = `Rank: ${rank}`;
-    rankDisplay.className = cssClass;
-}
-
-function showFinalResults() {
-    const container = document.getElementById('ui-container');
-    const finalScore = (scoreCorrect / quizData.length) * 100;
-    const finalRank = document.getElementById('rank-display').innerText;
-
-    let resultsHTML = '';
-
-    if (finalScore >= 70) {
-        resultsHTML = `
-            <div style="text-align:center; padding: 20px; border: 3px solid green; background: #003300;">
-                <h2 style="color: greenyellow;">FAA PART 107 CERTIFICATE EARNED!</h2>
-                <p>Congratulations, Devil! You passed the FAA Rating Game with a score of: <strong>${finalScore.toFixed(1)}%</strong></p>
-                <h3 class="rank-ultimate">${finalRank}</h3>
-                <button onclick="location.reload()">Re-Train at the Academy</button>
-            </div>
-        `;
-    } else {
-        resultsHTML = `
-            <div style="text-align:center; padding: 20px;">
-                <h2 style="color: var(--dxd-red);">RATING GAME FAILED!</h2>
-                <p>You scored ${finalScore.toFixed(1)}%. The minimum passing score is 70%. You must retry the academy!</p>
-                <button onclick="location.reload()">Retry the Academy</button>
-            </div>
-        `;
-    }
-    
-    container.innerHTML = resultsHTML;
-}
-
-document.getElementById('next-btn').onclick = () => {
-    currentIdx++;
+/**
+ * Advance to the next question
+ */
+function advanceQuestion() {
+    GameState.nextQuestion();
     renderQuestion();
-};
+}
 
-initGame();
+/**
+ * Show final results screen
+ */
+function showFinalResults() {
+    const finalScore = GameState.getFinalScore();
+    const rank = Quiz.getRank(GameState.demonicPower);
+    const passed = Quiz.hasPassed();
+    
+    UI.renderResults(finalScore, `Rank: ${rank.name}`, passed);
+}
+
+// Initialize game when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGame);
+} else {
+    initGame();
+}

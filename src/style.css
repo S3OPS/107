@@ -115,9 +115,17 @@ button:hover {
 .rank-high { color: #00ffff; }
 .rank-ultimate { color: var(--dxd-gold); text-shadow: 0 0 10px red; }
 
-#mentor-img {
+/* Feedback Status Styles */
+.feedback-correct { color: var(--dxd-gold); font-weight: bold; }
+.feedback-incorrect { color: red; font-weight: bold; }
 
-/* Add this to the bottom of style.css */
+#mentor-img {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+/* Smooth transitions for game elements */
 #game-wrapper, #start-screen {
     transition: opacity 0.5s ease-in-out;
 }
@@ -129,9 +137,4 @@ button:hover {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-    max-width: 200px;
-    height: auto;
-    margin-bottom: 15px;
 }
