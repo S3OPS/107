@@ -183,7 +183,7 @@ button:focus-visible {
 /* Selected option style for keyboard navigation */
 #options-container button.keyboard-selected {
     outline: 3px solid var(--dxd-gold);
-    background-color: #ff0000;
+    background-color: var(--dxd-red);
     box-shadow: 0 0 15px var(--dxd-gold);
 }
 
@@ -252,9 +252,9 @@ button:focus-visible {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
+        animation-duration: 0.001s !important;
         animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+        transition-duration: 0.001s !important;
     }
     
     .spinner {

@@ -115,9 +115,6 @@ function renderOptions(options, onSelect) {
     const container = elementCache.optionsContainer;
     if (!container) return;
 
-    // Store callback for keyboard navigation
-    container._onSelect = onSelect;
-
     // Use DocumentFragment for batch DOM insertion (performance optimization)
     const fragment = document.createDocumentFragment();
     
@@ -134,12 +131,6 @@ function renderOptions(options, onSelect) {
     // Replace content in single operation for better performance
     container.replaceChildren(fragment);
     container.classList.remove('hidden');
-    
-    // Focus first option for accessibility
-    const firstButton = container.querySelector('button');
-    if (firstButton) {
-        firstButton.focus();
-    }
 }
 
 /**
@@ -324,10 +315,11 @@ function showError(message, onRetry) {
     elementCache.errorDisplay?.classList.remove('hidden');
     
     if (elementCache.retryBtn && onRetry) {
-        // Remove any existing listeners and add new one
-        const newRetryBtn = elementCache.retryBtn.cloneNode(true);
-        elementCache.retryBtn.parentNode.replaceChild(newRetryBtn, elementCache.retryBtn);
-        elementCache.retryBtn = newRetryBtn;
+        // Remove existing listener before adding new one
+        if (elementCache._retryHandler) {
+            elementCache.retryBtn.removeEventListener('click', elementCache._retryHandler);
+        }
+        elementCache._retryHandler = onRetry;
         elementCache.retryBtn.addEventListener('click', onRetry);
     }
 }
@@ -341,12 +333,17 @@ function hideError() {
 
 /**
  * Set up keyboard navigation for quiz options
- * Allows arrow keys to navigate and Enter/Space to select
+ * Allows arrow keys to navigate and number keys to select
  */
 function setupKeyboardNavigation() {
     document.addEventListener('keydown', (e) => {
         const container = elementCache.optionsContainer;
         if (!container || container.classList.contains('hidden')) return;
+        
+        // Don't interfere with text input fields
+        const activeElement = document.activeElement;
+        const tagName = activeElement?.tagName?.toLowerCase();
+        if (tagName === 'input' || tagName === 'textarea') return;
         
         const buttons = Array.from(container.querySelectorAll('button'));
         if (buttons.length === 0) return;
@@ -380,11 +377,13 @@ function setupKeyboardNavigation() {
             case '3':
             case '4':
             case '5':
-                // Number keys for quick selection (1-5)
-                const numIndex = parseInt(e.key, 10) - 1;
-                if (numIndex < buttons.length) {
-                    e.preventDefault();
-                    buttons[numIndex].click();
+                // Number keys for quick selection (1-5) - only when focused on options
+                if (currentIndex >= 0) {
+                    const numIndex = parseInt(e.key, 10) - 1;
+                    if (numIndex < buttons.length) {
+                        e.preventDefault();
+                        buttons[numIndex].click();
+                    }
                 }
                 break;
         }
