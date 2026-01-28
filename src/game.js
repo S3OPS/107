@@ -8,13 +8,17 @@
  *   - quiz.js: Quiz mechanics and scoring
  *   - ui.js: Rendering and DOM operations
  * 
- * @version 2.0.0 - Refactored for modularity and performance
+ * @version 2.1.0 - Added accessibility and error handling improvements
  */
 
 import GameConfig from './modules/config.js';
 import GameState from './modules/state.js';
 import * as UI from './modules/ui.js';
 import * as Quiz from './modules/quiz.js';
+
+// Maximum number of retry attempts for loading data
+const MAX_RETRY_ATTEMPTS = 3;
+let retryAttempts = 0;
 
 /**
  * Initialize the game application
@@ -25,12 +29,36 @@ async function initGame() {
         // Initialize UI element cache (performance optimization)
         UI.initUI();
         
+        // Show loading indicator while fetching data
+        UI.showLoading();
+        
         // Load quiz data with validation
         const success = await Quiz.loadQuizData();
+        
+        // Hide loading indicator
+        UI.hideLoading();
+        
         if (!success) {
-            console.error("Critical Failure: Could not load quiz data");
+            retryAttempts++;
+            if (retryAttempts < MAX_RETRY_ATTEMPTS) {
+                UI.showError(
+                    `Failed to load quiz data (attempt ${retryAttempts}/${MAX_RETRY_ATTEMPTS}). Please check your connection and try again.`,
+                    () => {
+                        UI.hideError();
+                        initGame(); // Retry initialization
+                    }
+                );
+            } else {
+                UI.showError(
+                    "Failed to load quiz data after multiple attempts. Please refresh the page to try again.",
+                    () => location.reload()
+                );
+            }
             return;
         }
+        
+        // Reset retry counter on success
+        retryAttempts = 0;
         
         // Set up event handlers
         UI.onBeginClick(startGame);
@@ -38,6 +66,11 @@ async function initGame() {
         
     } catch (err) {
         console.error("Critical Failure:", err);
+        UI.hideLoading();
+        UI.showError(
+            "An unexpected error occurred. Please refresh the page.",
+            () => location.reload()
+        );
     }
 }
 
