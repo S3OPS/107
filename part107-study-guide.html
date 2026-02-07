@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 107 FAA Exam Study Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: #f0f0f0;
+            height: 30px;
+            border-radius: 15px;
+            margin: 20px 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .question-container {
+            padding: 40px;
+        }
+
+        .question-header {
+            margin-bottom: 20px;
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover {
+            background: #e8e9ff;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .option-letter {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 1.1em;
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .option.correct .option-letter {
+            background: #28a745;
+        }
+
+        .option.incorrect .option-letter {
+            background: #dc3545;
+        }
+
+        .feedback {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .feedback.incorrect {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+
+        .feedback-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .feedback-message {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            font-style: italic;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 40px;
+            background: #f8f9fa;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            display: none;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .results-title {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .results-score {
+            font-size: 4em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0;
+        }
+
+        .results-message {
+            font-size: 1.3em;
+            line-height: 1.8;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .results-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .breakdown-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .breakdown-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .breakdown-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .start-screen {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .start-screen h2 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            font-size: 1.2em;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .topics-list {
+            text-align: left;
+            max-width: 600px;
+            margin: 30px auto;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        .topics-list h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .topics-list ul {
+            list-style: none;
+        }
+
+        .topics-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 1.1em;
+        }
+
+        .topics-list li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .topics-list li:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .question-text {
+                font-size: 1.1em;
+            }
+
+            .option {
+                padding: 15px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ Part 107 FAA Exam Study Guide</h1>
+            <p>Master Your Remote Pilot Knowledge</p>
+        </div>
+
+        <div id="startScreen" class="start-screen">
+            <h2>Welcome to Your Interactive Study Guide!</h2>
+            <p>This comprehensive guide covers everything you need to know to pass the Part 107 FAA Remote Pilot exam. Answer multiple choice questions, get instant feedback, and track your progress.</p>
+            
+            <div class="topics-list">
+                <h3>📚 Topics Covered:</h3>
+                <ul>
+                    <li>Airspace Classification & Requirements</li>
+                    <li>Weather Theory & Meteorology</li>
+                    <li>Regulations & Operating Requirements</li>
+                    <li>Loading & Performance</li>
+                    <li>Emergency Procedures</li>
+                    <li>Crew Resource Management</li>
+                    <li>Radio Communication</li>
+                    <li>Airport Operations</li>
+                    <li>Aeronautical Decision Making</li>
+                    <li>Maintenance & Preflight</li>
+                </ul>
+            </div>
+
+            <p><strong>You have until March to prepare - let's get started!</strong></p>
+            <button class="btn btn-primary" onclick="startQuiz()">Start Studying 🚀</button>
+        </div>
+
+        <div id="quizScreen" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar">0%</div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="currentQuestion">0</div>
+                    <div class="stat-label">Question</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="correctCount">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="scorePercent">0%</div>
+                    <div class="stat-label">Score</div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-header">
+                    <div class="category-badge" id="category"></div>
+                    <div class="question-text" id="questionText"></div>
+                </div>
+
+                <div class="options" id="optionsContainer"></div>
+
+                <div class="feedback" id="feedback"></div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">← Previous</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+            </div>
+        </div>
+
+        <div id="resultsScreen" class="results-container">
+            <div class="results-title">🎉 Quiz Complete!</div>
+            <div class="results-score" id="finalScore"></div>
+            <div class="results-message" id="resultsMessage"></div>
+            
+            <div class="results-breakdown">
+                <div class="breakdown-item">
+                    <div class="breakdown-value" id="totalAnswered">0</div>
+                    <div class="breakdown-label">Questions Answered</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-value" id="totalCorrect">0</div>
+                    <div class="breakdown-label">Correct Answers</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-value" id="totalIncorrect">0</div>
+                    <div class="breakdown-label">Incorrect Answers</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top: 30px;">Try Again 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive Part 107 Question Bank
+        const questions = [
+            // Airspace Classification
+            {
+                category: "Airspace",
+                question: "What is the maximum altitude you can fly a drone under Part 107 without special authorization?",
+                options: [
+                    "200 feet AGL",
+                    "400 feet AGL",
+                    "500 feet AGL",
+                    "1000 feet AGL"
+                ],
+                correct: 1,
+                explanation: "Under Part 107, the maximum altitude for drone operations is 400 feet above ground level (AGL) unless you're flying within 400 feet of a structure, in which case you can fly up to 400 feet above the structure's immediate uppermost limit."
+            },
+            {
+                category: "Airspace",
+                question: "Which class of airspace requires ATC authorization for drone operations?",
+                options: [
+                    "Class G airspace",
+                    "Class E airspace below 400 feet",
+                    "Class B, C, D, and E surface areas",
+                    "All airspace requires authorization"
+                ],
+                correct: 2,
+                explanation: "Class B, C, D, and surface area E airspace require ATC authorization through LAANC or DroneZone. Class G airspace (uncontrolled) does not require authorization, though you still must follow Part 107 regulations."
+            },
+            {
+                category: "Airspace",
+                question: "What does Class G airspace represent?",
+                options: [
+                    "Controlled airspace from surface to 18,000 feet",
+                    "Uncontrolled airspace",
+                    "Restricted airspace for military operations",
+                    "Airspace around major airports"
+                ],
+                correct: 1,
+                explanation: "Class G airspace is uncontrolled airspace where Air Traffic Control (ATC) does not provide services. It's where most recreational and commercial drone operations occur, typically below 1,200 feet AGL."
+            },
+            {
+                category: "Airspace",
+                question: "What is the purpose of a NOTAM?",
+                options: [
+                    "To certify remote pilots",
+                    "To provide notice of abnormal conditions or hazards",
+                    "To grant airspace authorization",
+                    "To register drones"
+                ],
+                correct: 1,
+                explanation: "NOTAM stands for Notice to Airmen. It provides time-critical information about abnormal conditions, hazards, or changes to facilities, services, procedures, or regulations. Remote pilots should check NOTAMs before every flight."
+            },
+            {
+                category: "Airspace",
+                question: "What does LAANC stand for?",
+                options: [
+                    "Low Altitude Authorization and Notification Capability",
+                    "Local Airspace Acknowledgment and Navigation Control",
+                    "Limited Aircraft Authorization for Networked Communications",
+                    "Licensed Aviation Access to National Corridors"
+                ],
+                correct: 0,
+                explanation: "LAANC (Low Altitude Authorization and Notification Capability) is an automated system that provides near real-time processing of airspace authorization requests for Part 107 drone operations in controlled airspace."
+            },
+
+            // Weather & Meteorology
+            {
+                category: "Weather",
+                question: "What weather phenomenon poses the greatest threat to drone operations?",
+                options: [
+                    "Light rain",
+                    "High winds",
+                    "Partly cloudy skies",
+                    "Temperature below 50°F"
+                ],
+                correct: 1,
+                explanation: "High winds are extremely dangerous for drone operations. Most consumer and commercial drones cannot safely operate in winds exceeding 25-30 mph. Strong winds can cause loss of control, reduced battery life, and crashes."
+            },
+            {
+                category: "Weather",
+                question: "What is the definition of ceiling in aviation weather?",
+                options: [
+                    "The highest altitude a drone can reach",
+                    "The height of the lowest layer of clouds covering more than half the sky",
+                    "The maximum operating altitude",
+                    "The top of controlled airspace"
+                ],
+                correct: 1,
+                explanation: "In aviation, ceiling refers to the height above ground level (AGL) of the lowest layer of clouds that covers more than half (broken) or all (overcast) of the sky. This is important for determining visibility and operating conditions."
+            },
+            {
+                category: "Weather",
+                question: "What causes advection fog?",
+                options: [
+                    "Radiation cooling on clear nights",
+                    "Warm, moist air moving over a cold surface",
+                    "Rising air currents in mountainous terrain",
+                    "Thunderstorm activity"
+                ],
+                correct: 1,
+                explanation: "Advection fog forms when warm, moist air moves (advects) over a colder surface, causing the air to cool to its dew point. This commonly occurs in coastal areas when warm air moves over cold ocean water."
+            },
+            {
+                category: "Weather",
+                question: "What information is contained in a METAR?",
+                options: [
+                    "Forecast weather for the next 24 hours",
+                    "Current observed weather conditions at an airport",
+                    "Long-term climate predictions",
+                    "Pilot experience requirements"
+                ],
+                correct: 1,
+                explanation: "METAR (Meteorological Aerodrome Report) is a format for reporting current weather observations at airports. It includes information on wind, visibility, clouds, temperature, dew point, and barometric pressure."
+            },
+            {
+                category: "Weather",
+                question: "What does high humidity increase the risk of?",
+                options: [
+                    "Improved drone performance",
+                    "Condensation damage to electronics",
+                    "Better battery life",
+                    "Enhanced GPS signal"
+                ],
+                correct: 1,
+                explanation: "High humidity increases the risk of condensation forming on or inside electronic components, which can cause short circuits and damage. It can also affect battery performance and reduce overall drone reliability."
+            },
+
+            // Regulations & Operating Requirements
+            {
+                category: "Regulations",
+                question: "What is the minimum age to obtain a Part 107 Remote Pilot Certificate?",
+                options: [
+                    "14 years old",
+                    "16 years old",
+                    "18 years old",
+                    "21 years old"
+                ],
+                correct: 1,
+                explanation: "You must be at least 16 years old to obtain a Part 107 Remote Pilot Certificate. You must also pass the Part 107 knowledge test and undergo TSA vetting."
+            },
+            {
+                category: "Regulations",
+                question: "How often must a Part 107 Remote Pilot Certificate be renewed?",
+                options: [
+                    "Every year",
+                    "Every 2 years",
+                    "Every 3 years",
+                    "Never, it's valid indefinitely"
+                ],
+                correct: 1,
+                explanation: "A Part 107 Remote Pilot Certificate must be renewed every 24 months (2 years). Renewal requires completing an online recurrent training course or retaking the Part 107 knowledge test."
+            },
+            {
+                category: "Regulations",
+                question: "What is the maximum groundspeed allowed under Part 107?",
+                options: [
+                    "87 knots (100 mph)",
+                    "100 knots (115 mph)",
+                    "50 knots (58 mph)",
+                    "No maximum specified"
+                ],
+                correct: 0,
+                explanation: "Part 107.51 limits small unmanned aircraft to a maximum groundspeed of 87 knots (100 mph or 161 km/h). This helps maintain safe separation from other aircraft and ensures the remote pilot maintains adequate control."
+            },
+            {
+                category: "Regulations",
+                question: "When must a drone be registered with the FAA?",
+                options: [
+                    "All drones must be registered",
+                    "Only drones weighing more than 0.55 pounds (250 grams)",
+                    "Only drones weighing more than 5 pounds",
+                    "Registration is optional"
+                ],
+                correct: 1,
+                explanation: "Drones weighing more than 0.55 pounds (250 grams) and less than 55 pounds must be registered with the FAA. The registration number must be displayed on the exterior of the aircraft."
+            },
+            {
+                category: "Regulations",
+                question: "Can you fly a drone at night under Part 107?",
+                options: [
+                    "No, night operations are prohibited",
+                    "Yes, with anti-collision lighting visible for 3 statute miles",
+                    "Only with a waiver",
+                    "Yes, but only in Class G airspace"
+                ],
+                correct: 1,
+                explanation: "As of 2021, night operations are allowed under Part 107 if the remote pilot has completed night training and the drone has anti-collision lighting visible for at least 3 statute miles. Night operations require additional recurrent training."
+            },
+
+            // Operations & Flight Planning
+            {
+                category: "Operations",
+                question: "What is the minimum visibility required for Part 107 operations?",
+                options: [
+                    "1 statute mile",
+                    "2 statute miles",
+                    "3 statute miles",
+                    "5 statute miles"
+                ],
+                correct: 2,
+                explanation: "Part 107 requires a minimum flight visibility of 3 statute miles from the control station. This ensures the remote pilot can see and avoid obstacles, other aircraft, and people on the ground."
+            },
+            {
+                category: "Operations",
+                question: "What must you do before each flight?",
+                options: [
+                    "File a flight plan with ATC",
+                    "Conduct a preflight inspection",
+                    "Submit a weather report",
+                    "Register your drone"
+                ],
+                correct: 1,
+                explanation: "Part 107.49 requires the remote pilot in command to conduct a preflight inspection before each flight, including checking the aircraft and control station for proper operation and any defects that could affect safety."
+            },
+            {
+                category: "Operations",
+                question: "How close can you fly to people not directly participating in the operation?",
+                options: [
+                    "Directly over them at any altitude",
+                    "Not directly over them unless they're under a covered structure",
+                    "Within 10 feet",
+                    "Within 50 feet"
+                ],
+                correct: 1,
+                explanation: "Under Part 107, you cannot operate over people unless they are directly participating in the operation or are under a covered structure or stationary vehicle. Recent rule changes also allow operations over people with drones meeting specific Category 1-4 requirements."
+            },
+            {
+                category: "Operations",
+                question: "What is VLOS (Visual Line of Sight)?",
+                options: [
+                    "Using only the drone's camera feed",
+                    "Seeing the drone with unaided vision (except corrective lenses)",
+                    "Using binoculars to see the drone",
+                    "Maintaining GPS contact"
+                ],
+                correct: 1,
+                explanation: "VLOS means the remote pilot must be able to see the drone with unaided vision (corrective lenses are allowed) throughout the entire flight. This is required under Part 107 to maintain situational awareness and avoid collisions."
+            },
+            {
+                category: "Operations",
+                question: "What action should you take if you experience a flyaway?",
+                options: [
+                    "Wait for the battery to die",
+                    "Activate return-to-home if available, attempt to regain control",
+                    "Immediately file an accident report",
+                    "Continue with your mission"
+                ],
+                correct: 1,
+                explanation: "If experiencing a flyaway (loss of control), attempt to regain control, use return-to-home features if available, and prepare for emergency landing. After regaining control or crash, assess the situation and file reports as required."
+            },
+
+            // Loading & Performance
+            {
+                category: "Loading & Performance",
+                question: "What happens to drone performance at high-density altitude?",
+                options: [
+                    "Performance improves",
+                    "Performance decreases (less lift, reduced efficiency)",
+                    "No effect on performance",
+                    "Only affects battery life"
+                ],
+                correct: 1,
+                explanation: "High-density altitude (high temperature, high elevation, or high humidity) means thinner air. This reduces lift generation and motor efficiency, requiring more power to maintain flight and reducing overall performance and flight time."
+            },
+            {
+                category: "Loading & Performance",
+                question: "How does wind affect battery consumption?",
+                options: [
+                    "Wind has no effect on batteries",
+                    "Headwinds increase battery consumption",
+                    "Wind improves battery life",
+                    "Only crosswinds affect batteries"
+                ],
+                correct: 1,
+                explanation: "Flying into headwinds requires more power to maintain groundspeed and position, significantly increasing battery consumption. Always account for wind when planning flight time and ensure sufficient battery reserve."
+            },
+            {
+                category: "Loading & Performance",
+                question: "What is the effect of adding payload weight to a drone?",
+                options: [
+                    "Increases flight time",
+                    "Improves stability",
+                    "Reduces flight time and maneuverability",
+                    "No effect if under maximum takeoff weight"
+                ],
+                correct: 2,
+                explanation: "Adding payload weight requires more power to maintain flight, reducing flight time. It also affects maneuverability and can change the aircraft's center of gravity, potentially making it unstable. Never exceed the manufacturer's maximum takeoff weight."
+            },
+            {
+                category: "Loading & Performance",
+                question: "What is the relationship between temperature and battery performance?",
+                options: [
+                    "Cold temperatures improve battery performance",
+                    "Temperature has no effect",
+                    "Cold temperatures reduce battery capacity and performance",
+                    "Only hot temperatures affect batteries"
+                ],
+                correct: 2,
+                explanation: "Cold temperatures significantly reduce lithium polymer battery capacity, discharge rate, and overall performance. In freezing conditions, batteries may provide 50% or less of their normal capacity. Pre-warm batteries and monitor voltage closely in cold weather."
+            },
+            {
+                category: "Loading & Performance",
+                question: "What is the recommended minimum battery level to return to home?",
+                options: [
+                    "10%",
+                    "20%",
+                    "30%",
+                    "50%"
+                ],
+                correct: 2,
+                explanation: "Most pilots recommend returning with at least 30% battery remaining to account for unexpected situations like headwinds, navigation errors, or the need to avoid obstacles. Never push your battery to critically low levels."
+            },
+
+            // Emergency Procedures
+            {
+                category: "Emergency",
+                question: "What should you do if you lose GPS signal during flight?",
+                options: [
+                    "Immediately land",
+                    "Switch to ATTI mode if available and carefully return to home",
+                    "Continue flying normally",
+                    "Activate automatic landing"
+                ],
+                correct: 1,
+                explanation: "Loss of GPS signal means loss of position hold and automated features. If your drone has ATTI (attitude) mode, it will switch to that, requiring manual control. Carefully navigate back to your position and land safely. Avoid complex maneuvers."
+            },
+            {
+                category: "Emergency",
+                question: "When must you report an accident to the FAA?",
+                options: [
+                    "Any crash or damage",
+                    "Serious injury or property damage over $500",
+                    "Only if someone dies",
+                    "Reporting is optional"
+                ],
+                correct: 1,
+                explanation: "Part 107 requires reporting within 10 days if an operation causes serious injury, loss of consciousness, or property damage (other than to the drone) exceeding $500. Use the FAA's online reporting system."
+            },
+            {
+                category: "Emergency",
+                question: "What is the first priority in an emergency situation?",
+                options: [
+                    "Protecting the drone",
+                    "Completing the mission",
+                    "Safety of people and property",
+                    "Recording video evidence"
+                ],
+                correct: 2,
+                explanation: "In any emergency, the first priority is always the safety of people and property. The remote pilot in command is responsible for making decisions that prioritize safety, even if it means damaging or losing the aircraft."
+            },
+            {
+                category: "Emergency",
+                question: "What should you do if manned aircraft approaches your operation area?",
+                options: [
+                    "Maintain altitude and position",
+                    "Immediately land or move away from the manned aircraft path",
+                    "Flash your lights to warn them",
+                    "Continue your mission"
+                ],
+                correct: 1,
+                explanation: "Manned aircraft always have right of way. If a manned aircraft approaches, immediately descend, move away from its path, and land if necessary. Never assume they see you or will avoid you."
+            },
+            {
+                category: "Emergency",
+                question: "What indicates a low battery warning should be taken seriously?",
+                options: [
+                    "You can ignore it if you're close to home",
+                    "It means you may have only minutes of flight time remaining",
+                    "It's just a suggestion to land soon",
+                    "Modern drones always have 10+ minutes after the warning"
+                ],
+                correct: 1,
+                explanation: "Low battery warnings are critical. Depending on conditions (wind, temperature, altitude), you may have only 1-3 minutes of flight time remaining. Always respond immediately by returning to home or landing in a safe location."
+            },
+
+            // Crew Resource Management
+            {
+                category: "Crew Resource Management",
+                question: "What is the purpose of a visual observer (VO)?",
+                options: [
+                    "To fly the drone when the pilot is tired",
+                    "To assist in maintaining VLOS and watching for hazards",
+                    "To handle all communication",
+                    "Visual observers are not allowed under Part 107"
+                ],
+                correct: 1,
+                explanation: "A visual observer helps the remote pilot maintain VLOS, watches for hazards (aircraft, people, obstacles), and assists in safe operation. The VO must be able to communicate with the remote pilot in command and see the aircraft."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "Who has final authority over the flight operation?",
+                options: [
+                    "The client who hired you",
+                    "Air Traffic Control",
+                    "The Remote Pilot in Command (RPIC)",
+                    "The visual observer"
+                ],
+                correct: 2,
+                explanation: "The Remote Pilot in Command (RPIC) has final authority and responsibility for the operation. They can decline to fly if conditions are unsafe, regardless of pressure from clients or others."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "What is the hazardous attitude of 'Get-Home-Itis'?",
+                options: [
+                    "Being too cautious",
+                    "Rushing to complete a mission despite warning signs",
+                    "Taking too many breaks",
+                    "Following regulations too strictly"
+                ],
+                correct: 1,
+                explanation: "Get-Home-Itis (or 'mission-itis') is the dangerous tendency to rush to complete a mission despite deteriorating conditions, low battery, or other warning signs. This hazardous attitude leads to poor decision-making and accidents."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "What should you do if you feel uncomfortable with a requested operation?",
+                options: [
+                    "Proceed anyway to satisfy the client",
+                    "Decline or postpone until conditions are safe",
+                    "Have someone else fly for you",
+                    "Ignore your instincts"
+                ],
+                correct: 1,
+                explanation: "Trust your instincts. If you're uncomfortable with weather, airspace, or any aspect of the operation, you have the authority and responsibility to decline or postpone. Professional judgment is essential for safe operations."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "What is 'normalization of deviance'?",
+                options: [
+                    "Following all regulations strictly",
+                    "Gradually accepting unsafe practices as normal because nothing bad has happened",
+                    "Training new pilots",
+                    "Updating your knowledge regularly"
+                ],
+                correct: 1,
+                explanation: "Normalization of deviance occurs when unsafe practices become routine because they haven't caused problems yet. Examples include skipping preflight checks, flying in marginal weather, or cutting corners. This attitude eventually leads to accidents."
+            },
+
+            // Radio Communication & Airport Operations
+            {
+                category: "Radio & Airport",
+                question: "What does CTAF stand for?",
+                options: [
+                    "Control Tower Authorization Frequency",
+                    "Common Traffic Advisory Frequency",
+                    "Certified Technical Aviation Frequency",
+                    "Central Terminal Access Frequency"
+                ],
+                correct: 1,
+                explanation: "CTAF (Common Traffic Advisory Frequency) is a radio frequency used at non-towered airports for pilots to communicate their positions and intentions. Monitoring CTAF helps maintain situational awareness of nearby aircraft activity."
+            },
+            {
+                category: "Radio & Airport",
+                question: "What is the standard traffic pattern altitude at most airports?",
+                options: [
+                    "500 feet AGL",
+                    "1,000 feet AGL",
+                    "1,500 feet AGL",
+                    "2,000 feet AGL"
+                ],
+                correct: 1,
+                explanation: "The standard traffic pattern altitude at most airports is 1,000 feet AGL (above ground level). This is important for drone pilots to know when operating near airports, as this is where manned aircraft will be flying during landing and takeoff."
+            },
+            {
+                category: "Radio & Airport",
+                question: "What direction do aircraft typically fly in the traffic pattern?",
+                options: [
+                    "Always clockwise",
+                    "Typically left-hand (counterclockwise) unless specified otherwise",
+                    "Always right-hand",
+                    "No standard pattern"
+                ],
+                correct: 1,
+                explanation: "Most airports use left-hand (counterclockwise) traffic patterns unless a right-hand pattern is specified in the Chart Supplement or by local procedures. This standardization helps prevent collisions and maintain orderly flow."
+            },
+            {
+                category: "Radio & Airport",
+                question: "Why should drone pilots monitor local airport frequencies?",
+                options: [
+                    "It's required by Part 107",
+                    "To maintain awareness of manned aircraft activity in the area",
+                    "To request permission for each flight",
+                    "To report weather conditions"
+                ],
+                correct: 1,
+                explanation: "While not always required, monitoring local airport frequencies (CTAF or tower) when operating near airports helps maintain situational awareness of manned aircraft activity, allowing you to take appropriate action to avoid conflicts."
+            },
+            {
+                category: "Radio & Airport",
+                question: "What does a segmented circle at an airport indicate?",
+                options: [
+                    "The airport is closed",
+                    "Traffic pattern information and runway in use",
+                    "Military operations area",
+                    "Drone operations prohibited"
+                ],
+                correct: 1,
+                explanation: "A segmented circle at an airport displays traffic pattern indicators and wind direction information. It helps pilots determine the active runway and proper traffic pattern direction, especially at non-towered airports."
+            },
+
+            // Aeronautical Decision Making
+            {
+                category: "Decision Making",
+                question: "What does the PAVE checklist help assess?",
+                options: [
+                    "Pilot, Aircraft, enVironment, External pressures",
+                    "Plan, Analyze, Verify, Execute",
+                    "Position, Altitude, Velocity, Energy",
+                    "Preflight, Airspace, Visual observers, Equipment"
+                ],
+                correct: 0,
+                explanation: "The PAVE checklist is a risk management tool: Pilot (skills, fitness), Aircraft (condition, capabilities), enVironment (weather, terrain), and External pressures (time constraints, client expectations). Use it to assess risk before each flight."
+            },
+            {
+                category: "Decision Making",
+                question: "What is the IMSAFE checklist used for?",
+                options: [
+                    "Aircraft inspection",
+                    "Assessing personal fitness to fly (Illness, Medication, Stress, Alcohol, Fatigue, Emotion)",
+                    "Weather analysis",
+                    "Airspace authorization"
+                ],
+                correct: 1,
+                explanation: "IMSAFE assesses personal fitness: Illness, Medication, Stress, Alcohol, Fatigue, Emotion. If any factor impairs your judgment or abilities, you should not operate the drone. Personal fitness is as important as aircraft readiness."
+            },
+            {
+                category: "Decision Making",
+                question: "What is the 3P model for decision making?",
+                options: [
+                    "Plan, Perform, Proceed",
+                    "Perceive, Process, Perform",
+                    "Prepare, Practice, Perfect",
+                    "Position, Power, Pitch"
+                ],
+                correct: 1,
+                explanation: "The 3P model (Perceive, Process, Perform) is a structured approach to aeronautical decision making. Perceive hazards, Process to determine risk and solutions, Perform by taking the safest course of action."
+            },
+            {
+                category: "Decision Making",
+                question: "What type of personality trait is 'anti-authority'?",
+                options: [
+                    "A safe attitude for independent thinking",
+                    "A hazardous attitude that rejects rules and regulations",
+                    "A required trait for remote pilots",
+                    "A neutral personality trait"
+                ],
+                correct: 1,
+                explanation: "Anti-authority is a hazardous attitude where a person resents rules and regulations, thinking 'Don't tell me what to do.' The antidote is recognizing that rules are usually reasonable and designed for safety."
+            },
+            {
+                category: "Decision Making",
+                question: "What does the hazardous attitude of 'invulnerability' mean?",
+                options: [
+                    "Being well-trained and confident",
+                    "Believing 'It won't happen to me' and taking unnecessary risks",
+                    "Having good insurance coverage",
+                    "Following all safety procedures"
+                ],
+                correct: 1,
+                explanation: "Invulnerability is the hazardous attitude of believing 'It won't happen to me.' This leads to taking risks without considering consequences. The antidote is acknowledging that accidents can happen to anyone, including you."
+            },
+
+            // Maintenance & Preflight
+            {
+                category: "Maintenance",
+                question: "How often should you inspect your drone?",
+                options: [
+                    "Once a month",
+                    "Before every flight",
+                    "Only after crashes",
+                    "Once a year"
+                ],
+                correct: 1,
+                explanation: "Part 107.49 requires a preflight inspection before each flight. Check propellers, motors, battery, frame, camera gimbal, firmware updates, and control station. Never skip preflight inspections."
+            },
+            {
+                category: "Maintenance",
+                question: "What should you check on propellers during preflight?",
+                options: [
+                    "Only that they're attached",
+                    "For cracks, chips, or damage; proper installation and tightness",
+                    "Just the color",
+                    "Only if they look damaged"
+                ],
+                correct: 1,
+                explanation: "Inspect propellers for any cracks, chips, or damage; verify they're securely attached and properly installed (correct rotation direction). Damaged propellers can cause vibration, reduced performance, or catastrophic failure."
+            },
+            {
+                category: "Maintenance",
+                question: "What is the proper way to store LiPo batteries?",
+                options: [
+                    "Fully charged",
+                    "Completely discharged",
+                    "At storage voltage (around 50-60% charge)",
+                    "Storage conditions don't matter"
+                ],
+                correct: 2,
+                explanation: "LiPo batteries should be stored at storage voltage (typically 3.8V per cell, about 50-60% charge) in a cool, dry place. Storing fully charged or completely discharged reduces battery lifespan and can be dangerous."
+            },
+            {
+                category: "Maintenance",
+                question: "What indicates a LiPo battery is damaged and should not be used?",
+                options: [
+                    "It's more than 1 year old",
+                    "Swelling, punctures, or significant voltage imbalance between cells",
+                    "It needs to be charged",
+                    "The label is worn"
+                ],
+                correct: 1,
+                explanation: "Never use damaged LiPo batteries. Signs include swelling (puffing), punctures, dents, significant voltage imbalance between cells, or a battery that gets very hot during charging or use. Damaged batteries can catch fire."
+            },
+            {
+                category: "Maintenance",
+                question: "Why is firmware kept up to date?",
+                options: [
+                    "It's not necessary",
+                    "To access new features, improve performance, and fix safety issues",
+                    "Only for warranty purposes",
+                    "To increase resale value"
+                ],
+                correct: 1,
+                explanation: "Firmware updates often include critical safety fixes, improved stability, bug fixes, and new features. However, read release notes carefully and be cautious with updates right before important missions. Always test after updating."
+            },
+
+            // Additional Airspace Questions
+            {
+                category: "Airspace",
+                question: "What color is Class B airspace depicted on sectional charts?",
+                options: [
+                    "Red",
+                    "Blue",
+                    "Magenta",
+                    "Brown"
+                ],
+                correct: 1,
+                explanation: "Class B airspace is depicted in solid blue on sectional charts. It surrounds the busiest airports and typically extends from the surface to 10,000 feet MSL in a stepped configuration resembling an upside-down wedding cake."
+            },
+            {
+                category: "Airspace",
+                question: "What is a TFR?",
+                options: [
+                    "Total Flight Restriction",
+                    "Temporary Flight Restriction",
+                    "Terminal Flight Route",
+                    "Technical Frequency Range"
+                ],
+                correct: 1,
+                explanation: "A TFR (Temporary Flight Restriction) is airspace restriction issued for security, safety, or special events (presidential movements, sporting events, firefighting). TFRs are published via NOTAM. Violating a TFR is a serious offense."
+            },
+            {
+                category: "Airspace",
+                question: "What altitude is Class A airspace?",
+                options: [
+                    "Surface to 10,000 feet",
+                    "10,000 to 18,000 feet MSL",
+                    "18,000 feet MSL to Flight Level 600",
+                    "Above 60,000 feet"
+                ],
+                correct: 2,
+                explanation: "Class A airspace exists from 18,000 feet MSL to Flight Level 600 (approximately 60,000 feet). It's controlled airspace where all aircraft must operate under IFR and have specific equipment. Drones cannot legally operate in Class A airspace under Part 107."
+            },
+            {
+                category: "Airspace",
+                question: "What do the magenta dashed lines around airports on sectional charts indicate?",
+                options: [
+                    "Class B airspace",
+                    "Class C airspace",
+                    "Class D airspace",
+                    "Restricted airspace"
+                ],
+                correct: 2,
+                explanation: "Magenta dashed lines indicate Class D airspace, which surrounds airports with operating control towers. Class D airspace typically extends from the surface to 2,500 feet AGL. Authorization is required for drone operations."
+            },
+
+            // Additional Weather Questions
+            {
+                category: "Weather",
+                question: "What is the standard temperature lapse rate?",
+                options: [
+                    "2°C per 1,000 feet",
+                    "3°C per 1,000 feet",
+                    "5°C per 1,000 feet",
+                    "10°C per 1,000 feet"
+                ],
+                correct: 0,
+                explanation: "The standard temperature lapse rate is approximately 2°C (3.5°F) per 1,000 feet of altitude gain in the troposphere. This means air temperature generally decreases as altitude increases, affecting air density and drone performance."
+            },
+            {
+                category: "Weather",
+                question: "What type of weather produces hail, lightning, and severe turbulence?",
+                options: [
+                    "Stratus clouds",
+                    "Cumulus clouds",
+                    "Cumulonimbus thunderstorms",
+                    "Cirrus clouds"
+                ],
+                correct: 2,
+                explanation: "Cumulonimbus clouds produce thunderstorms with severe weather including hail, lightning, extreme turbulence, heavy rain, and strong winds. Never fly near thunderstorms - they can extend for miles and produce hazardous conditions."
+            },
+            {
+                category: "Weather",
+                question: "What causes wind shear?",
+                options: [
+                    "High humidity",
+                    "Sudden changes in wind speed and/or direction over a short distance",
+                    "Low barometric pressure",
+                    "Cold temperatures"
+                ],
+                correct: 1,
+                explanation: "Wind shear is a sudden change in wind speed and/or direction over a short distance. It can occur near thunderstorms, frontal systems, or due to terrain effects. Wind shear is extremely hazardous for all aircraft, especially small drones."
+            },
+            {
+                category: "Weather",
+                question: "What does dew point indicate?",
+                options: [
+                    "The temperature at which condensation occurs",
+                    "The highest temperature of the day",
+                    "Wind speed",
+                    "Barometric pressure"
+                ],
+                correct: 0,
+                explanation: "Dew point is the temperature at which air becomes saturated and condensation begins. When air temperature and dew point are close (within 4-5°F), fog or low clouds are likely to form. This is important for assessing visibility conditions."
+            },
+
+            // Additional Regulations Questions
+            {
+                category: "Regulations",
+                question: "What is the maximum weight for a Part 107 drone?",
+                options: [
+                    "25 pounds",
+                    "55 pounds including payload",
+                    "100 pounds",
+                    "No weight limit"
+                ],
+                correct: 1,
+                explanation: "Under Part 107, the maximum weight for a small unmanned aircraft is 55 pounds (25 kg) including everything on board (payload, batteries, etc.). Aircraft exceeding this weight require different certification and operating rules."
+            },
+            {
+                category: "Regulations",
+                question: "Can you operate from a moving vehicle under Part 107?",
+                options: [
+                    "No, never",
+                    "Yes, but only over sparsely populated areas",
+                    "Yes, without restrictions",
+                    "Only with a waiver"
+                ],
+                correct: 1,
+                explanation: "Part 107 allows operations from moving vehicles or aircraft only over sparsely populated areas. This helps reduce risk to people and property. Operating from a moving vehicle in populated areas requires a waiver."
+            },
+            {
+                category: "Regulations",
+                question: "What documents must you have available during flight operations?",
+                options: [
+                    "Only your driver's license",
+                    "Remote Pilot Certificate and photo ID",
+                    "Just the drone registration",
+                    "No documents required"
+                ],
+                correct: 1,
+                explanation: "You must have your Remote Pilot Certificate and government-issued photo identification available during operations. These must be presented to FAA inspectors or law enforcement upon request."
+            },
+            {
+                category: "Regulations",
+                question: "How long is the Part 107 knowledge test valid before expiring?",
+                options: [
+                    "12 months",
+                    "24 months",
+                    "36 months",
+                    "It never expires"
+                ],
+                correct: 1,
+                explanation: "The Part 107 knowledge test results are valid for 24 months. Within this period, you must complete the application process to receive your Remote Pilot Certificate, which is then valid for 24 months from issuance."
+            },
+
+            // Additional Operations Questions
+            {
+                category: "Operations",
+                question: "What is the minimum distance from clouds required under Part 107?",
+                options: [
+                    "Clear of clouds",
+                    "500 feet below, 1,000 feet above, 2,000 feet horizontally",
+                    "500 feet in any direction",
+                    "1,000 feet in any direction"
+                ],
+                correct: 1,
+                explanation: "Part 107 requires remaining at least 500 feet below clouds, 1,000 feet above clouds, and 2,000 feet horizontally from clouds. This cloud clearance ensures adequate separation from manned aircraft operating in and around clouds."
+            },
+            {
+                category: "Operations",
+                question: "What is a sterile cockpit?",
+                options: [
+                    "A clean work area",
+                    "Avoiding distractions during critical phases of flight",
+                    "Operating alone",
+                    "Using sanitized equipment"
+                ],
+                correct: 1,
+                explanation: "Sterile cockpit refers to avoiding non-essential activities and distractions during critical phases of flight (takeoff, landing, or when dealing with problems). This helps maintain focus and reduces the risk of errors."
+            },
+            {
+                category: "Operations",
+                question: "What should you consider when planning a flight near wildlife?",
+                options: [
+                    "Wildlife is not a concern",
+                    "Avoid disturbing wildlife; some areas have specific restrictions",
+                    "Only consider during nesting season",
+                    "Wildlife will always avoid drones"
+                ],
+                correct: 1,
+                explanation: "Many areas have restrictions on drone operations near wildlife, especially during nesting season. Drones can disturb wildlife, causing stress or abandonment of nests. Research local regulations and maintain appropriate distances from animals."
+            },
+
+            // Additional Decision Making Questions
+            {
+                category: "Decision Making",
+                question: "What is 'machoism' in the context of hazardous attitudes?",
+                options: [
+                    "Being confident and skilled",
+                    "Thinking 'I can do it' and taking unnecessary risks to prove ability",
+                    "Following proper procedures",
+                    "Working with a team"
+                ],
+                correct: 1,
+                explanation: "Machoism is the hazardous attitude of taking risks to prove you can handle anything - 'I can do it.' This leads to showing off or accepting unnecessary challenges. The antidote is acknowledging that taking chances is foolish."
+            },
+            {
+                category: "Decision Making",
+                question: "What is 'resignation' as a hazardous attitude?",
+                options: [
+                    "Quitting flying",
+                    "Thinking 'What's the use?' and not taking action when needed",
+                    "Being calm under pressure",
+                    "Following instructions carefully"
+                ],
+                correct: 1,
+                explanation: "Resignation is the hazardous attitude of thinking 'What's the use?' and believing you can't make a difference. This leads to passivity when action is needed. The antidote is realizing you're not helpless and can make a difference."
+            }
+        ];
+
+        // Quiz State
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let selectedAnswer = null;
+        let userAnswers = [];
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Start Quiz
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'block';
+            loadQuestion();
+        }
+
+        // Load Question
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            selectedAnswer = null;
+
+            // Update header
+            document.getElementById('category').textContent = question.category;
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+
+            // Clear and populate options
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            const letters = ['A', 'B', 'C', 'D'];
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.onclick = () => selectAnswer(index);
+                optionDiv.innerHTML = `
+                    <div class="option-letter">${letters[index]}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            // Hide feedback
+            document.getElementById('feedback').classList.remove('show');
+
+            // Update stats
+            updateStats();
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        // Select Answer
+        function selectAnswer(index) {
+            if (selectedAnswer !== null) return; // Already answered
+
+            selectedAnswer = index;
+            const question = questions[currentQuestionIndex];
+            const isCorrect = index === question.correct;
+
+            // Store answer
+            userAnswers[currentQuestionIndex] = {
+                selected: index,
+                correct: question.correct,
+                isCorrect: isCorrect
+            };
+
+            if (isCorrect) {
+                correctAnswers++;
+            }
+
+            // Update option styling
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, i) => {
+                if (i === question.correct) {
+                    option.classList.add('correct');
+                } else if (i === index && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+
+            // Show feedback
+            showFeedback(isCorrect, question);
+
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+
+            // Update stats
+            updateStats();
+        }
+
+        // Show Feedback
+        function showFeedback(isCorrect, question) {
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+
+            const encouragement = isCorrect 
+                ? ['Excellent!', 'Great job!', 'Perfect!', 'Well done!', 'Outstanding!', 'Awesome!'][Math.floor(Math.random() * 6)]
+                : ['Good try!', 'Keep learning!', 'You\'re getting there!', 'Nice effort!', 'Almost!'][Math.floor(Math.random() * 5)];
+
+            const correctAnswerText = question.options[question.correct];
+
+            feedback.innerHTML = `
+                <div class="feedback-title">${encouragement}</div>
+                <div class="feedback-message">
+                    ${isCorrect 
+                        ? 'That\'s the correct answer!' 
+                        : `The correct answer is: <strong>${correctAnswerText}</strong>`
+                    }
+                </div>
+                <div class="explanation">
+                    💡 <strong>Explanation:</strong> ${question.explanation}
+                </div>
+            `;
+        }
+
+        // Update Stats
+        function updateStats() {
+            const answered = userAnswers.filter(a => a !== undefined).length;
+            const progress = (answered / questions.length) * 100;
+            const score = answered > 0 ? Math.round((correctAnswers / answered) * 100) : 0;
+
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressBar').textContent = Math.round(progress) + '%';
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('scorePercent').textContent = score + '%';
+        }
+
+        // Next Question
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Previous Question
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                
+                // If we already answered this question, restore the answer
+                if (userAnswers[currentQuestionIndex]) {
+                    const previousAnswer = userAnswers[currentQuestionIndex];
+                    selectedAnswer = previousAnswer.selected;
+                }
+                
+                loadQuestion();
+
+                // If question was answered, show the selection
+                if (selectedAnswer !== null) {
+                    const question = questions[currentQuestionIndex];
+                    const options = document.querySelectorAll('.option');
+                    
+                    options.forEach((option, i) => {
+                        if (i === question.correct) {
+                            option.classList.add('correct');
+                        } else if (i === selectedAnswer && !previousAnswer.isCorrect) {
+                            option.classList.add('incorrect');
+                        }
+                        option.style.pointerEvents = 'none';
+                    });
+
+                    showFeedback(previousAnswer.isCorrect, question);
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            }
+        }
+
+        // Show Results
+        function showResults() {
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('resultsScreen').classList.add('show');
+
+            const totalQuestions = questions.length;
+            const scorePercent = Math.round((correctAnswers / totalQuestions) * 100);
+
+            document.getElementById('finalScore').textContent = scorePercent + '%';
+            document.getElementById('totalAnswered').textContent = totalQuestions;
+            document.getElementById('totalCorrect').textContent = correctAnswers;
+            document.getElementById('totalIncorrect').textContent = totalQuestions - correctAnswers;
+
+            let message = '';
+            if (scorePercent >= 90) {
+                message = '🎉 Outstanding! You\'re ready for the Part 107 exam! Your knowledge is excellent and you demonstrate a strong understanding of all the key concepts. Keep up the great work!';
+            } else if (scorePercent >= 80) {
+                message = '🌟 Great job! You\'re almost there! With a bit more study in the areas you missed, you\'ll be fully prepared for the exam. Review the explanations and try again!';
+            } else if (scorePercent >= 70) {
+                message = '📚 Good progress! You understand many concepts, but there\'s room for improvement. Focus on the areas where you struggled and review the explanations carefully. The passing score for the actual exam is 70%, so you\'re on the right track!';
+            } else if (scorePercent >= 60) {
+                message = '💪 Keep studying! You\'re building your knowledge, but need more practice. Review each topic thoroughly and understand the reasoning behind each answer. You can do this!';
+            } else {
+                message = '📖 Don\'t give up! This is a complex exam covering many topics. Take time to study each subject area, review the explanations, and take the quiz again. Every expert was once a beginner!';
+            }
+
+            document.getElementById('resultsMessage').textContent = message;
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            selectedAnswer = null;
+            userAnswers = [];
+
+            document.getElementById('resultsScreen').classList.remove('show');
+            document.getElementById('quizScreen').style.display = 'block';
+            
+            loadQuestion();
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            // Questions are already loaded in order
+            console.log(`Loaded ${questions.length} questions for Part 107 study guide`);
+        };
+    </script>
+</body>
+</html>
