@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Part 107 FAA Exam Study Guide</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1961,68 +1960,76 @@
             initializeCategoryChart();
         };
 
-        // Initialize Category Distribution Chart
+        // Initialize Category Distribution Chart (Custom Canvas Implementation)
         function initializeCategoryChart() {
             const categoryCount = {};
             questions.forEach(q => {
                 categoryCount[q.category] = (categoryCount[q.category] || 0) + 1;
             });
 
-            const ctx = document.getElementById('categoryChart');
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: Object.keys(categoryCount),
-                        datasets: [{
-                            data: Object.values(categoryCount),
-                            backgroundColor: [
-                                '#2196F3', // Blue
-                                '#FF9800', // Orange
-                                '#4CAF50', // Green
-                                '#F44336', // Red
-                                '#9C27B0', // Purple
-                                '#00BCD4', // Cyan
-                                '#FFC107', // Amber
-                                '#E91E63', // Pink
-                                '#795548', // Brown
-                                '#607D8B'  // Blue Grey
-                            ],
-                            borderWidth: 2,
-                            borderColor: '#fff'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    padding: 15,
-                                    font: {
-                                        size: 12
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const label = context.label || '';
-                                        const value = context.parsed || 0;
-                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        const percentage = ((value / total) * 100).toFixed(1);
-                                        return `${label}: ${value} questions (${percentage}%)`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
+            const canvas = document.getElementById('categoryChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width = canvas.offsetWidth * 2; // Retina support
+            const height = canvas.height = canvas.offsetHeight * 2;
+            ctx.scale(2, 2);
+            
+            const colors = [
+                '#2196F3', '#FF9800', '#4CAF50', '#F44336', '#9C27B0',
+                '#00BCD4', '#FFC107', '#E91E63', '#795548', '#607D8B'
+            ];
+            
+            const categories = Object.keys(categoryCount);
+            const values = Object.values(categoryCount);
+            const total = values.reduce((a, b) => a + b, 0);
+            
+            // Draw donut chart
+            const centerX = width / 4;
+            const centerY = height / 4 - 40;
+            const radius = Math.min(width, height) / 6;
+            const innerRadius = radius * 0.5;
+            
+            let currentAngle = -Math.PI / 2;
+            
+            categories.forEach((category, i) => {
+                const sliceAngle = (values[i] / total) * 2 * Math.PI;
+                
+                // Draw slice
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+                ctx.arc(centerX, centerY, innerRadius, currentAngle + sliceAngle, currentAngle, true);
+                ctx.closePath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                currentAngle += sliceAngle;
+            });
+            
+            // Draw legend
+            const legendY = height / 2 - 40;
+            const legendX = 20;
+            categories.forEach((category, i) => {
+                const y = legendY + i * 25;
+                
+                // Color box
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fillRect(legendX, y, 15, 15);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(legendX, y, 15, 15);
+                
+                // Text
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.fillText(`${category}: ${values[i]}`, legendX + 20, y + 12);
+            });
         }
 
-        // Initialize Performance Charts (called after quiz completion)
+        // Initialize Performance Charts (Custom Canvas Implementation)
         function initializePerformanceCharts() {
             // Calculate performance by category
             const categoryStats = {};
@@ -2037,113 +2044,139 @@
             });
 
             // Performance by Category Bar Chart
-            const perfCtx = document.getElementById('performanceChart');
-            if (perfCtx) {
-                const categories = Object.keys(categoryStats);
+            const perfCanvas = document.getElementById('performanceChart');
+            if (perfCanvas) {
+                const ctx = perfCanvas.getContext('2d');
+                const width = perfCanvas.width = perfCanvas.offsetWidth * 2;
+                const height = perfCanvas.height = perfCanvas.offsetHeight * 2;
+                ctx.scale(2, 2);
+                
+                const categories = Object.keys(categoryStats).sort();
                 const percentages = categories.map(cat => 
-                    ((categoryStats[cat].correct / categoryStats[cat].total) * 100).toFixed(1)
+                    (categoryStats[cat].correct / categoryStats[cat].total) * 100
                 );
-
-                new Chart(perfCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: categories,
-                        datasets: [{
-                            label: 'Score (%)',
-                            data: percentages,
-                            backgroundColor: percentages.map(p => 
-                                p >= 90 ? '#4CAF50' :
-                                p >= 80 ? '#8BC34A' :
-                                p >= 70 ? '#FFC107' :
-                                p >= 60 ? '#FF9800' : '#F44336'
-                            ),
-                            borderColor: '#1a1a1a',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    callback: function(value) {
-                                        return value + '%';
-                                    }
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Score Percentage'
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    font: {
-                                        size: 10
-                                    }
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const cat = context.label;
-                                        const stats = categoryStats[cat];
-                                        return `${context.parsed.y}% (${stats.correct}/${stats.total} correct)`;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                
+                const chartWidth = width / 2 - 60;
+                const chartHeight = height / 2 - 80;
+                const barWidth = chartWidth / categories.length - 5;
+                const startX = 40;
+                const startY = height / 2 - 50;
+                
+                // Draw axes
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(startX, startY - chartHeight);
+                ctx.lineTo(startX, startY);
+                ctx.lineTo(startX + chartWidth, startY);
+                ctx.stroke();
+                
+                // Draw bars
+                categories.forEach((cat, i) => {
+                    const barHeight = (percentages[i] / 100) * chartHeight;
+                    const x = startX + i * (barWidth + 5) + 5;
+                    const y = startY - barHeight;
+                    
+                    // Color based on score
+                    const p = percentages[i];
+                    ctx.fillStyle = p >= 90 ? '#4CAF50' :
+                                   p >= 80 ? '#8BC34A' :
+                                   p >= 70 ? '#FFC107' :
+                                   p >= 60 ? '#FF9800' : '#F44336';
+                    
+                    ctx.fillRect(x, y, barWidth, barHeight);
+                    ctx.strokeStyle = '#1a1a1a';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x, y, barWidth, barHeight);
+                    
+                    // Value label
+                    ctx.fillStyle = '#333';
+                    ctx.font = 'bold 10px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(Math.round(percentages[i]) + '%', x + barWidth/2, y - 5);
+                    
+                    // Category label (rotated)
+                    ctx.save();
+                    ctx.translate(x + barWidth/2, startY + 10);
+                    ctx.rotate(-Math.PI / 4);
+                    ctx.font = '9px Arial';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(cat, 0, 0);
+                    ctx.restore();
                 });
+                
+                // Y-axis labels
+                ctx.fillStyle = '#666';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'right';
+                for (let i = 0; i <= 100; i += 25) {
+                    const y = startY - (i / 100) * chartHeight;
+                    ctx.fillText(i + '%', startX - 5, y + 3);
+                }
             }
 
             // Score Distribution Pie Chart
-            const scoreCtx = document.getElementById('scoreDistributionChart');
-            if (scoreCtx) {
-                new Chart(scoreCtx, {
-                    type: 'pie',
-                    data: {
-                        labels: ['Correct', 'Incorrect'],
-                        datasets: [{
-                            data: [correctAnswers, questions.length - correctAnswers],
-                            backgroundColor: ['#4CAF50', '#F44336'],
-                            borderWidth: 2,
-                            borderColor: '#fff'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    padding: 15,
-                                    font: {
-                                        size: 14
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const total = questions.length;
-                                        const value = context.parsed;
-                                        const percentage = ((value / total) * 100).toFixed(1);
-                                        return `${context.label}: ${value} (${percentage}%)`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
+            const scoreCanvas = document.getElementById('scoreDistributionChart');
+            if (scoreCanvas) {
+                const ctx = scoreCanvas.getContext('2d');
+                const width = scoreCanvas.width = scoreCanvas.offsetWidth * 2;
+                const height = scoreCanvas.height = scoreCanvas.offsetHeight * 2;
+                ctx.scale(2, 2);
+                
+                const correct = correctAnswers;
+                const incorrect = questions.length - correctAnswers;
+                const total = questions.length;
+                
+                const centerX = width / 4;
+                const centerY = height / 4 - 20;
+                const radius = Math.min(width, height) / 5;
+                
+                const correctAngle = (correct / total) * 2 * Math.PI;
+                
+                // Draw correct slice
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + correctAngle);
+                ctx.closePath();
+                ctx.fillStyle = '#4CAF50';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Draw incorrect slice
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, -Math.PI / 2 + correctAngle, -Math.PI / 2 + 2 * Math.PI);
+                ctx.closePath();
+                ctx.fillStyle = '#F44336';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Legend
+                const legendY = height / 2 - 40;
+                
+                // Correct legend
+                ctx.fillStyle = '#4CAF50';
+                ctx.fillRect(20, legendY, 20, 20);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(20, legendY, 20, 20);
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(`Correct: ${correct} (${Math.round((correct/total)*100)}%)`, 45, legendY + 15);
+                
+                // Incorrect legend
+                ctx.fillStyle = '#F44336';
+                ctx.fillRect(20, legendY + 30, 20, 20);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(20, legendY + 30, 20, 20);
+                ctx.fillStyle = '#333';
+                ctx.fillText(`Incorrect: ${incorrect} (${Math.round((incorrect/total)*100)}%)`, 45, legendY + 45);
             }
 
             // Populate Category Performance Table
