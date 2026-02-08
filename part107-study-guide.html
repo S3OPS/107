@@ -1203,7 +1203,7 @@
 
             // Emergency Procedures
             {
-                category: "Emergency",
+                category: "Emergency Procedures",
                 question: "What should you do if you lose GPS signal during flight?",
                 options: [
                     "Immediately land",
@@ -1215,7 +1215,7 @@
                 explanation: "Loss of GPS signal means loss of position hold and automated features. If your drone has ATTI (attitude) mode, it will switch to that, requiring manual control. Carefully navigate back to your position and land safely. Avoid complex maneuvers."
             },
             {
-                category: "Emergency",
+                category: "Emergency Procedures",
                 question: "When must you report an accident to the FAA?",
                 options: [
                     "Any crash or damage",
@@ -1227,7 +1227,7 @@
                 explanation: "Part 107 requires reporting within 10 days if an operation causes serious injury, loss of consciousness, or property damage (other than to the drone) exceeding $500. Use the FAA's online reporting system."
             },
             {
-                category: "Emergency",
+                category: "Emergency Procedures",
                 question: "What is the first priority in an emergency situation?",
                 options: [
                     "Protecting the drone",
@@ -1239,7 +1239,7 @@
                 explanation: "In any emergency, the first priority is always the safety of people and property. The remote pilot in command is responsible for making decisions that prioritize safety, even if it means damaging or losing the aircraft."
             },
             {
-                category: "Emergency",
+                category: "Emergency Procedures",
                 question: "What should you do if manned aircraft approaches your operation area?",
                 options: [
                     "Maintain altitude and position",
@@ -1251,7 +1251,7 @@
                 explanation: "Manned aircraft always have right of way. If a manned aircraft approaches, immediately descend, move away from its path, and land if necessary. Never assume they see you or will avoid you."
             },
             {
-                category: "Emergency",
+                category: "Emergency Procedures",
                 question: "What indicates a low battery warning should be taken seriously?",
                 options: [
                     "You can ignore it if you're close to home",
@@ -1327,7 +1327,7 @@
 
             // Radio Communication & Airport Operations
             {
-                category: "Radio & Airport",
+                category: "Radio & Airport Operations",
                 question: "What does CTAF stand for?",
                 options: [
                     "Control Tower Authorization Frequency",
@@ -1339,7 +1339,7 @@
                 explanation: "CTAF (Common Traffic Advisory Frequency) is a radio frequency used at non-towered airports for pilots to communicate their positions and intentions. Monitoring CTAF helps maintain situational awareness of nearby aircraft activity."
             },
             {
-                category: "Radio & Airport",
+                category: "Radio & Airport Operations",
                 question: "What is the standard traffic pattern altitude at most airports?",
                 options: [
                     "500 feet AGL",
@@ -1351,7 +1351,7 @@
                 explanation: "The standard traffic pattern altitude at most airports is 1,000 feet AGL (above ground level). This is important for drone pilots to know when operating near airports, as this is where manned aircraft will be flying during landing and takeoff."
             },
             {
-                category: "Radio & Airport",
+                category: "Radio & Airport Operations",
                 question: "What direction do aircraft typically fly in the traffic pattern?",
                 options: [
                     "Always clockwise",
@@ -1363,7 +1363,7 @@
                 explanation: "Most airports use left-hand (counterclockwise) traffic patterns unless a right-hand pattern is specified in the Chart Supplement or by local procedures. This standardization helps prevent collisions and maintain orderly flow."
             },
             {
-                category: "Radio & Airport",
+                category: "Radio & Airport Operations",
                 question: "Why should drone pilots monitor local airport frequencies?",
                 options: [
                     "It's required by Part 107",
@@ -1375,7 +1375,7 @@
                 explanation: "While not always required, monitoring local airport frequencies (CTAF or tower) when operating near airports helps maintain situational awareness of manned aircraft activity, allowing you to take appropriate action to avoid conflicts."
             },
             {
-                category: "Radio & Airport",
+                category: "Radio & Airport Operations",
                 question: "What does a segmented circle at an airport indicate?",
                 options: [
                     "The airport is closed",
@@ -1451,7 +1451,7 @@
 
             // Maintenance & Preflight
             {
-                category: "Maintenance",
+                category: "Maintenance & Preflight",
                 question: "How often should you inspect your drone?",
                 options: [
                     "Once a month",
@@ -1463,7 +1463,7 @@
                 explanation: "Part 107.49 requires a preflight inspection before each flight. Check propellers, motors, battery, frame, camera gimbal, firmware updates, and control station. Never skip preflight inspections."
             },
             {
-                category: "Maintenance",
+                category: "Maintenance & Preflight",
                 question: "What should you check on propellers during preflight?",
                 options: [
                     "Only that they're attached",
@@ -1475,7 +1475,7 @@
                 explanation: "Inspect propellers for any cracks, chips, or damage; verify they're securely attached and properly installed (correct rotation direction). Damaged propellers can cause vibration, reduced performance, or catastrophic failure."
             },
             {
-                category: "Maintenance",
+                category: "Maintenance & Preflight",
                 question: "What is the proper way to store LiPo batteries?",
                 options: [
                     "Fully charged",
@@ -1487,7 +1487,7 @@
                 explanation: "LiPo batteries should be stored at storage voltage (typically 3.8V per cell, about 50-60% charge) in a cool, dry place. Storing fully charged or completely discharged reduces battery lifespan and can be dangerous."
             },
             {
-                category: "Maintenance",
+                category: "Maintenance & Preflight",
                 question: "What indicates a LiPo battery is damaged and should not be used?",
                 options: [
                     "It's more than 1 year old",
@@ -1499,7 +1499,7 @@
                 explanation: "Never use damaged LiPo batteries. Signs include swelling (puffing), punctures, dents, significant voltage imbalance between cells, or a battery that gets very hot during charging or use. Damaged batteries can catch fire."
             },
             {
-                category: "Maintenance",
+                category: "Maintenance & Preflight",
                 question: "Why is firmware kept up to date?",
                 options: [
                     "It's not necessary",
@@ -1723,6 +1723,414 @@
                 ],
                 correct: 1,
                 explanation: "Resignation is the hazardous attitude of thinking 'What's the use?' and believing you can't make a difference. This leads to passivity when action is needed. The antidote is realizing you're not helpless and can make a difference."
+            },
+
+            // Night Operations (NEW SECTION)
+            {
+                category: "Night Operations",
+                question: "What lighting is required for night operations under Part 107?",
+                options: [
+                    "No lighting is required",
+                    "Anti-collision lighting visible for at least 3 statute miles",
+                    "White strobe lights only",
+                    "Landing lights"
+                ],
+                correct: 1,
+                explanation: "Part 107.29 requires that small unmanned aircraft operated at night must have anti-collision lighting visible for at least 3 statute miles. The lighting must have a flash rate sufficient to avoid collision."
+            },
+            {
+                category: "Night Operations",
+                question: "When can you legally operate a drone at night under Part 107?",
+                options: [
+                    "Never - night operations are prohibited",
+                    "Anytime with proper anti-collision lighting",
+                    "Only with a waiver",
+                    "Only in Class G airspace"
+                ],
+                correct: 1,
+                explanation: "As of April 2021, Part 107 allows night operations if the drone has proper anti-collision lighting visible for 3 statute miles and the remote pilot has completed updated night operations training or passed the recurrent knowledge test after April 6, 2021."
+            },
+            {
+                category: "Night Operations",
+                question: "What additional training is required for night operations?",
+                options: [
+                    "No additional training required",
+                    "Initial or recurrent training that addresses night operations",
+                    "A separate night operations certificate",
+                    "Only a Part 61 pilot certificate"
+                ],
+                correct: 1,
+                explanation: "Remote pilots must complete initial or recurrent training that addresses night operations, or pass the Part 107 knowledge test on or after April 6, 2021. This ensures pilots understand the unique challenges of night flying."
+            },
+            {
+                category: "Night Operations",
+                question: "What is the minimum visibility required for night operations?",
+                options: [
+                    "1 statute mile",
+                    "2 statute miles",
+                    "3 statute miles",
+                    "5 statute miles"
+                ],
+                correct: 2,
+                explanation: "Part 107 requires a minimum visibility of 3 statute miles from the control station during night operations. This is the same requirement as daytime operations."
+            },
+            {
+                category: "Night Operations",
+                question: "What color should anti-collision lights be for night operations?",
+                options: [
+                    "Must be white only",
+                    "Must be red only",
+                    "Can be any color visible for 3 statute miles",
+                    "Must be alternating red and white"
+                ],
+                correct: 2,
+                explanation: "Part 107 does not specify a color requirement for anti-collision lighting. The key requirement is that it must be visible for at least 3 statute miles and have a sufficient flash rate to avoid collision."
+            },
+            {
+                category: "Night Operations",
+                question: "What is 'civil twilight' and why is it important for Part 107 operations?",
+                options: [
+                    "The time when streetlights turn on",
+                    "30 minutes before sunrise to 30 minutes after sunset",
+                    "The period from sunset to sunrise",
+                    "When visibility drops below 5 miles"
+                ],
+                correct: 1,
+                explanation: "Civil twilight is officially defined as 30 minutes before official sunrise and 30 minutes after official sunset. Operations outside civil twilight are considered night operations and require anti-collision lighting and appropriate training."
+            },
+
+            // Operations Over People (NEW SECTION)
+            {
+                category: "Operations Over People",
+                question: "Under Part 107, which category of small unmanned aircraft can fly over people without additional requirements?",
+                options: [
+                    "Category 1",
+                    "Category 2",
+                    "Category 3",
+                    "All categories can fly over people freely"
+                ],
+                correct: 0,
+                explanation: "Category 1 aircraft (weighing 0.55 pounds or less including payload) can operate over people without additional requirements. They pose minimal injury risk due to their light weight."
+            },
+            {
+                category: "Operations Over People",
+                question: "What is the maximum weight for a Category 1 aircraft?",
+                options: [
+                    "0.25 pounds",
+                    "0.55 pounds",
+                    "1.0 pound",
+                    "2.0 pounds"
+                ],
+                correct: 1,
+                explanation: "Category 1 aircraft must weigh 0.55 pounds (250 grams) or less, including everything on board or attached during flight. This weight limit ensures minimal risk of injury to people below."
+            },
+            {
+                category: "Operations Over People",
+                question: "What must a Category 2 aircraft have to fly over people?",
+                options: [
+                    "Nothing - any drone can be Category 2",
+                    "Declaration of Compliance submitted to FAA",
+                    "Waiver from the FAA",
+                    "Remote ID only"
+                ],
+                correct: 1,
+                explanation: "Category 2 aircraft must have a Declaration of Compliance on file with the FAA demonstrating that the aircraft will not cause injury exceeding 11 foot-pounds of kinetic energy threshold upon impact, has no exposed rotating parts causing lacerations, and passes other safety requirements."
+            },
+            {
+                category: "Operations Over People",
+                question: "Can you operate over moving vehicles under Part 107?",
+                options: [
+                    "Yes, always without restrictions",
+                    "No, never allowed",
+                    "Yes, under certain conditions including not operating over open-air assemblies",
+                    "Only with a waiver"
+                ],
+                correct: 2,
+                explanation: "Operations over moving vehicles are allowed for Category 1, 2, 3, or 4 aircraft if not operated over open-air assemblies of human beings, and participants are on notice that a drone may fly over them. Operations must not involve sustained flight over moving vehicles."
+            },
+            {
+                category: "Operations Over People",
+                question: "What is an 'open-air assembly' under Part 107?",
+                options: [
+                    "Any group of 3 or more people",
+                    "Any outdoor gathering",
+                    "An outdoor gathering where people don't have opportunities to seek shelter",
+                    "Only stadiums and concert venues"
+                ],
+                correct: 2,
+                explanation: "An open-air assembly is an outdoor gathering of people where they are largely unable to leave or seek shelter. Examples include sporting events, concerts, festivals, and demonstrations. Operations over open-air assemblies require specific categorical compliance."
+            },
+            {
+                category: "Operations Over People",
+                question: "What is Category 3 for operations over people?",
+                options: [
+                    "Aircraft that can cause injury up to 11 foot-pounds",
+                    "Aircraft that can cause injury up to 25 foot-pounds with no exposed rotating parts",
+                    "Any aircraft with Remote ID",
+                    "Recreational aircraft only"
+                ],
+                correct: 1,
+                explanation: "Category 3 aircraft must not cause injury exceeding the severity threshold of 25 foot-pounds of kinetic energy, must have no exposed rotating parts that would lacerate human skin, and must have a Declaration of Compliance submitted to the FAA."
+            },
+            {
+                category: "Operations Over People",
+                question: "Are all Category 2 and 3 aircraft required to have Remote ID?",
+                options: [
+                    "No, Remote ID is optional",
+                    "Only Category 3 requires Remote ID",
+                    "Yes, both Category 2 and 3 require Remote ID",
+                    "Only operations over people require Remote ID"
+                ],
+                correct: 2,
+                explanation: "All Category 2 and Category 3 small unmanned aircraft must be equipped with Remote ID broadcast capability. Category 1 aircraft may rely on standard Remote ID rules (built-in or broadcast module)."
+            },
+
+            // Additional Loading & Performance Questions
+            {
+                category: "Loading & Performance",
+                question: "What happens to aircraft performance as temperature increases?",
+                options: [
+                    "Performance improves",
+                    "Performance decreases due to lower air density",
+                    "Temperature has no effect on performance",
+                    "Only affects night operations"
+                ],
+                correct: 1,
+                explanation: "As temperature increases, air density decreases, which reduces aircraft performance. Motors work harder, battery efficiency decreases, and lift is reduced. This is especially critical on hot days at high altitudes."
+            },
+            {
+                category: "Loading & Performance",
+                question: "What effect does high altitude have on battery performance?",
+                options: [
+                    "Batteries perform better at high altitude",
+                    "Altitude has no effect on batteries",
+                    "Batteries drain faster due to lower air density requiring more power",
+                    "Only affects cold weather operations"
+                ],
+                correct: 2,
+                explanation: "At high altitudes, the air is less dense, requiring motors to work harder to generate lift. This causes batteries to drain faster and reduces flight time. Pilots must plan for shorter flight times at higher elevations."
+            },
+            {
+                category: "Loading & Performance",
+                question: "What is the relationship between center of gravity (CG) and aircraft stability?",
+                options: [
+                    "CG position doesn't affect stability",
+                    "Forward CG increases stability but reduces maneuverability",
+                    "Aft CG always improves performance",
+                    "CG only matters for fixed-wing aircraft"
+                ],
+                correct: 1,
+                explanation: "A forward center of gravity increases stability but makes the aircraft less maneuverable and requires more power. An aft CG reduces stability and can make the aircraft difficult or impossible to control. Proper CG is critical for safe flight."
+            },
+            {
+                category: "Loading & Performance",
+                question: "How does adding a payload affect flight time?",
+                options: [
+                    "Payload has no effect on flight time",
+                    "Heavier payloads decrease flight time due to increased power requirements",
+                    "Heavier payloads always improve stability",
+                    "Only matters for commercial operations"
+                ],
+                correct: 1,
+                explanation: "Adding payload increases the aircraft's weight, requiring more power to maintain flight. This drains the battery faster and significantly reduces flight time. Always calculate expected flight time when carrying payloads."
+            },
+            {
+                category: "Loading & Performance",
+                question: "What is 'density altitude' and why does it matter?",
+                options: [
+                    "The altitude shown on GPS",
+                    "Pressure altitude corrected for non-standard temperature; affects performance",
+                    "The altitude of clouds",
+                    "Only important for manned aircraft"
+                ],
+                correct: 1,
+                explanation: "Density altitude is pressure altitude corrected for temperature. High density altitude (hot temperatures, high elevation, or high humidity) means thin air, which significantly degrades aircraft performance. Calculate density altitude before flight in challenging conditions."
+            },
+
+            // Additional Emergency Procedures Questions
+            {
+                category: "Emergency Procedures",
+                question: "What is the first action if you lose GPS signal during flight?",
+                options: [
+                    "Immediately land wherever you are",
+                    "Switch to ATTI/Manual mode and maintain visual control",
+                    "Activate Return to Home",
+                    "Turn off the aircraft"
+                ],
+                correct: 1,
+                explanation: "If GPS is lost, the aircraft will typically switch to ATTI (Attitude) mode where it cannot hold position automatically. Maintain visual contact, use manual control, and carefully navigate to a safe landing location. RTH will not work without GPS."
+            },
+            {
+                category: "Emergency Procedures",
+                question: "What should you do if your aircraft begins uncontrolled descent?",
+                options: [
+                    "Increase throttle and try to regain control",
+                    "Turn off the controller",
+                    "Wait for automatic recovery",
+                    "Throw objects at it to stop it"
+                ],
+                correct: 0,
+                explanation: "During uncontrolled descent, attempt to increase throttle to regain control. If unsuccessful, try to steer away from people and property. Maintain visual contact and be prepared to warn people below if necessary."
+            },
+            {
+                category: "Emergency Procedures",
+                question: "What is a 'flyaway' and what causes it?",
+                options: [
+                    "Normal return to home",
+                    "Aircraft flying uncontrollably away from the pilot, often due to compass error or GPS issues",
+                    "When the pilot flies too far away",
+                    "A training exercise"
+                ],
+                correct: 1,
+                explanation: "A flyaway occurs when the aircraft flies away uncontrollably, often due to compass interference, GPS errors, or software glitches. Prevention includes proper compass calibration, checking for interference sources, and maintaining visual line of sight."
+            },
+            {
+                category: "Emergency Procedures",
+                question: "If you experience intermittent video signal loss, what should you do?",
+                options: [
+                    "Continue flying normally",
+                    "Return the aircraft to a closer position and check for interference",
+                    "Fly higher to improve signal",
+                    "Land immediately wherever you are"
+                ],
+                correct: 1,
+                explanation: "Intermittent video loss indicates signal problems. Return the aircraft closer to your position, check for interference sources (WiFi, power lines, other RF sources), and ensure your antenna is properly positioned. Don't fly beyond reliable video range."
+            },
+            {
+                category: "Emergency Procedures",
+                question: "What emergency procedure should be followed for a motor failure?",
+                options: [
+                    "The aircraft will automatically compensate",
+                    "Attempt controlled descent to a safe landing area; multi-rotor drones cannot sustain flight with motor failure",
+                    "Increase throttle to maximum",
+                    "Activate return to home"
+                ],
+                correct: 1,
+                explanation: "Unlike helicopters which can autorotate, multi-rotor drones cannot sustain flight with a motor failure. Try to control the descent as much as possible and steer toward a safe landing area away from people and property."
+            },
+            {
+                category: "Emergency Procedures",
+                question: "What should you check if the aircraft is drifting without control input?",
+                options: [
+                    "Nothing - drifting is normal",
+                    "Compass calibration and GPS signal strength",
+                    "Battery level only",
+                    "Wind speed"
+                ],
+                correct: 1,
+                explanation: "Unexpected drifting often indicates compass errors or poor GPS signal. Check compass calibration, GPS satellite count, and look for magnetic interference. Also verify you're not in ATTI mode. Land and recalibrate if problems persist."
+            },
+
+            // Additional Radio Communication Questions
+            {
+                category: "Radio & Airport Operations",
+                question: "What is the CTAF frequency used for?",
+                options: [
+                    "Emergency communications only",
+                    "Common Traffic Advisory Frequency for pilots to announce positions at non-towered airports",
+                    "Contacting Air Traffic Control",
+                    "Weather information"
+                ],
+                correct: 1,
+                explanation: "CTAF (Common Traffic Advisory Frequency) is used at non-towered airports for pilots to self-announce their positions and intentions. Drone pilots operating near airports should monitor CTAF to maintain awareness of manned aircraft traffic."
+            },
+            {
+                category: "Radio & Airport Operations",
+                question: "What does 'downwind' mean in the airport traffic pattern?",
+                options: [
+                    "Flying into the wind",
+                    "Flying parallel to the runway in the opposite direction of landing",
+                    "Taxiing on the runway",
+                    "Emergency landing"
+                ],
+                correct: 1,
+                explanation: "The downwind leg is flown parallel to the runway in the opposite direction of landing, typically at pattern altitude. Understanding traffic patterns helps drone pilots anticipate where manned aircraft will be when operating near airports."
+            },
+            {
+                category: "Radio & Airport Operations",
+                question: "If you hear 'Cessna 123 is on final for runway 27,' what does this mean?",
+                options: [
+                    "The aircraft is taxiing",
+                    "The aircraft is aligned with runway 27 for landing",
+                    "The aircraft is taking off",
+                    "The aircraft is in the parking area"
+                ],
+                correct: 1,
+                explanation: "'On final' means the aircraft is on final approach, aligned with the runway and descending for landing. This is a critical phase of flight, and drone pilots must ensure they are clear of the approach path."
+            },
+
+            // Additional Regulations Questions
+            {
+                category: "Regulations",
+                question: "What is Remote ID and when is it required?",
+                options: [
+                    "An optional feature for tracking",
+                    "Required for all Part 107 operations as of September 16, 2023",
+                    "Only required for operations over people",
+                    "Not required under Part 107"
+                ],
+                correct: 1,
+                explanation: "Remote ID became mandatory for Part 107 operations on September 16, 2023. It broadcasts identification and location information, allowing the FAA and law enforcement to identify drones in flight. Limited exceptions exist for operations in FAA-recognized identification areas (FRIAs)."
+            },
+            {
+                category: "Regulations",
+                question: "What are the two types of Remote ID?",
+                options: [
+                    "Standard and Extended",
+                    "Standard Remote ID and Broadcast Module",
+                    "Internal and External",
+                    "Basic and Advanced"
+                ],
+                correct: 1,
+                explanation: "Standard Remote ID is built into the aircraft at manufacture. Broadcast modules are aftermarket devices that can be attached to drones manufactured before Remote ID requirements. Both meet the Remote ID requirement."
+            },
+            {
+                category: "Regulations",
+                question: "What is an FRIA (FAA-Recognized Identification Area)?",
+                options: [
+                    "Where Remote ID is not required",
+                    "Federal restricted airspace",
+                    "Foreign territory",
+                    "Flight restricted investigation area"
+                ],
+                correct: 0,
+                explanation: "FRIAs are FAA-Recognized Identification Areas where drones without Remote ID can operate. These are typically established at community-based organization flying sites. Operations must remain within the boundaries of the FRIA."
+            },
+            {
+                category: "Regulations",
+                question: "What information does Remote ID broadcast?",
+                options: [
+                    "Only the drone's location",
+                    "Drone ID, location, altitude, velocity, and control station location",
+                    "Pilot's name and address",
+                    "Video feed from the drone"
+                ],
+                correct: 1,
+                explanation: "Remote ID broadcasts the drone's identification number, location, altitude, velocity, time mark, and emergency status. Standard Remote ID also broadcasts the control station location. This information is available to the FAA and law enforcement."
+            },
+            {
+                category: "Regulations",
+                question: "What is the maximum allowed takeoff weight under Part 107?",
+                options: [
+                    "25 pounds",
+                    "35 pounds",
+                    "55 pounds",
+                    "100 pounds"
+                ],
+                correct: 2,
+                explanation: "Part 107 allows operations of small unmanned aircraft weighing less than 55 pounds at takeoff, including everything on board or attached to the aircraft. This includes the aircraft, payload, and any attachments."
+            },
+            {
+                category: "Regulations",
+                question: "Can you operate multiple drones simultaneously under Part 107?",
+                options: [
+                    "Yes, as many as you want",
+                    "No, never allowed",
+                    "Yes, but only one drone at a time without a waiver",
+                    "Only with multiple remote pilots"
+                ],
+                correct: 2,
+                explanation: "Part 107 normally requires one remote pilot per aircraft. Operating multiple drones simultaneously requires either multiple remote pilots or a waiver from the FAA. Some waivers allow single-pilot multi-drone operations under specific conditions."
             }
         ];
 
