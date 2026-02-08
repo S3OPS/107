@@ -6,21 +6,23 @@ A comprehensive, interactive HTML-based study guide to help you pass the FAA Par
 
 This study guide provides a game-formatted multiple choice question test covering all topics required for the Part 107 exam. It features:
 
-- **60+ comprehensive questions** covering all exam topics
+- **106 comprehensive questions** covering all exam topics
 - **Interactive multiple choice format** with instant feedback
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
 - **Beautiful, responsive design** that works on desktop and mobile devices
-- **Topic coverage** including:
+- **Complete topic coverage** including:
   - Airspace Classification & Requirements
   - Weather Theory & Meteorology
-  - Regulations & Operating Requirements
+  - Regulations & Operating Requirements (including Remote ID)
   - Loading & Performance
   - Emergency Procedures
   - Crew Resource Management
   - Radio Communication & Airport Operations
   - Aeronautical Decision Making
   - Maintenance & Preflight Procedures
+  - **Night Operations** (NEW - lighting requirements, training, visibility)
+  - **Operations Over People** (NEW - Categories 1-4, safety requirements)
 
 ## 🚀 Getting Started
 
@@ -73,11 +75,13 @@ While this study guide is comprehensive, we recommend also reviewing official FA
 
 The FAA Part 107 Remote Pilot Certificate is required for commercial drone operations. The exam consists of 60 multiple-choice questions covering:
 
-- Regulations
+- Regulations (including Remote ID requirements)
 - Airspace & Requirements
 - Weather
 - Loading & Performance
 - Operations
+- Night Operations
+- Operations Over People
 
 **Passing Score**: 70% (42 out of 60 questions correct)
 
@@ -86,6 +90,38 @@ The FAA Part 107 Remote Pilot Certificate is required for commercial drone opera
 **Cost**: $175 (as of 2024)
 
 **Validity**: Certificate is valid for 24 months
+
+## ✅ Comprehensive Coverage Guarantee
+
+This study guide has been carefully designed to ensure **complete coverage** of all Part 107 exam topics:
+
+### Current FAA Requirements (2024-2026)
+✅ **Remote ID compliance** - All Remote ID requirements effective September 2023  
+✅ **Night Operations** - Requirements added in April 2021 amendment  
+✅ **Operations Over People** - Categories 1-4 with safety thresholds  
+✅ **Updated Regulations** - All current Part 107 rules and amendments  
+✅ **Airspace Authorization** - LAANC system and procedures  
+✅ **Emergency Procedures** - Comprehensive failure scenarios  
+✅ **Weather Theory** - Meteorology and weather decision-making  
+✅ **Performance Calculations** - Loading, CG, density altitude effects  
+✅ **Aeronautical Decision Making** - Risk management and hazardous attitudes  
+✅ **Airport Operations** - Traffic patterns and radio communication
+
+### Question Distribution (106 Total Questions)
+- **Airspace Classification**: 9 questions
+- **Weather Theory**: 10 questions (expanded)
+- **Regulations & Operating Requirements**: 16 questions (expanded with Remote ID, renewals)
+- **Decision Making**: 7 questions
+- **Operations**: 10 questions (expanded with VLOS, distance requirements)
+- **Loading & Performance**: 11 questions (expanded with stall speed, weight effects)
+- **Emergency Procedures**: 11 questions (comprehensive scenarios)
+- **Crew Resource Management**: 5 questions
+- **Radio & Airport Operations**: 8 questions (traffic patterns, communications)
+- **Maintenance & Preflight**: 5 questions
+- **Night Operations**: 7 questions (NEW - complete lighting and visibility coverage)
+- **Operations Over People**: 7 questions (NEW - all categories and requirements)
+
+All questions include detailed explanations based on current FAA regulations and best practices.
 
 ## 📝 Exam Preparation Timeline
 
