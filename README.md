@@ -6,7 +6,7 @@ A comprehensive, interactive HTML-based study guide to help you pass the FAA Par
 
 This study guide provides a game-formatted multiple choice question test covering all topics required for the Part 107 exam. It features:
 
-- **128 comprehensive questions** covering all exam topics
+- **127 comprehensive questions** covering all exam topics
 - **Interactive multiple choice format** with instant feedback
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
@@ -142,8 +142,8 @@ This study guide has been carefully designed to ensure **complete coverage** of 
 ✅ **Chart Supplement** - NEW! Airport data, frequencies, and facility information  
 ✅ **Airspace Symbols & Legends** - NEW! Complete chart symbology and boundary recognition
 
-### Question Distribution (128 Total Questions)
-- **Airspace Classification & Chart Reading**: 31 questions (EXPANDED - now includes comprehensive sectional chart interpretation, legends, symbols, Chart Supplement usage)
+### Question Distribution (127 Total Questions)
+- **Airspace Classification & Chart Reading**: 30 questions (EXPANDED - now includes comprehensive sectional chart interpretation, legends, symbols, Chart Supplement usage)
 - **Weather Theory**: 10 questions (expanded)
 - **Regulations & Operating Requirements**: 16 questions (expanded with Remote ID, renewals)
 - **Decision Making**: 7 questions
