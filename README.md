@@ -6,7 +6,7 @@ A comprehensive, interactive HTML-based study guide to help you pass the FAA Par
 
 This study guide provides a game-formatted multiple choice question test covering all topics required for the Part 107 exam. It features:
 
-- **100 comprehensive questions** covering all exam topics
+- **106 comprehensive questions** covering all exam topics
 - **Interactive multiple choice format** with instant feedback
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
@@ -107,19 +107,19 @@ This study guide has been carefully designed to ensure **complete coverage** of 
 ✅ **Aeronautical Decision Making** - Risk management and hazardous attitudes  
 ✅ **Airport Operations** - Traffic patterns and radio communication
 
-### Question Distribution (100 Total Questions)
+### Question Distribution (106 Total Questions)
 - **Airspace Classification**: 9 questions
-- **Weather Theory**: 9 questions  
-- **Regulations & Operating Requirements**: 15 questions (expanded with Remote ID)
+- **Weather Theory**: 10 questions (expanded)
+- **Regulations & Operating Requirements**: 16 questions (expanded with Remote ID, renewals)
 - **Decision Making**: 7 questions
-- **Operations**: 8 questions
-- **Loading & Performance**: 10 questions (expanded)
-- **Emergency Procedures**: 11 questions (expanded)
+- **Operations**: 10 questions (expanded with VLOS, distance requirements)
+- **Loading & Performance**: 11 questions (expanded with stall speed, weight effects)
+- **Emergency Procedures**: 11 questions (comprehensive scenarios)
 - **Crew Resource Management**: 5 questions
-- **Radio & Airport Operations**: 8 questions (expanded)
+- **Radio & Airport Operations**: 8 questions (traffic patterns, communications)
 - **Maintenance & Preflight**: 5 questions
-- **Night Operations**: 6 questions (NEW)
-- **Operations Over People**: 7 questions (NEW)
+- **Night Operations**: 7 questions (NEW - complete lighting and visibility coverage)
+- **Operations Over People**: 7 questions (NEW - all categories and requirements)
 
 All questions include detailed explanations based on current FAA regulations and best practices.
 
