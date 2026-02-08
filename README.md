@@ -6,13 +6,16 @@ A comprehensive, interactive HTML-based study guide to help you pass the FAA Par
 
 This study guide provides a game-formatted multiple choice question test covering all topics required for the Part 107 exam. It features:
 
-- **106 comprehensive questions** covering all exam topics
+- **128 comprehensive questions** covering all exam topics
 - **Interactive multiple choice format** with instant feedback
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
 - **Beautiful, responsive design** that works on desktop and mobile devices
 - **Complete topic coverage** including:
   - Airspace Classification & Requirements
+  - **Sectional Chart Reading** (NEW - comprehensive VFR chart interpretation)
+  - **Chart Legends & Symbols** (NEW - airport symbols, airspace boundaries, terrain)
+  - **Chart Supplement Usage** (NEW - airport data interpretation)
   - Weather Theory & Meteorology
   - Regulations & Operating Requirements (including Remote ID)
   - Loading & Performance
@@ -23,6 +26,35 @@ This study guide provides a game-formatted multiple choice question test coverin
   - Maintenance & Preflight Procedures
   - **Night Operations** (NEW - lighting requirements, training, visibility)
   - **Operations Over People** (NEW - Categories 1-4, safety requirements)
+
+## 🗺️ Enhanced Chart Reading Coverage
+
+**The real FAA Part 107 exam heavily emphasizes navigational chart interpretation!** This study guide now includes:
+
+### Sectional Chart Questions (22 new questions added!)
+- ✈️ **Airspace Boundary Recognition** - Solid vs dashed lines, blue vs magenta coloring
+- 🎨 **Chart Symbol Interpretation** - Airport symbols, obstacle markings, terrain features
+- 📊 **Legend Reading** - Understanding all chart symbology and notations
+- 🏔️ **Terrain & Elevation** - MEF (Maximum Elevation Figures), contour lines, topography
+- 🚫 **Special Use Airspace** - MOAs, Restricted Areas (R-xxxx), Alert Areas (A-xxxx)
+- 🎯 **Airport Details** - Runway lengths, field elevations, lighting indicators
+- 📡 **Navigation Aids** - VOR symbols, waypoints, reporting points
+- ⚠️ **Obstacle Identification** - Towers, under construction (UC) notations
+
+### Chart Supplement Coverage
+- 📋 **Airport Data Interpretation** - Understanding A/FD format and information
+- 📻 **Frequency Information** - CTAF, tower, ATIS/AWOS frequencies
+- 🔄 **Traffic Pattern Details** - RP (Right Pattern) notations, pattern altitudes
+- 🌙 **Operating Hours** - Understanding airport operation times and lighting
+- ⚡ **NSTD Notations** - Non-standard procedures and special remarks
+
+### Real-World Chart Skills Tested
+Each question is designed to match actual FAA exam scenarios where you must:
+- Identify airspace class by chart symbology
+- Determine if authorization is required based on chart depiction
+- Understand airport capabilities from chart and supplement data
+- Recognize hazardous areas and restrictions
+- Calculate true AGL altitudes using field elevations
 
 ## 🚀 Getting Started
 
@@ -105,10 +137,13 @@ This study guide has been carefully designed to ensure **complete coverage** of 
 ✅ **Weather Theory** - Meteorology and weather decision-making  
 ✅ **Performance Calculations** - Loading, CG, density altitude effects  
 ✅ **Aeronautical Decision Making** - Risk management and hazardous attitudes  
-✅ **Airport Operations** - Traffic patterns and radio communication
+✅ **Airport Operations** - Traffic patterns and radio communication  
+✅ **Sectional Chart Reading** - NEW! Comprehensive coverage of VFR chart interpretation  
+✅ **Chart Supplement** - NEW! Airport data, frequencies, and facility information  
+✅ **Airspace Symbols & Legends** - NEW! Complete chart symbology and boundary recognition
 
-### Question Distribution (106 Total Questions)
-- **Airspace Classification**: 9 questions
+### Question Distribution (128 Total Questions)
+- **Airspace Classification & Chart Reading**: 31 questions (EXPANDED - now includes comprehensive sectional chart interpretation, legends, symbols, Chart Supplement usage)
 - **Weather Theory**: 10 questions (expanded)
 - **Regulations & Operating Requirements**: 16 questions (expanded with Remote ID, renewals)
 - **Decision Making**: 7 questions
