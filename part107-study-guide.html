@@ -378,6 +378,248 @@
             border-bottom: none;
         }
 
+        /* Visual Dashboard Styles */
+        .visual-dashboard {
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            border-bottom: 3px solid #d32f2f;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e0e0e0;
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #d32f2f;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .chart-canvas {
+            max-height: 300px;
+        }
+
+        /* Airspace Visual Diagram */
+        .airspace-diagram {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e0e0e0;
+        }
+
+        .airspace-diagram h3 {
+            color: #d32f2f;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            text-align: center;
+        }
+
+        .airspace-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .airspace-layer {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .airspace-layer:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .airspace-class-a {
+            background: linear-gradient(90deg, #e3f2fd, #fff);
+            border-color: #2196F3;
+        }
+
+        .airspace-class-b {
+            background: linear-gradient(90deg, #f3e5f5, #fff);
+            border-color: #9C27B0;
+        }
+
+        .airspace-class-c {
+            background: linear-gradient(90deg, #fff3e0, #fff);
+            border-color: #FF9800;
+        }
+
+        .airspace-class-d {
+            background: linear-gradient(90deg, #fce4ec, #fff);
+            border-color: #E91E63;
+        }
+
+        .airspace-class-e {
+            background: linear-gradient(90deg, #f1f8e9, #fff);
+            border-color: #8BC34A;
+        }
+
+        .airspace-class-g {
+            background: linear-gradient(90deg, #fff9c4, #fff);
+            border-color: #FFC107;
+        }
+
+        .airspace-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .airspace-info {
+            flex: 1;
+        }
+
+        .airspace-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .airspace-desc {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        /* Performance breakdown table */
+        .performance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .performance-table th,
+        .performance-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .performance-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        .performance-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            color: white;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .score-excellent {
+            background: #4caf50;
+            color: white;
+        }
+
+        .score-good {
+            background: #8bc34a;
+            color: white;
+        }
+
+        .score-fair {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .score-poor {
+            background: #f44336;
+            color: white;
+        }
+
+        /* Visual Reference Section */
+        .visual-reference {
+            padding: 30px;
+            background: white;
+        }
+
+        .reference-title {
+            font-size: 1.8em;
+            color: #d32f2f;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .reference-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .reference-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .reference-card h4 {
+            color: #d32f2f;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .reference-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reference-card li {
+            padding: 5px 0;
+            color: #666;
+        }
+
+        .reference-card li::before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8em;
@@ -394,6 +636,14 @@
             .stats {
                 flex-direction: column;
                 gap: 15px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reference-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -426,6 +676,122 @@
             </div>
 
             <p><strong>You have until March to prepare - let's get started!</strong></p>
+            
+            <!-- Visual Dashboard Section -->
+            <div class="visual-dashboard">
+                <h3 class="reference-title">📊 Study Guide Overview</h3>
+                <div class="dashboard-grid">
+                    <div class="chart-container">
+                        <div class="chart-title">Questions by Category</div>
+                        <canvas id="categoryChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Airspace Classification Visual -->
+            <div class="visual-reference">
+                <div class="airspace-diagram">
+                    <h3>🛩️ Airspace Classification Quick Reference</h3>
+                    <div class="airspace-layers">
+                        <div class="airspace-layer airspace-class-a">
+                            <div class="airspace-icon">🔵</div>
+                            <div class="airspace-info">
+                                <div class="airspace-name">Class A (18,000' - 60,000' MSL)</div>
+                                <div class="airspace-desc">IFR only, ATC clearance required - Not applicable to Part 107</div>
+                            </div>
+                        </div>
+                        <div class="airspace-layer airspace-class-b">
+                            <div class="airspace-icon">🟣</div>
+                            <div class="airspace-info">
+                                <div class="airspace-name">Class B (Major Airports)</div>
+                                <div class="airspace-desc">ATC authorization required via LAANC or DroneZone</div>
+                            </div>
+                        </div>
+                        <div class="airspace-layer airspace-class-c">
+                            <div class="airspace-icon">🟠</div>
+                            <div class="airspace-info">
+                                <div class="airspace-name">Class C (Busy Airports)</div>
+                                <div class="airspace-desc">ATC authorization required via LAANC or DroneZone</div>
+                            </div>
+                        </div>
+                        <div class="airspace-layer airspace-class-d">
+                            <div class="airspace-icon">🔴</div>
+                            <div class="airspace-info">
+                                <div class="airspace-name">Class D (Towered Airports)</div>
+                                <div class="airspace-desc">ATC authorization required via LAANC or DroneZone</div>
+                            </div>
+                        </div>
+                        <div class="airspace-layer airspace-class-e">
+                            <div class="airspace-icon">🟢</div>
+                            <div class="airspace-info">
+                                <div class="airspace-name">Class E (Controlled Airspace)</div>
+                                <div class="airspace-desc">Surface area E requires authorization; E above 400' AGL typically OK</div>
+                            </div>
+                        </div>
+                        <div class="airspace-layer airspace-class-g">
+                            <div class="airspace-icon">🟡</div>
+                            <div class="airspace-info">
+                                <div class="airspace-name">Class G (Uncontrolled)</div>
+                                <div class="airspace-desc">No ATC authorization needed - Most common for Part 107 ops</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Reference Cards -->
+                <h3 class="reference-title">📋 Key Part 107 Facts</h3>
+                <div class="reference-grid">
+                    <div class="reference-card">
+                        <h4>🎯 Altitude Limits</h4>
+                        <ul>
+                            <li>Max 400' AGL</li>
+                            <li>+400' above structures</li>
+                            <li>Measured from takeoff point</li>
+                        </ul>
+                    </div>
+                    <div class="reference-card">
+                        <h4>👁️ Visual Requirements</h4>
+                        <ul>
+                            <li>3 SM visibility minimum</li>
+                            <li>VLOS required</li>
+                            <li>Visual observer allowed</li>
+                        </ul>
+                    </div>
+                    <div class="reference-card">
+                        <h4>⚡ Speed & Weather</h4>
+                        <ul>
+                            <li>Max 87 knots (100 mph)</li>
+                            <li>No clouds in VLOS</li>
+                            <li>Check winds before flight</li>
+                        </ul>
+                    </div>
+                    <div class="reference-card">
+                        <h4>📜 Certification</h4>
+                        <ul>
+                            <li>Age 16+ required</li>
+                            <li>Renew every 2 years</li>
+                            <li>Pass score: 70%</li>
+                        </ul>
+                    </div>
+                    <div class="reference-card">
+                        <h4>⚖️ Registration</h4>
+                        <ul>
+                            <li>0.55+ lbs requires registration</li>
+                            <li>Mark externally</li>
+                            <li>Valid for 3 years</li>
+                        </ul>
+                    </div>
+                    <div class="reference-card">
+                        <h4>🌙 Night Operations</h4>
+                        <ul>
+                            <li>Allowed with training</li>
+                            <li>Anti-collision lights</li>
+                            <li>Visible for 3 SM</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <button class="btn btn-primary" onclick="startQuiz()">Start Studying 🚀</button>
         </div>
 
@@ -483,6 +849,38 @@
                 <div class="breakdown-item">
                     <div class="breakdown-value" id="totalIncorrect">0</div>
                     <div class="breakdown-label">Incorrect Answers</div>
+                </div>
+            </div>
+
+            <!-- Performance Charts -->
+            <div class="visual-dashboard">
+                <h3 class="reference-title">📊 Your Performance Analysis</h3>
+                <div class="dashboard-grid">
+                    <div class="chart-container">
+                        <div class="chart-title">Performance by Category</div>
+                        <canvas id="performanceChart" class="chart-canvas"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-title">Score Distribution</div>
+                        <canvas id="scoreDistributionChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Category Performance Table -->
+                <div class="chart-container" style="margin-top: 20px;">
+                    <div class="chart-title">Detailed Category Breakdown</div>
+                    <table class="performance-table" id="categoryPerformanceTable">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Correct</th>
+                                <th>Total</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTableBody">
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -1535,6 +1933,9 @@
             }
 
             document.getElementById('resultsMessage').textContent = message;
+            
+            // Initialize performance charts
+            initializePerformanceCharts();
         }
 
         // Restart Quiz
@@ -1554,7 +1955,253 @@
         window.onload = function() {
             // Questions are already loaded in order
             console.log(`Loaded ${questions.length} questions for Part 107 study guide`);
+            
+            // Initialize category chart on start screen
+            initializeCategoryChart();
         };
+
+        // Initialize Category Distribution Chart (Custom Canvas Implementation)
+        function initializeCategoryChart() {
+            const categoryCount = {};
+            questions.forEach(q => {
+                categoryCount[q.category] = (categoryCount[q.category] || 0) + 1;
+            });
+
+            const canvas = document.getElementById('categoryChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width = canvas.offsetWidth * 2; // Retina support
+            const height = canvas.height = canvas.offsetHeight * 2;
+            ctx.scale(2, 2);
+            
+            const colors = [
+                '#2196F3', '#FF9800', '#4CAF50', '#F44336', '#9C27B0',
+                '#00BCD4', '#FFC107', '#E91E63', '#795548', '#607D8B'
+            ];
+            
+            const categories = Object.keys(categoryCount);
+            const values = Object.values(categoryCount);
+            const total = values.reduce((a, b) => a + b, 0);
+            
+            // Draw donut chart
+            const centerX = width / 4;
+            const centerY = height / 4 - 40;
+            const radius = Math.min(width, height) / 6;
+            const innerRadius = radius * 0.5;
+            
+            let currentAngle = -Math.PI / 2;
+            
+            categories.forEach((category, i) => {
+                const sliceAngle = (values[i] / total) * 2 * Math.PI;
+                
+                // Draw slice
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+                ctx.arc(centerX, centerY, innerRadius, currentAngle + sliceAngle, currentAngle, true);
+                ctx.closePath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                currentAngle += sliceAngle;
+            });
+            
+            // Draw legend
+            const legendY = height / 2 - 40;
+            const legendX = 20;
+            categories.forEach((category, i) => {
+                const y = legendY + i * 25;
+                
+                // Color box
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fillRect(legendX, y, 15, 15);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(legendX, y, 15, 15);
+                
+                // Text
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.fillText(`${category}: ${values[i]}`, legendX + 20, y + 12);
+            });
+        }
+
+        // Initialize Performance Charts (Custom Canvas Implementation)
+        function initializePerformanceCharts() {
+            // Calculate performance by category
+            const categoryStats = {};
+            questions.forEach((q, index) => {
+                if (!categoryStats[q.category]) {
+                    categoryStats[q.category] = { correct: 0, total: 0 };
+                }
+                categoryStats[q.category].total++;
+                if (userAnswers[index] === q.correct) {
+                    categoryStats[q.category].correct++;
+                }
+            });
+
+            // Performance by Category Bar Chart
+            const perfCanvas = document.getElementById('performanceChart');
+            if (perfCanvas) {
+                const ctx = perfCanvas.getContext('2d');
+                const width = perfCanvas.width = perfCanvas.offsetWidth * 2;
+                const height = perfCanvas.height = perfCanvas.offsetHeight * 2;
+                ctx.scale(2, 2);
+                
+                const categories = Object.keys(categoryStats).sort();
+                const percentages = categories.map(cat => 
+                    (categoryStats[cat].correct / categoryStats[cat].total) * 100
+                );
+                
+                const chartWidth = width / 2 - 60;
+                const chartHeight = height / 2 - 80;
+                const barWidth = chartWidth / categories.length - 5;
+                const startX = 40;
+                const startY = height / 2 - 50;
+                
+                // Draw axes
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(startX, startY - chartHeight);
+                ctx.lineTo(startX, startY);
+                ctx.lineTo(startX + chartWidth, startY);
+                ctx.stroke();
+                
+                // Draw bars
+                categories.forEach((cat, i) => {
+                    const barHeight = (percentages[i] / 100) * chartHeight;
+                    const x = startX + i * (barWidth + 5) + 5;
+                    const y = startY - barHeight;
+                    
+                    // Color based on score
+                    const p = percentages[i];
+                    ctx.fillStyle = p >= 90 ? '#4CAF50' :
+                                   p >= 80 ? '#8BC34A' :
+                                   p >= 70 ? '#FFC107' :
+                                   p >= 60 ? '#FF9800' : '#F44336';
+                    
+                    ctx.fillRect(x, y, barWidth, barHeight);
+                    ctx.strokeStyle = '#1a1a1a';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x, y, barWidth, barHeight);
+                    
+                    // Value label
+                    ctx.fillStyle = '#333';
+                    ctx.font = 'bold 10px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(Math.round(percentages[i]) + '%', x + barWidth/2, y - 5);
+                    
+                    // Category label (rotated)
+                    ctx.save();
+                    ctx.translate(x + barWidth/2, startY + 10);
+                    ctx.rotate(-Math.PI / 4);
+                    ctx.font = '9px Arial';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(cat, 0, 0);
+                    ctx.restore();
+                });
+                
+                // Y-axis labels
+                ctx.fillStyle = '#666';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'right';
+                for (let i = 0; i <= 100; i += 25) {
+                    const y = startY - (i / 100) * chartHeight;
+                    ctx.fillText(i + '%', startX - 5, y + 3);
+                }
+            }
+
+            // Score Distribution Pie Chart
+            const scoreCanvas = document.getElementById('scoreDistributionChart');
+            if (scoreCanvas) {
+                const ctx = scoreCanvas.getContext('2d');
+                const width = scoreCanvas.width = scoreCanvas.offsetWidth * 2;
+                const height = scoreCanvas.height = scoreCanvas.offsetHeight * 2;
+                ctx.scale(2, 2);
+                
+                const correct = correctAnswers;
+                const incorrect = questions.length - correctAnswers;
+                const total = questions.length;
+                
+                const centerX = width / 4;
+                const centerY = height / 4 - 20;
+                const radius = Math.min(width, height) / 5;
+                
+                const correctAngle = (correct / total) * 2 * Math.PI;
+                
+                // Draw correct slice
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + correctAngle);
+                ctx.closePath();
+                ctx.fillStyle = '#4CAF50';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Draw incorrect slice
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, -Math.PI / 2 + correctAngle, -Math.PI / 2 + 2 * Math.PI);
+                ctx.closePath();
+                ctx.fillStyle = '#F44336';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Legend
+                const legendY = height / 2 - 40;
+                
+                // Correct legend
+                ctx.fillStyle = '#4CAF50';
+                ctx.fillRect(20, legendY, 20, 20);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(20, legendY, 20, 20);
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(`Correct: ${correct} (${Math.round((correct/total)*100)}%)`, 45, legendY + 15);
+                
+                // Incorrect legend
+                ctx.fillStyle = '#F44336';
+                ctx.fillRect(20, legendY + 30, 20, 20);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(20, legendY + 30, 20, 20);
+                ctx.fillStyle = '#333';
+                ctx.fillText(`Incorrect: ${incorrect} (${Math.round((incorrect/total)*100)}%)`, 45, legendY + 45);
+            }
+
+            // Populate Category Performance Table
+            const tableBody = document.getElementById('categoryTableBody');
+            if (tableBody) {
+                tableBody.innerHTML = '';
+                Object.keys(categoryStats).sort().forEach(category => {
+                    const stats = categoryStats[category];
+                    const percentage = ((stats.correct / stats.total) * 100).toFixed(1);
+                    const scoreClass = 
+                        percentage >= 90 ? 'score-excellent' :
+                        percentage >= 80 ? 'score-good' :
+                        percentage >= 70 ? 'score-fair' : 'score-poor';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><span class="category-badge">${category}</span></td>
+                        <td>${stats.correct}</td>
+                        <td>${stats.total}</td>
+                        <td><span class="score-badge ${scoreClass}">${percentage}%</span></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        }
     </script>
 </body>
 </html>
