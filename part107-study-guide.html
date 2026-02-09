@@ -2772,7 +2772,7 @@
                     categoryStats[q.category] = { correct: 0, total: 0 };
                 }
                 categoryStats[q.category].total++;
-                if (userAnswers[index] === q.correct) {
+                if (userAnswers[index] && userAnswers[index].isCorrect) {
                     categoryStats[q.category].correct++;
                 }
             });
