@@ -738,6 +738,142 @@
                     </div>
                 </div>
 
+                <!-- Annotated Sectional Chart -->
+                <div class="airspace-diagram">
+                    <h3>🗺️ Sectional Chart Visual Guide - What You'll See on the Test</h3>
+                    <p style="text-align: center; color: #666; margin-bottom: 20px;">This annotated chart shows how airspace and symbols appear on actual VFR sectional charts used in the FAA exam</p>
+                    
+                    <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" style="width: 100%; max-width: 900px; margin: 0 auto; display: block; background: #f5f3e8; border: 2px solid #333; border-radius: 8px;">
+                        <!-- Background terrain colors -->
+                        <rect x="0" y="0" width="800" height="600" fill="#f5f3e8"/>
+                        
+                        <!-- Terrain contour lines (brown) -->
+                        <path d="M 50 400 Q 100 390, 150 395 T 250 400" stroke="#8B4513" stroke-width="1" fill="none" opacity="0.5"/>
+                        <path d="M 60 420 Q 110 410, 160 415 T 260 420" stroke="#8B4513" stroke-width="1" fill="none" opacity="0.5"/>
+                        <path d="M 70 440 Q 120 430, 170 435 T 270 440" stroke="#8B4513" stroke-width="1" fill="none" opacity="0.5"/>
+                        
+                        <!-- Class E 700' AGL (magenta shading with scalloped edges) -->
+                        <ellipse cx="650" cy="450" rx="120" ry="100" fill="#E91E63" opacity="0.15"/>
+                        <path d="M 530 450 Q 540 430, 550 450 T 570 450 T 590 450 T 610 450 T 630 450 T 650 450 T 670 450 T 690 450 T 710 450 T 730 450 T 750 450 Q 760 470, 770 450" 
+                              stroke="#E91E63" stroke-width="1.5" fill="none" opacity="0.6" stroke-dasharray="5,3"/>
+                        <text x="650" y="520" text-anchor="middle" fill="#C2185B" font-size="11" font-weight="bold">Class E</text>
+                        <text x="650" y="535" text-anchor="middle" fill="#666" font-size="10">700' AGL (magenta scalloped)</text>
+                        
+                        <!-- Restricted Area R-2508 -->
+                        <rect x="30" y="80" width="140" height="100" fill="#FF0000" opacity="0.1" stroke="#FF0000" stroke-width="2" stroke-dasharray="8,4"/>
+                        <text x="100" y="125" text-anchor="middle" fill="#CC0000" font-size="14" font-weight="bold">R-2508</text>
+                        <text x="100" y="142" text-anchor="middle" fill="#666" font-size="9">SFC-FL180</text>
+                        <text x="100" y="200" text-anchor="middle" fill="#CC0000" font-size="10" font-weight="bold">↑ Restricted Area</text>
+                        <text x="100" y="213" text-anchor="middle" fill="#666" font-size="9">(Red hatched border)</text>
+                        
+                        <!-- MOA (Military Operations Area) -->
+                        <path d="M 580 80 L 750 80 L 750 180 L 580 180 Z" fill="#E91E63" opacity="0.08" stroke="#E91E63" stroke-width="2" stroke-dasharray="6,3"/>
+                        <line x1="585" y1="85" x2="745" y2="85" stroke="#E91E63" stroke-width="1" opacity="0.4"/>
+                        <line x1="585" y1="95" x2="745" y2="95" stroke="#E91E63" stroke-width="1" opacity="0.4"/>
+                        <line x1="585" y1="105" x2="745" y2="105" stroke="#E91E63" stroke-width="1" opacity="0.4"/>
+                        <text x="665" y="125" text-anchor="middle" fill="#C2185B" font-size="13" font-weight="bold">NIGHTHAWK MOA</text>
+                        <text x="665" y="142" text-anchor="middle" fill="#666" font-size="9">SFC-10,000</text>
+                        <text x="665" y="205" text-anchor="middle" fill="#C2185B" font-size="10" font-weight="bold">↑ MOA</text>
+                        <text x="665" y="218" text-anchor="middle" fill="#666" font-size="9">(Magenta hatched border)</text>
+                        
+                        <!-- Class B Airspace (solid blue) -->
+                        <ellipse cx="400" cy="300" rx="90" ry="75" fill="#2196F3" opacity="0.15" stroke="#0D47A1" stroke-width="3"/>
+                        <ellipse cx="400" cy="300" rx="60" ry="50" fill="#2196F3" opacity="0.2" stroke="#0D47A1" stroke-width="3"/>
+                        <text x="400" y="255" text-anchor="middle" fill="#0D47A1" font-size="11" font-weight="bold">100</text>
+                        <text x="400" y="268" text-anchor="middle" fill="#0D47A1" font-size="10">SFC</text>
+                        <text x="450" y="290" text-anchor="middle" fill="#0D47A1" font-size="11" font-weight="bold">80</text>
+                        <text x="450" y="303" text-anchor="middle" fill="#0D47A1" font-size="10">30</text>
+                        <text x="400" y="390" text-anchor="middle" fill="#0D47A1" font-size="11" font-weight="bold">↑ Class B Airspace</text>
+                        <text x="400" y="405" text-anchor="middle" fill="#666" font-size="9">(Solid blue lines)</text>
+                        
+                        <!-- Major Airport (Blue) - Class B -->
+                        <circle cx="400" cy="300" r="8" fill="#0D47A1" stroke="#0D47A1" stroke-width="2"/>
+                        <line x1="400" y1="292" x2="400" y2="308" stroke="white" stroke-width="1.5"/>
+                        <line x1="392" y1="300" x2="408" y2="300" stroke="white" stroke-width="1.5"/>
+                        <text x="400" y="323" text-anchor="middle" fill="#0D47A1" font-size="9" font-weight="bold">79</text>
+                        <line x1="400" y1="324" x2="400" y2="325" stroke="#0D47A1" stroke-width="0.5"/>
+                        <text x="400" y="332" text-anchor="middle" fill="#0D47A1" font-size="8">26</text>
+                        
+                        <!-- Class C Airspace (solid magenta) -->
+                        <circle cx="200" cy="300" r="55" fill="#E91E63" opacity="0.12" stroke="#C2185B" stroke-width="2.5"/>
+                        <circle cx="200" cy="300" r="35" fill="#E91E63" opacity="0.15" stroke="#C2185B" stroke-width="2.5"/>
+                        <text x="200" y="265" text-anchor="middle" fill="#C2185B" font-size="10" font-weight="bold">40</text>
+                        <text x="200" y="276" text-anchor="middle" fill="#C2185B" font-size="9">SFC</text>
+                        <text x="238" y="295" text-anchor="middle" fill="#C2185B" font-size="10" font-weight="bold">40</text>
+                        <text x="238" y="306" text-anchor="middle" fill="#C2185B" font-size="9">12</text>
+                        <text x="200" y="375" text-anchor="middle" fill="#C2185B" font-size="11" font-weight="bold">↑ Class C Airspace</text>
+                        <text x="200" y="390" text-anchor="middle" fill="#666" font-size="9">(Solid magenta lines)</text>
+                        
+                        <!-- Busy Airport (Blue) - Class C -->
+                        <circle cx="200" cy="300" r="7" fill="#0D47A1" stroke="#0D47A1" stroke-width="2"/>
+                        <line x1="200" y1="293" x2="200" y2="307" stroke="white" stroke-width="1.5"/>
+                        <line x1="193" y1="300" x2="207" y2="300" stroke="white" stroke-width="1.5"/>
+                        <text x="200" y="320" text-anchor="middle" fill="#0D47A1" font-size="8" font-weight="bold">52</text>
+                        <line x1="200" y1="321" x2="200" y2="322" stroke="#0D47A1" stroke-width="0.5"/>
+                        <text x="200" y="329" text-anchor="middle" fill="#0D47A1" font-size="7">18</text>
+                        
+                        <!-- Class D Airspace (dashed magenta) -->
+                        <circle cx="600" cy="300" r="40" fill="#E91E63" opacity="0.08" stroke="#E91E63" stroke-width="2" stroke-dasharray="8,4"/>
+                        <text x="600" y="280" text-anchor="middle" fill="#C2185B" font-size="10" font-weight="bold">25</text>
+                        <text x="600" y="291" text-anchor="middle" fill="#C2185B" font-size="9">SFC</text>
+                        <text x="600" y="360" text-anchor="middle" fill="#C2185B" font-size="11" font-weight="bold">↑ Class D Airspace</text>
+                        <text x="600" y="375" text-anchor="middle" fill="#666" font-size="9">(Dashed magenta lines)</text>
+                        
+                        <!-- Towered Airport (Blue) - Class D -->
+                        <circle cx="600" cy="300" r="6" fill="#0D47A1" stroke="#0D47A1" stroke-width="2"/>
+                        <line x1="600" y1="294" x2="600" y2="306" stroke="white" stroke-width="1.5"/>
+                        <line x1="594" y1="300" x2="606" y2="300" stroke="white" stroke-width="1.5"/>
+                        <text x="600" y="318" text-anchor="middle" fill="#0D47A1" font-size="8" font-weight="bold">35</text>
+                        <line x1="600" y1="319" x2="600" y2="320" stroke="#0D47A1" stroke-width="0.5"/>
+                        <text x="600" y="327" text-anchor="middle" fill="#0D47A1" font-size="7">12</text>
+                        
+                        <!-- Non-towered Airport (Magenta) -->
+                        <circle cx="300" cy="480" r="5" fill="#E91E63" stroke="#E91E63" stroke-width="1.5"/>
+                        <line x1="300" y1="475" x2="300" y2="485" stroke="white" stroke-width="1"/>
+                        <line x1="295" y1="480" x2="305" y2="480" stroke="white" stroke-width="1"/>
+                        <text x="300" y="500" text-anchor="middle" fill="#E91E63" font-size="8" font-weight="bold">38</text>
+                        <line x1="300" y1="501" x2="300" y2="502" stroke="#E91E63" stroke-width="0.5"/>
+                        <text x="300" y="509" text-anchor="middle" fill="#E91E63" font-size="7">08</text>
+                        <text x="300" y="525" text-anchor="middle" fill="#C2185B" font-size="10" font-weight="bold">↑ Non-Towered Airport</text>
+                        <text x="300" y="538" text-anchor="middle" fill="#666" font-size="9">(Magenta symbol)</text>
+                        
+                        <!-- Mode C Veil (blue segmented line) - around Class B -->
+                        <circle cx="400" cy="300" r="130" fill="none" stroke="#1976D2" stroke-width="2" stroke-dasharray="10,6" opacity="0.7"/>
+                        <text x="530" cy="305" text-anchor="middle" fill="#1565C0" font-size="9" font-weight="bold">Mode C Veil</text>
+                        <text x="530" cy="315" text-anchor="middle" fill="#666" font-size="8">(30 NM radius)</text>
+                        
+                        <!-- Legend Box -->
+                        <rect x="15" y="240" width="160" height="135" fill="white" stroke="#333" stroke-width="2" rx="5"/>
+                        <text x="95" y="258" text-anchor="middle" font-weight="bold" font-size="12" fill="#333">Chart Legend</text>
+                        <line x1="25" y1="262" x2="165" y2="262" stroke="#999" stroke-width="1"/>
+                        
+                        <!-- Legend items -->
+                        <line x1="25" y1="275" x2="50" y2="275" stroke="#0D47A1" stroke-width="3"/>
+                        <text x="55" y="279" font-size="9" fill="#333">Solid Blue = Class B</text>
+                        
+                        <line x1="25" y1="290" x2="50" y2="290" stroke="#C2185B" stroke-width="2.5"/>
+                        <text x="55" y="294" font-size="9" fill="#333">Solid Magenta = Class C</text>
+                        
+                        <line x1="25" y1="305" x2="50" y2="305" stroke="#E91E63" stroke-width="2" stroke-dasharray="6,3"/>
+                        <text x="55" y="309" font-size="9" fill="#333">Dashed Magenta = Class D</text>
+                        
+                        <circle cx="37.5" cy="320" r="3" fill="#0D47A1"/>
+                        <text x="55" y="324" font-size="9" fill="#333">Blue = Towered Airport</text>
+                        
+                        <circle cx="37.5" cy="335" r="3" fill="#E91E63"/>
+                        <text x="55" y="339" font-size="9" fill="#333">Magenta = Non-Towered</text>
+                        
+                        <text x="30" y="355" font-size="9" fill="#333" font-weight="bold">55</text>
+                        <line x1="30" y1="356" x2="42" y2="356" stroke="#333" stroke-width="0.5"/>
+                        <text x="30" y="364" font-size="8" fill="#333">30</text>
+                        <text x="55" y="361" font-size="9" fill="#333">= Runway 5500'/Elev 3000'</text>
+                        
+                        <!-- Title -->
+                        <text x="400" y="30" text-anchor="middle" font-weight="bold" font-size="16" fill="#333">VFR Sectional Chart - Airspace Examples</text>
+                        <text x="400" y="50" text-anchor="middle" font-size="11" fill="#666">Study this chart to recognize airspace on the FAA exam</text>
+                    </svg>
+                </div>
+
                 <!-- Quick Reference Cards -->
                 <h3 class="reference-title">📋 Key Part 107 Facts</h3>
                 <div class="reference-grid">
