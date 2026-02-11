@@ -11,6 +11,14 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
 - **Beautiful, responsive design** that works on desktop and mobile devices
+- **📝 NEW: Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
+  - Exam format, logistics, and requirements (60 questions, 2 hours, computer-based)
+  - Question distribution breakdown by topic
+  - Test-taking strategies specific to Part 107
+  - Common exam traps and misconceptions
+  - Post-exam certification process
+  - Study timeline recommendations
+  - Additional resources and tools
 - **Complete topic coverage** including:
   - Airspace Classification & Requirements
   - **Sectional Chart Reading** (NEW - comprehensive VFR chart interpretation)
@@ -55,6 +63,33 @@ Each question is designed to match actual FAA exam scenarios where you must:
 - Understand airport capabilities from chart and supplement data
 - Recognize hazardous areas and restrictions
 - Calculate true AGL altitudes using field elevations
+
+## 📝 Test-Specific Information & Strategies
+
+**NEW ADDITION!** The study guide now includes a comprehensive section about the actual FAA Part 107 exam to help you prepare for test day:
+
+### What's Included:
+- **📊 Exam Format & Requirements** - 60 questions, 2 hours, computer-based testing, 70% passing score
+- **💰 Cost & Logistics** - $175 fee, scheduling process, testing center procedures
+- **🆔 What to Bring** - Required documents, ID requirements, what's prohibited
+- **📊 Question Distribution** - Detailed breakdown showing which topics appear most frequently (Regulations: 25-33%, Airspace: 17-25%, Weather: 18-27%, etc.)
+- **🎓 Test-Taking Strategies** - Time management, answer elimination techniques, how to approach different question types
+- **⚠️ Common Exam Traps** - The 8 most common misconceptions that trip up test-takers:
+  - Airspace authorization confusion
+  - 400-foot rule variations (AGL vs MSL, structure exceptions)
+  - Class D vs E surface area identification
+  - Part 107 weather minimums vs manned aircraft
+  - Remote ID compliance requirements
+  - Density altitude effects
+  - Night operations requirements
+  - VLOS rule interpretation
+- **📋 Chart & Performance Question Tips** - How to approach sectional chart questions and performance calculations
+- **🧠 Mental Preparation** - Test day readiness and anxiety management
+- **📜 Post-Exam Certification Process** - Steps after passing, TSA background check, certificate validity
+- **📅 Study Timeline** - Week-by-week preparation plan leading up to your March exam
+- **📚 Additional Resources** - Official FAA materials, video resources, mobile apps
+
+This section is displayed on the start screen before you begin studying, so you can understand exactly what to expect on test day and how to maximize your chances of passing!
 
 ## 🚀 Getting Started
 
