@@ -119,6 +119,36 @@
             font-weight: 500;
         }
 
+        .question-visual {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #d32f2f;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .question-visual svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+        }
+
+        .question-visual img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .visual-caption {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
         .options {
             display: flex;
             flex-direction: column;
@@ -1094,6 +1124,7 @@
                 <div class="question-header">
                     <div class="category-badge" id="category"></div>
                     <div class="question-text" id="questionText"></div>
+                    <div id="questionVisual"></div>
                 </div>
 
                 <div class="options" id="optionsContainer"></div>
@@ -1177,7 +1208,37 @@
                     "1000 feet AGL"
                 ],
                 correct: 1,
-                explanation: "Under Part 107, the maximum altitude for drone operations is 400 feet above ground level (AGL) unless you're flying within 400 feet of a structure, in which case you can fly up to 400 feet above the structure's immediate uppermost limit."
+                explanation: "Under Part 107, the maximum altitude for drone operations is 400 feet above ground level (AGL) unless you're flying within 400 feet of a structure, in which case you can fly up to 400 feet above the structure's immediate uppermost limit.",
+                visual: `
+                    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" style="max-width: 500px;">
+                        <!-- Ground -->
+                        <rect x="0" y="250" width="400" height="50" fill="#8B7355"/>
+                        <line x1="0" y1="250" x2="400" y2="250" stroke="#333" stroke-width="2"/>
+                        
+                        <!-- 400 ft AGL line -->
+                        <line x1="0" y1="50" x2="400" y2="50" stroke="#d32f2f" stroke-width="2" stroke-dasharray="10,5"/>
+                        <text x="10" y="45" fill="#d32f2f" font-weight="bold" font-size="16">400 ft AGL Maximum</text>
+                        
+                        <!-- Drone at legal altitude -->
+                        <circle cx="150" cy="100" r="8" fill="#2196F3"/>
+                        <text x="130" y="85" fill="#28a745" font-size="14" font-weight="bold">✓ Legal</text>
+                        
+                        <!-- Drone above limit -->
+                        <circle cx="300" cy="20" r="8" fill="#dc3545"/>
+                        <text x="270" y="15" fill="#dc3545" font-size="14" font-weight="bold">✗ Too High</text>
+                        
+                        <!-- Altitude markers -->
+                        <line x1="20" y1="250" x2="20" y2="50" stroke="#666" stroke-width="1"/>
+                        <text x="25" y="150" fill="#666" font-size="12">400 ft</text>
+                        
+                        <!-- Structure example -->
+                        <rect x="350" y="150" width="30" height="100" fill="#999"/>
+                        <line x1="365" y1="150" x2="365" y2="0" stroke="#28a745" stroke-width="2" stroke-dasharray="5,3"/>
+                        <text x="310" y="75" fill="#28a745" font-size="11">+400 ft above</text>
+                        <text x="310" y="88" fill="#28a745" font-size="11">structure OK</text>
+                    </svg>
+                `,
+                visualCaption: "Part 107 altitude limits: 400 feet AGL, or 400 feet above a structure"
             },
             {
                 category: "Airspace",
@@ -1189,7 +1250,46 @@
                     "All airspace requires authorization"
                 ],
                 correct: 2,
-                explanation: "Class B, C, D, and surface area E airspace require ATC authorization through LAANC or DroneZone. Class G airspace (uncontrolled) does not require authorization, though you still must follow Part 107 regulations."
+                explanation: "Class B, C, D, and surface area E airspace require ATC authorization through LAANC or DroneZone. Class G airspace (uncontrolled) does not require authorization, though you still must follow Part 107 regulations.",
+                visual: `
+                    <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="max-width: 600px;">
+                        <!-- Title -->
+                        <text x="250" y="20" text-anchor="middle" font-weight="bold" font-size="18" fill="#333">Airspace Authorization Requirements</text>
+                        
+                        <!-- Class B -->
+                        <circle cx="80" cy="80" r="30" fill="#0066CC" opacity="0.7"/>
+                        <text x="80" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="16">B</text>
+                        <text x="80" y="125" text-anchor="middle" fill="#d32f2f" font-size="12" font-weight="bold">Auth Required</text>
+                        
+                        <!-- Class C -->
+                        <circle cx="180" cy="80" r="30" fill="#CC00CC" opacity="0.7"/>
+                        <text x="180" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="16">C</text>
+                        <text x="180" y="125" text-anchor="middle" fill="#d32f2f" font-size="12" font-weight="bold">Auth Required</text>
+                        
+                        <!-- Class D -->
+                        <circle cx="280" cy="80" r="30" fill="#0000CC" opacity="0.7"/>
+                        <text x="280" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="16">D</text>
+                        <text x="280" y="125" text-anchor="middle" fill="#d32f2f" font-size="12" font-weight="bold">Auth Required</text>
+                        
+                        <!-- Class E Surface -->
+                        <circle cx="380" cy="80" r="30" fill="#CC00CC" opacity="0.5"/>
+                        <text x="380" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="16">E</text>
+                        <text x="380" y="100" text-anchor="middle" fill="white" font-size="10">surface</text>
+                        <text x="380" y="125" text-anchor="middle" fill="#d32f2f" font-size="12" font-weight="bold">Auth Required</text>
+                        
+                        <!-- Class G -->
+                        <circle cx="130" cy="200" r="30" fill="#FFCC00" opacity="0.7"/>
+                        <text x="130" y="205" text-anchor="middle" fill="#333" font-weight="bold" font-size="16">G</text>
+                        <text x="130" y="245" text-anchor="middle" fill="#28a745" font-size="12" font-weight="bold">✓ No Auth Needed</text>
+                        
+                        <!-- Class E (above 400') -->
+                        <circle cx="300" cy="200" r="30" fill="#CC00CC" opacity="0.3"/>
+                        <text x="300" y="205" text-anchor="middle" fill="#333" font-weight="bold" font-size="16">E</text>
+                        <text x="300" y="220" text-anchor="middle" fill="#333" font-size="9">above 400'</text>
+                        <text x="300" y="245" text-anchor="middle" fill="#28a745" font-size="12" font-weight="bold">✓ Usually OK</text>
+                    </svg>
+                `,
+                visualCaption: "Authorization required for Class B, C, D, and E surface areas via LAANC or DroneZone"
             },
             {
                 category: "Airspace",
@@ -1239,7 +1339,41 @@
                     "Temperature below 50°F"
                 ],
                 correct: 1,
-                explanation: "High winds are extremely dangerous for drone operations. Most consumer and commercial drones cannot safely operate in winds exceeding 25-30 mph. Strong winds can cause loss of control, reduced battery life, and crashes."
+                explanation: "High winds are extremely dangerous for drone operations. Most consumer and commercial drones cannot safely operate in winds exceeding 25-30 mph. Strong winds can cause loss of control, reduced battery life, and crashes.",
+                visual: `
+                    <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" style="max-width: 600px;">
+                        <!-- Title -->
+                        <text x="250" y="25" text-anchor="middle" font-weight="bold" font-size="16" fill="#333">Wind Speed Safety Zones</text>
+                        
+                        <!-- Safe zone -->
+                        <rect x="30" y="50" width="120" height="120" fill="#28a745" opacity="0.3" rx="8"/>
+                        <text x="90" y="75" text-anchor="middle" font-weight="bold" fill="#28a745">SAFE</text>
+                        <text x="90" y="95" text-anchor="middle" font-size="14">0-15 mph</text>
+                        <circle cx="90" cy="130" r="15" fill="#2196F3"/>
+                        <path d="M 80,130 L 100,130 M 100,130 L 95,125 M 100,130 L 95,135" stroke="white" stroke-width="2" fill="none"/>
+                        
+                        <!-- Caution zone -->
+                        <rect x="180" y="50" width="120" height="120" fill="#FFC107" opacity="0.3" rx="8"/>
+                        <text x="240" y="75" text-anchor="middle" font-weight="bold" fill="#F57C00">CAUTION</text>
+                        <text x="240" y="95" text-anchor="middle" font-size="14">15-25 mph</text>
+                        <circle cx="240" cy="130" r="15" fill="#2196F3"/>
+                        <path d="M 228,125 L 252,135 M 228,135 L 252,125" stroke="white" stroke-width="2"/>
+                        <text x="240" y="160" text-anchor="middle" font-size="11" fill="#F57C00">Challenging</text>
+                        
+                        <!-- Danger zone -->
+                        <rect x="330" y="50" width="120" height="120" fill="#dc3545" opacity="0.3" rx="8"/>
+                        <text x="390" y="75" text-anchor="middle" font-weight="bold" fill="#dc3545">DANGER</text>
+                        <text x="390" y="95" text-anchor="middle" font-size="14">&gt;25 mph</text>
+                        <circle cx="390" cy="130" r="15" fill="#dc3545"/>
+                        <line x1="380" y1="120" x2="400" y2="140" stroke="white" stroke-width="3"/>
+                        <line x1="400" y1="120" x2="380" y2="140" stroke="white" stroke-width="3"/>
+                        <text x="390" y="160" text-anchor="middle" font-size="11" fill="#dc3545">Do Not Fly!</text>
+                        
+                        <!-- Bottom note -->
+                        <text x="250" y="195" text-anchor="middle" font-size="13" fill="#666">⚠️ High winds cause loss of control, reduced battery, and crashes</text>
+                    </svg>
+                `,
+                visualCaption: "Wind speed safety guide for drone operations"
             },
             {
                 category: "Weather",
@@ -1797,7 +1931,54 @@
                     "Brown"
                 ],
                 correct: 1,
-                explanation: "Class B airspace is depicted in solid blue on sectional charts. It surrounds the busiest airports and typically extends from the surface to 10,000 feet MSL in a stepped configuration resembling an upside-down wedding cake."
+                explanation: "Class B airspace is depicted in solid blue on sectional charts. It surrounds the busiest airports and typically extends from the surface to 10,000 feet MSL in a stepped configuration resembling an upside-down wedding cake.",
+                visual: `
+                    <svg viewBox="0 0 450 260" xmlns="http://www.w3.org/2000/svg" style="max-width: 550px;">
+                        <!-- Title -->
+                        <text x="225" y="20" text-anchor="middle" font-weight="bold" font-size="16" fill="#333">Airspace Colors on Sectional Charts</text>
+                        
+                        <!-- Class B - Blue -->
+                        <rect x="30" y="50" width="90" height="80" fill="none" stroke="#0066CC" stroke-width="4" rx="5"/>
+                        <text x="75" y="100" text-anchor="middle" font-weight="bold" font-size="20" fill="#0066CC">B</text>
+                        <text x="75" y="120" text-anchor="middle" font-size="12" fill="#333">BLUE</text>
+                        <text x="75" y="145" text-anchor="middle" font-size="11" fill="#666">(Solid lines)</text>
+                        
+                        <!-- Class C - Magenta Solid -->
+                        <rect x="140" y="50" width="90" height="80" fill="none" stroke="#CC00CC" stroke-width="4" rx="5"/>
+                        <text x="185" y="100" text-anchor="middle" font-weight="bold" font-size="20" fill="#CC00CC">C</text>
+                        <text x="185" y="120" text-anchor="middle" font-size="12" fill="#333">MAGENTA</text>
+                        <text x="185" y="145" text-anchor="middle" font-size="11" fill="#666">(Solid lines)</text>
+                        
+                        <!-- Class D - Magenta Dashed -->
+                        <rect x="250" y="50" width="90" height="80" fill="none" stroke="#CC00CC" stroke-width="4" stroke-dasharray="10,5" rx="5"/>
+                        <text x="295" y="100" text-anchor="middle" font-weight="bold" font-size="20" fill="#CC00CC">D</text>
+                        <text x="295" y="120" text-anchor="middle" font-size="12" fill="#333">MAGENTA</text>
+                        <text x="295" y="145" text-anchor="middle" font-size="11" fill="#666">(Dashed lines)</text>
+                        
+                        <!-- Class E - Blue Shading -->
+                        <rect x="360" y="50" width="60" height="80" fill="#0066CC" opacity="0.2" rx="5"/>
+                        <text x="390" y="100" text-anchor="middle" font-weight="bold" font-size="20" fill="#0066CC">E</text>
+                        <text x="390" y="120" text-anchor="middle" font-size="10" fill="#333">BLUE</text>
+                        <text x="390" y="135" text-anchor="middle" font-size="9" fill="#666">shaded</text>
+                        <text x="390" y="148" text-anchor="middle" font-size="9" fill="#666">(1200'AGL)</text>
+                        
+                        <!-- Class E 700' - Magenta Shading -->
+                        <g>
+                            <rect x="70" y="160" width="60" height="80" fill="#CC00CC" opacity="0.15" rx="5"/>
+                            <path d="M 70,240 Q 75,235 80,240 T 90,240 T 100,240 T 110,240 T 120,240 T 130,240" fill="none" stroke="#CC00CC" stroke-width="2"/>
+                            <text x="100" y="205" text-anchor="middle" font-weight="bold" font-size="20" fill="#CC00CC">E</text>
+                            <text x="100" y="220" text-anchor="middle" font-size="10" fill="#333">MAGENTA</text>
+                            <text x="100" y="233" text-anchor="middle" font-size="9" fill="#666">shaded</text>
+                        </g>
+                        <text x="100" y="255" text-anchor="middle" font-size="9" fill="#666">(700'AGL scalloped)</text>
+                        
+                        <!-- Note -->
+                        <text x="270" y="190" text-anchor="middle" font-size="12" fill="#d32f2f" font-weight="bold">Remember:</text>
+                        <text x="270" y="210" text-anchor="middle" font-size="11" fill="#666">Blue = Class B</text>
+                        <text x="270" y="225" text-anchor="middle" font-size="11" fill="#666">Magenta = Class C & D</text>
+                    </svg>
+                `,
+                visualCaption: "Sectional chart color coding for airspace classes"
             },
             {
                 category: "Airspace",
@@ -2740,6 +2921,7 @@
         let correctAnswers = 0;
         let selectedAnswer = null;
         let userAnswers = [];
+        let shuffledQuestions = [];
 
         // Shuffle array function
         function shuffleArray(array) {
@@ -2753,6 +2935,9 @@
 
         // Start Quiz
         function startQuiz() {
+            // Randomize questions at the start of each quiz
+            shuffledQuestions = shuffleArray(questions);
+            
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('quizScreen').style.display = 'block';
             loadQuestion();
@@ -2760,13 +2945,26 @@
 
         // Load Question
         function loadQuestion() {
-            const question = questions[currentQuestionIndex];
+            const question = shuffledQuestions[currentQuestionIndex];
             selectedAnswer = null;
 
             // Update header
             document.getElementById('category').textContent = question.category;
             document.getElementById('questionText').textContent = question.question;
             document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+
+            // Render visual if available
+            const visualContainer = document.getElementById('questionVisual');
+            if (question.visual) {
+                visualContainer.innerHTML = `
+                    <div class="question-visual">
+                        ${question.visual}
+                        ${question.visualCaption ? `<div class="visual-caption">${question.visualCaption}</div>` : ''}
+                    </div>
+                `;
+            } else {
+                visualContainer.innerHTML = '';
+            }
 
             // Clear and populate options
             const optionsContainer = document.getElementById('optionsContainer');
@@ -2800,7 +2998,7 @@
             if (selectedAnswer !== null) return; // Already answered
 
             selectedAnswer = index;
-            const question = questions[currentQuestionIndex];
+            const question = shuffledQuestions[currentQuestionIndex];
             const isCorrect = index === question.correct;
 
             // Store answer
@@ -2863,7 +3061,7 @@
         // Update Stats
         function updateStats() {
             const answered = userAnswers.filter(a => a !== undefined).length;
-            const progress = (answered / questions.length) * 100;
+            const progress = (answered / shuffledQuestions.length) * 100;
             const score = answered > 0 ? Math.round((correctAnswers / answered) * 100) : 0;
 
             document.getElementById('progressBar').style.width = progress + '%';
@@ -2874,7 +3072,7 @@
 
         // Next Question
         function nextQuestion() {
-            if (currentQuestionIndex < questions.length - 1) {
+            if (currentQuestionIndex < shuffledQuestions.length - 1) {
                 currentQuestionIndex++;
                 loadQuestion();
             } else {
@@ -2897,7 +3095,7 @@
 
                 // If question was answered, show the selection
                 if (selectedAnswer !== null) {
-                    const question = questions[currentQuestionIndex];
+                    const question = shuffledQuestions[currentQuestionIndex];
                     const options = document.querySelectorAll('.option');
                     
                     options.forEach((option, i) => {
@@ -2920,7 +3118,7 @@
             document.getElementById('quizScreen').style.display = 'none';
             document.getElementById('resultsScreen').classList.add('show');
 
-            const totalQuestions = questions.length;
+            const totalQuestions = shuffledQuestions.length;
             const scorePercent = Math.round((correctAnswers / totalQuestions) * 100);
 
             document.getElementById('finalScore').textContent = scorePercent + '%';
@@ -2953,6 +3151,9 @@
             correctAnswers = 0;
             selectedAnswer = null;
             userAnswers = [];
+            
+            // Randomize questions again for the new quiz
+            shuffledQuestions = shuffleArray(questions);
 
             document.getElementById('resultsScreen').classList.remove('show');
             document.getElementById('quizScreen').style.display = 'block';
@@ -3042,7 +3243,7 @@
         function initializePerformanceCharts() {
             // Calculate performance by category
             const categoryStats = {};
-            questions.forEach((q, index) => {
+            shuffledQuestions.forEach((q, index) => {
                 if (!categoryStats[q.category]) {
                     categoryStats[q.category] = { correct: 0, total: 0 };
                 }
