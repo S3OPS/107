@@ -1853,7 +1853,7 @@
             </div>
             
             <div class="keyboard-hint">
-                💡 Tip: Use <strong>A, B, C, D</strong> keys to select answers | <strong>←</strong> Previous | <strong>→</strong> Next | <strong>Space</strong> Bookmark
+                💡 Tip: Use <strong>A, B, C, D</strong> keys to select answers | <strong>← / ↓</strong> Previous | <strong>→ / ↑</strong> Next | <strong>Space</strong> Bookmark
             </div>
         </div>
 
@@ -3646,6 +3646,12 @@
         let examTimer = null;
         let bookmarkedQuestions = new Set();
 
+        // Constants
+        const PROGRESS_EXPIRY_DAYS = 7;
+        const EXAM_DURATION_MS = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+        const WARNING_THRESHOLD_30MIN_MS = 30 * 60 * 1000;
+        const WARNING_THRESHOLD_10MIN_MS = 10 * 60 * 1000;
+
         // LocalStorage Keys
         const STORAGE_KEYS = {
             PROGRESS: 'part107_progress',
@@ -3703,8 +3709,8 @@
 
 KEYBOARD SHORTCUTS:
 • A, B, C, D - Select answer options
-• ← (Left Arrow) - Previous question
-• → (Right Arrow) - Next question  
+• ← / ↓ (Left/Down Arrow) - Previous question
+• → / ↑ (Right/Up Arrow) - Next question  
 • Space - Bookmark current question
 • Esc - Clear selection (if not answered)
 
@@ -3741,8 +3747,9 @@ Your progress is saved automatically. You can close the browser and return anyti
             
             try {
                 const progress = JSON.parse(saved);
-                // Don't load progress older than 7 days
-                if (Date.now() - progress.timestamp > 7 * 24 * 60 * 60 * 1000) {
+                // Don't load progress older than PROGRESS_EXPIRY_DAYS
+                const expiryMs = PROGRESS_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
+                if (Date.now() - progress.timestamp > expiryMs) {
                     localStorage.removeItem(STORAGE_KEYS.PROGRESS);
                     return null;
                 }
@@ -3783,10 +3790,8 @@ Your progress is saved automatically. You can close the browser and return anyti
             quizMode = progress.quizMode;
             shuffledQuestions = progress.shuffledQuestions.map(idx => questions[idx]);
             
-            // Start quiz
-            document.getElementById('startScreen').style.display = 'none';
-            document.getElementById('quizScreen').style.display = 'block';
-            loadQuestion();
+            // Start quiz in resume mode
+            startQuiz(quizMode, true);
         }
 
         function startNewSession() {
@@ -3851,7 +3856,7 @@ Your progress is saved automatically. You can close the browser and return anyti
             
             examTimer = setInterval(() => {
                 const elapsed = Date.now() - examStartTime;
-                const remaining = Math.max(0, 2 * 60 * 60 * 1000 - elapsed); // 2 hours
+                const remaining = Math.max(0, EXAM_DURATION_MS - elapsed);
                 
                 const hours = Math.floor(remaining / (60 * 60 * 1000));
                 const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
@@ -3860,9 +3865,9 @@ Your progress is saved automatically. You can close the browser and return anyti
                 timerDisplay.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 
                 // Warning colors
-                if (remaining < 10 * 60 * 1000) { // Last 10 minutes
+                if (remaining < WARNING_THRESHOLD_10MIN_MS) {
                     timerDisplay.style.color = '#f44336';
-                } else if (remaining < 30 * 60 * 1000) { // Last 30 minutes
+                } else if (remaining < WARNING_THRESHOLD_30MIN_MS) {
                     timerDisplay.style.color = '#ff9800';
                 }
                 
@@ -3934,11 +3939,11 @@ Your progress is saved automatically. You can close the browser and return anyti
         }
 
         // Start Quiz
-        function startQuiz(mode = 'practice') {
+        function startQuiz(mode = 'practice', isResume = false) {
             quizMode = mode;
             
             // Clear any saved progress when starting fresh
-            if (!arguments[1]) { // Not called from continueSession
+            if (!isResume) {
                 currentQuestionIndex = 0;
                 correctAnswers = 0;
                 selectedAnswer = null;
