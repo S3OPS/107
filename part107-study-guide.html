@@ -1604,6 +1604,9 @@
         <button class="settings-btn" id="reviewBtn" onclick="showReviewScreen()" title="Review Answers" aria-label="Review Answers" style="display: none;">
             📝
         </button>
+        <button class="settings-btn" id="reviewModeBtn" onclick="toggleReviewMode()" title="Review Mode - Study bookmarked or incorrect questions" aria-label="Review Mode" style="display: none;">
+            🔄
+        </button>
         <button class="settings-btn" id="categoryFilterBtn" onclick="toggleCategoryFilter()" title="Filter by Category" aria-label="Filter by Category" style="display: none;">
             📚
         </button>
@@ -1645,6 +1648,14 @@
                     <h3>⏱️ Exam Simulator</h3>
                     <p>2-hour timed test mimicking real exam conditions</p>
                 </div>
+            </div>
+            
+            <!-- Quiz Options -->
+            <div style="text-align: center; margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 10px; border: 2px solid #e0e0e0;">
+                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer;">
+                    <input type="checkbox" id="randomizeToggle" checked style="width: 20px; height: 20px; cursor: pointer;">
+                    <span>🔀 Randomize question order (recommended)</span>
+                </label>
             </div>
             
             <div class="topics-list">
@@ -2435,6 +2446,26 @@
                 </button>
             </div>
 
+            <!-- Review Mode Filters -->
+            <div class="review-mode-filters" id="reviewModeFilters" style="display: none;">
+                <h3 style="text-align: center; margin-bottom: 15px; color: #d32f2f;">📋 Review Mode</h3>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
+                    <button class="btn btn-secondary" onclick="filterReviewMode('all')" style="padding: 10px 20px;">
+                        📚 All Questions
+                    </button>
+                    <button class="btn btn-secondary" onclick="filterReviewMode('bookmarked')" style="padding: 10px 20px;">
+                        ⭐ Bookmarked Only
+                    </button>
+                    <button class="btn btn-secondary" onclick="filterReviewMode('incorrect')" style="padding: 10px 20px;">
+                        ❌ Incorrect Only
+                    </button>
+                    <button class="btn btn-primary" onclick="hideReviewFilters()" style="padding: 10px 20px;">
+                        ✓ Exit Review Mode
+                    </button>
+                </div>
+                <div id="reviewModeInfo" style="text-align: center; font-weight: bold; color: #d32f2f; margin-bottom: 10px;"></div>
+            </div>
+
             <!-- Category Filter -->
             <div id="categoryFilter" class="category-filter" style="display: none;">
                 <h3>📚 Filter by Category</h3>
@@ -2481,6 +2512,10 @@
                 <div class="stat">
                     <div class="stat-value" id="scorePercent">0%</div>
                     <div class="stat-label">Score</div>
+                </div>
+                <div class="stat" id="streakStat" style="display: none;">
+                    <div class="stat-value" id="streakCount">0</div>
+                    <div class="stat-label">🔥 Streak</div>
                 </div>
             </div>
 
@@ -4326,6 +4361,10 @@
         let examStartTime = null;
         let examTimer = null;
         let bookmarkedQuestions = new Set();
+        let currentStreak = 0;
+        let maxStreak = 0;
+        let reviewModeActive = false;
+        let reviewModeFilter = 'all'; // 'all', 'bookmarked', 'incorrect'
 
         // Constants
         const PROGRESS_EXPIRY_DAYS = 7;
@@ -4344,7 +4383,8 @@
             PROGRESS: 'part107_progress',
             DARK_MODE: 'part107_dark_mode',
             BOOKMARKS: 'part107_bookmarks',
-            STATS: 'part107_stats'
+            STATS: 'part107_stats',
+            RANDOMIZE: 'part107_randomize'
         };
 
         // Toast Notification System
@@ -4507,10 +4547,14 @@ FEATURES:
 📊 Progress Tracking - Your progress is automatically saved
 ⭐ Bookmarks - Mark questions for later review
 📈 Analytics - View performance by category
+🔥 Answer Streak - Track consecutive correct answers
+🔄 Review Mode - Filter to study only bookmarked or incorrect questions
+🔀 Question Randomization - Optional shuffling of questions
 
 MODES:
 📖 Practice Mode - Study at your own pace with immediate feedback
 ⏱️ Exam Mode - Timed 2-hour test simulating real exam conditions
+🔄 Review Mode - Focus on bookmarked or incorrectly answered questions
 
 Your progress is saved automatically. You can close the browser and return anytime!`);
         }
@@ -4634,6 +4678,117 @@ Your progress is saved automatically. You can close the browser and return anyti
             } else {
                 btn.classList.remove('bookmarked');
                 btn.title = 'Bookmark this question';
+            }
+        }
+
+        // Review Mode Functions
+        function toggleReviewMode() {
+            reviewModeActive = !reviewModeActive;
+            const filters = document.getElementById('reviewModeFilters');
+            
+            if (reviewModeActive) {
+                filters.style.display = 'block';
+                showToast('📋 Review Mode activated! Filter by bookmarked or incorrect questions.', 'info', 3000);
+            } else {
+                filters.style.display = 'none';
+                reviewModeFilter = 'all';
+                applyReviewFilter();
+                showToast('✓ Review Mode deactivated.', 'success', 2000);
+            }
+        }
+
+        function hideReviewFilters() {
+            reviewModeActive = false;
+            document.getElementById('reviewModeFilters').style.display = 'none';
+            reviewModeFilter = 'all';
+            applyReviewFilter();
+        }
+
+        function filterReviewMode(filterType) {
+            reviewModeFilter = filterType;
+            applyReviewFilter();
+        }
+
+        function applyReviewFilter() {
+            const infoEl = document.getElementById('reviewModeInfo');
+            
+            if (reviewModeFilter === 'all') {
+                shuffledQuestions = [...originalQuestions];
+                infoEl.textContent = '';
+                showToast('📚 Showing all questions', 'info', 2000);
+            } else if (reviewModeFilter === 'bookmarked') {
+                // Filter to only bookmarked questions
+                shuffledQuestions = originalQuestions.filter(q => {
+                    const idx = questions.indexOf(q);
+                    return bookmarkedQuestions.has(idx);
+                });
+                
+                if (shuffledQuestions.length === 0) {
+                    shuffledQuestions = [...originalQuestions];
+                    infoEl.textContent = '⚠️ No bookmarked questions yet! Bookmark questions to review them later.';
+                    showToast('No bookmarked questions found', 'warning', 3000);
+                } else {
+                    infoEl.textContent = `⭐ Showing ${shuffledQuestions.length} bookmarked question(s)`;
+                    showToast(`Reviewing ${shuffledQuestions.length} bookmarked questions`, 'success', 2000);
+                }
+            } else if (reviewModeFilter === 'incorrect') {
+                // Filter to only questions answered incorrectly
+                shuffledQuestions = originalQuestions.filter((q, idx) => {
+                    return userAnswers[idx] && !userAnswers[idx].isCorrect;
+                });
+                
+                if (shuffledQuestions.length === 0) {
+                    shuffledQuestions = [...originalQuestions];
+                    infoEl.textContent = '✓ No incorrect answers yet! (Or complete a quiz first)';
+                    showToast('No incorrect answers found', 'warning', 3000);
+                } else {
+                    infoEl.textContent = `❌ Showing ${shuffledQuestions.length} incorrectly answered question(s)`;
+                    showToast(`Reviewing ${shuffledQuestions.length} incorrect questions`, 'success', 2000);
+                }
+            }
+            
+            // Reset to first question
+            if (shuffledQuestions.length > 0) {
+                currentQuestionIndex = 0;
+                loadQuestion();
+            }
+        }
+
+        // Streak Functions
+        function updateStreak(isCorrect) {
+            if (isCorrect) {
+                currentStreak++;
+                if (currentStreak > maxStreak) {
+                    maxStreak = currentStreak;
+                }
+                
+                // Show streak milestone notifications
+                if (currentStreak === 5) {
+                    showToast('🔥 5 in a row! Keep it up!', 'success', 2000);
+                } else if (currentStreak === 10) {
+                    showToast('🔥🔥 10 streak! Excellent!', 'success', 2000);
+                } else if (currentStreak === 20) {
+                    showToast('🔥🔥🔥 20 streak! You\'re on fire!', 'success', 2000);
+                }
+            } else {
+                currentStreak = 0;
+            }
+            
+            // Update UI
+            const streakEl = document.getElementById('streakCount');
+            const streakStatEl = document.getElementById('streakStat');
+            
+            if (streakEl) {
+                streakEl.textContent = currentStreak;
+            }
+            
+            // Show/hide streak stat based on whether there's an active streak
+            if (streakStatEl) {
+                if (currentStreak > 0) {
+                    streakStatEl.style.display = 'block';
+                } else {
+                    streakStatEl.style.display = 'none';
+                }
             }
         }
 
@@ -4837,9 +4992,19 @@ Your progress is saved automatically. You can close the browser and return anyti
                 correctAnswers = 0;
                 selectedAnswer = null;
                 userAnswers = [];
+                currentStreak = 0;
+                maxStreak = 0;
                 
-                // Randomize questions at the start of each quiz
-                shuffledQuestions = shuffleArray(questions);
+                // Check if randomization is enabled
+                const randomizeToggle = document.getElementById('randomizeToggle');
+                const shouldRandomize = !randomizeToggle || randomizeToggle.checked;
+                
+                // Randomize questions if enabled
+                if (shouldRandomize) {
+                    shuffledQuestions = shuffleArray(questions);
+                } else {
+                    shuffledQuestions = [...questions];
+                }
                 
                 // Initialize category filter and save original questions
                 originalQuestions = [...shuffledQuestions];
@@ -4849,8 +5014,9 @@ Your progress is saved automatically. You can close the browser and return anyti
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('quizScreen').style.display = 'block';
             
-            // Show review button
+            // Show review buttons
             document.getElementById('reviewBtn').style.display = 'flex';
+            document.getElementById('reviewModeBtn').style.display = 'flex';
             
             // Start exam timer if in exam mode
             if (quizMode === 'exam') {
@@ -4948,6 +5114,9 @@ Your progress is saved automatically. You can close the browser and return anyti
             if (isCorrect) {
                 correctAnswers++;
             }
+
+            // Update streak
+            updateStreak(isCorrect);
 
             // Update option styling and ARIA
             const options = document.querySelectorAll('.option');
@@ -5091,6 +5260,11 @@ Your progress is saved automatically. You can close the browser and return anyti
                 message = '📖 Don\'t give up! This is a complex exam covering many topics. Take time to study each subject area, review the explanations, and take the quiz again. Every expert was once a beginner!';
             }
 
+            // Add streak information to the message if there was a good streak
+            if (maxStreak >= 5) {
+                message += ` 🔥 Your longest streak was ${maxStreak} correct answers in a row - impressive!`;
+            }
+
             document.getElementById('resultsMessage').textContent = message;
             
             // Initialize performance charts
@@ -5103,9 +5277,18 @@ Your progress is saved automatically. You can close the browser and return anyti
             correctAnswers = 0;
             selectedAnswer = null;
             userAnswers = [];
+            currentStreak = 0;
+            maxStreak = 0;
             
             // Randomize questions again for the new quiz
-            shuffledQuestions = shuffleArray(questions);
+            const randomizeToggle = document.getElementById('randomizeToggle');
+            const shouldRandomize = !randomizeToggle || randomizeToggle.checked;
+            
+            if (shouldRandomize) {
+                shuffledQuestions = shuffleArray(questions);
+            } else {
+                shuffledQuestions = [...questions];
+            }
             
             // Clear saved progress
             clearProgress();
