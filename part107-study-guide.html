@@ -1610,6 +1610,9 @@
         <button class="settings-btn" onclick="showHelp()" title="Help & Keyboard Shortcuts" aria-label="Help">
             ❓
         </button>
+        <button class="settings-btn" id="exportBtn" onclick="exportProgress()" title="Export Study Progress" aria-label="Export Progress" style="display: none;">
+            💾
+        </button>
     </div>
 
     <div class="container" id="main-content" role="main">
@@ -5604,33 +5607,78 @@ Your progress is saved automatically. You can close the browser and return anyti
         }
 
         function showTimerAlert(message) {
-            // Create temporary alert element
-            const alert = document.createElement('div');
-            alert.style.cssText = `
-                position: fixed;
-                top: 100px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(244, 67, 54, 0.95);
-                color: white;
-                padding: 15px 30px;
-                border-radius: 10px;
-                font-size: 1.2em;
-                font-weight: bold;
-                z-index: 10000;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-                animation: slideDown 0.3s ease;
-            `;
-            alert.setAttribute('role', 'alert');
-            alert.setAttribute('aria-live', 'assertive');
-            alert.textContent = message;
-            document.body.appendChild(alert);
-            
-            setTimeout(() => {
-                alert.style.opacity = '0';
-                alert.style.transition = 'opacity 0.5s ease';
-                setTimeout(() => alert.remove(), 500);
-            }, 3000);
+            // Use toast notification instead of custom alert
+            showToast(message, 'warning', 3000);
+        }
+
+        // Export/Import Progress Functions
+        function exportProgress() {
+            try {
+                const exportData = {
+                    version: '1.0',
+                    exportDate: new Date().toISOString(),
+                    bookmarks: Array.from(bookmarkedQuestions),
+                    currentSession: loadProgress(),
+                    darkMode: storage.getItem(STORAGE_KEYS.DARK_MODE) === 'true',
+                    totalQuestions: questions.length
+                };
+
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `part107-progress-${new Date().toISOString().split('T')[0]}.json`;
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                showToast('✅ Progress exported successfully!', 'success', 3000);
+            } catch (error) {
+                console.error('Export error:', error);
+                showToast('❌ Failed to export progress', 'error', 3000);
+            }
+        }
+
+        function importProgress(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importData = JSON.parse(e.target.result);
+                    
+                    // Validate import data
+                    if (!importData.version || !importData.bookmarks) {
+                        throw new Error('Invalid import file format');
+                    }
+                    
+                    // Import bookmarks
+                    bookmarkedQuestions = new Set(importData.bookmarks);
+                    saveBookmarks();
+                    
+                    // Import dark mode preference
+                    if (importData.darkMode !== undefined) {
+                        storage.setItem(STORAGE_KEYS.DARK_MODE, importData.darkMode);
+                        if (importData.darkMode) {
+                            document.body.classList.add('dark-mode');
+                        } else {
+                            document.body.classList.remove('dark-mode');
+                        }
+                        updateDarkModeIcon();
+                    }
+                    
+                    showToast('✅ Progress imported successfully!', 'success', 3000);
+                    
+                    // Reload page to reflect changes
+                    setTimeout(() => location.reload(), 1500);
+                } catch (error) {
+                    console.error('Import error:', error);
+                    showToast('❌ Failed to import progress. Check file format.', 'error', 3000);
+                }
+            };
+            reader.readAsText(file);
         }
 
         // Initialize on page load
@@ -5638,8 +5686,9 @@ Your progress is saved automatically. You can close the browser and return anyti
             loadDarkModePreference();
             checkSavedProgress();
             
-            // Show bookmarks button
+            // Show bookmarks and export buttons
             document.getElementById('bookmarksViewBtn').style.display = 'flex';
+            document.getElementById('exportBtn').style.display = 'flex';
         });
     </script>
 </body>
