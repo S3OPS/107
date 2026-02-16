@@ -1410,11 +1410,11 @@
 
             <!-- Mode Selection -->
             <div class="mode-selection">
-                <div class="mode-btn" onclick="startQuiz('practice')" role="button" tabindex="0" aria-label="Start practice mode" onkeydown="if(event.key==='Enter'||event.key===' '){startQuiz('practice');event.preventDefault();}">
+                <div class="mode-btn" onclick="startQuiz('practice')" role="button" tabindex="0" aria-label="Start practice mode" onkeydown="handleButtonKeydown(event, () => startQuiz('practice'))">
                     <h3>📖 Practice Mode</h3>
                     <p>Study at your own pace with immediate feedback and explanations</p>
                 </div>
-                <div class="mode-btn" onclick="startQuiz('exam')" role="button" tabindex="0" aria-label="Start exam simulator mode" onkeydown="if(event.key==='Enter'||event.key===' '){startQuiz('exam');event.preventDefault();}">
+                <div class="mode-btn" onclick="startQuiz('exam')" role="button" tabindex="0" aria-label="Start exam simulator mode" onkeydown="handleButtonKeydown(event, () => startQuiz('exam'))">
                     <h3>⏱️ Exam Simulator</h3>
                     <p>2-hour timed test mimicking real exam conditions</p>
                 </div>
@@ -2196,7 +2196,7 @@
             <div id="categoryFilter" class="category-filter" style="display: none;">
                 <h3>📚 Filter by Category</h3>
                 <div class="category-tags" id="categoryTags">
-                    <div class="category-tag active" data-category="all" onclick="filterByCategory('all')" role="button" tabindex="0" aria-label="Show all categories">
+                    <div class="category-tag active" data-category="all" onclick="filterByCategory('all')" role="button" tabindex="0" aria-label="Show all categories" onkeydown="handleButtonKeydown(event, () => filterByCategory('all'))">
                         All Questions
                     </div>
                 </div>
@@ -4089,6 +4089,11 @@
         const EXAM_DURATION_MS = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
         const WARNING_THRESHOLD_30MIN_MS = 30 * 60 * 1000;
         const WARNING_THRESHOLD_10MIN_MS = 10 * 60 * 1000;
+        
+        // Timer thresholds in seconds
+        const TIMER_WARNING_30MIN = 1800; // 30 minutes
+        const TIMER_WARNING_10MIN = 600;  // 10 minutes
+        const TIMER_CRITICAL_5MIN = 300;  // 5 minutes
 
         // LocalStorage Keys
         const STORAGE_KEYS = {
@@ -4097,6 +4102,14 @@
             BOOKMARKS: 'part107_bookmarks',
             STATS: 'part107_stats'
         };
+
+        // Helper Functions
+        function handleButtonKeydown(event, callback) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                callback();
+                event.preventDefault();
+            }
+        }
 
         // Initialize on page load
         window.onload = function() {
@@ -4499,9 +4512,15 @@ Your progress is saved automatically. You can close the browser and return anyti
                 correctAnswers++;
             }
 
-            // Update option styling
+            // Update option styling and ARIA
             const options = document.querySelectorAll('.option');
             options.forEach((option, i) => {
+                if (i === index) {
+                    option.setAttribute('aria-checked', 'true');
+                } else {
+                    option.setAttribute('aria-checked', 'false');
+                }
+                
                 if (i === question.correct) {
                     option.classList.add('correct');
                 } else if (i === index && !isCorrect) {
@@ -4931,12 +4950,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                 tag.setAttribute('aria-label', `Filter by ${category}`);
                 tag.textContent = category;
                 tag.onclick = () => filterByCategory(category);
-                tag.onkeydown = (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        filterByCategory(category);
-                        e.preventDefault();
-                    }
-                };
+                tag.onkeydown = (e) => handleButtonKeydown(e, () => filterByCategory(category));
                 tagsContainer.appendChild(tag);
             });
 
@@ -5135,20 +5149,21 @@ Your progress is saved automatically. You can close the browser and return anyti
                 updateTimerDisplay();
                 
                 // Update timer state based on remaining time
-                if (examTimeRemaining <= 300) { // 5 minutes
+                // Remove all state classes first to avoid conflicts
+                timerElement.classList.remove('warning', 'critical');
+                
+                if (examTimeRemaining <= TIMER_CRITICAL_5MIN) {
                     timerElement.classList.add('critical');
-                    timerElement.classList.remove('warning');
-                } else if (examTimeRemaining <= 1800) { // 30 minutes
+                } else if (examTimeRemaining <= TIMER_WARNING_30MIN) {
                     timerElement.classList.add('warning');
-                    timerElement.classList.remove('critical');
                 }
                 
                 // Show alerts at specific times
-                if (examTimeRemaining === 1800) {
+                if (examTimeRemaining === TIMER_WARNING_30MIN) {
                     showTimerAlert('⏰ 30 minutes remaining!');
-                } else if (examTimeRemaining === 600) {
+                } else if (examTimeRemaining === TIMER_WARNING_10MIN) {
                     showTimerAlert('⚠️ 10 minutes remaining!');
-                } else if (examTimeRemaining === 300) {
+                } else if (examTimeRemaining === TIMER_CRITICAL_5MIN) {
                     showTimerAlert('🚨 Only 5 minutes left!');
                 }
                 
