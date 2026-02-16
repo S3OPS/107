@@ -1698,10 +1698,20 @@
             
             <!-- Quiz Options -->
             <div style="text-align: center; margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 10px; border: 2px solid #e0e0e0;">
-                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer;">
+                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer; margin-bottom: 15px;">
                     <input type="checkbox" id="randomizeToggle" checked style="width: 20px; height: 20px; cursor: pointer;">
                     <span>🔀 Randomize question order (recommended)</span>
                 </label>
+                <div style="border-top: 1px solid #e0e0e0; padding-top: 15px;">
+                    <label style="font-size: 1em; color: #666; margin-bottom: 8px; display: block;">📝 Quiz Length:</label>
+                    <select id="quizLengthSelect" style="padding: 8px 15px; font-size: 1em; border-radius: 8px; border: 2px solid #d32f2f; background: white; cursor: pointer;">
+                        <option value="all">Full Quiz (127 questions)</option>
+                        <option value="20">Quick Test (20 questions)</option>
+                        <option value="30">Short Test (30 questions)</option>
+                        <option value="45">Practice Test (45 questions)</option>
+                        <option value="60">Exam Length (60 questions)</option>
+                    </select>
+                </div>
             </div>
             
             <div class="topics-list">
@@ -5194,11 +5204,25 @@ Your progress is saved automatically. You can close the browser and return anyti
                 maxStreak = 0;
                 incorrectQuestionIndices.clear(); // Clear incorrect questions from previous quiz
                 
+                // Get quiz length selection
+                const quizLengthSelect = document.getElementById('quizLengthSelect');
+                const quizLength = quizLengthSelect ? quizLengthSelect.value : 'all';
+                
                 // Randomize questions if enabled
+                let questionsToUse = questions;
                 if (getShouldRandomize()) {
-                    shuffledQuestions = shuffleArray(questions);
+                    questionsToUse = shuffleArray(questions);
                 } else {
-                    shuffledQuestions = [...questions];
+                    questionsToUse = [...questions];
+                }
+                
+                // Apply quiz length limit
+                if (quizLength !== 'all') {
+                    const numQuestions = parseInt(quizLength);
+                    shuffledQuestions = questionsToUse.slice(0, numQuestions);
+                    showToast(`📝 Starting ${numQuestions}-question quiz`, 'info', 3000);
+                } else {
+                    shuffledQuestions = questionsToUse;
                 }
                 
                 // Initialize category filter and save original questions

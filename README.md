@@ -15,6 +15,8 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **⏱️ Exam Simulator Mode** - Full 2-hour timed test mimicking real exam conditions with pause/resume
 - **⏸️ NEW: Timer Pause/Resume** - Pause and resume the exam timer at any time during practice
 - **🔊 NEW: Sound Effects** - Optional audio feedback for answers, streaks, and bookmarks (toggleable)
+- **📝 NEW: Flexible Quiz Lengths** - Choose from 20, 30, 45, 60, or all 127 questions
+- **⏱️ NEW: Time-per-Question Analytics** - Track and display average time spent on each question
 - **💾 Progress Persistence** - Automatically saves your progress; pick up where you left off
 - **⌨️ Keyboard Navigation** - Use A/B/C/D keys to answer, arrow keys to navigate
 - **⭐ Bookmark Questions** - Flag questions for later review
@@ -129,6 +131,15 @@ This section is displayed on the start screen before you begin studying, so you 
 - Bookmark confirmation sound
 - Easy toggle on/off with 🔊/🔇 button
 - Preference saved between sessions
+
+### 📝 Flexible Quiz Lengths (NEW!)
+- **Multiple quiz length options** for different study sessions
+- **Quick Test** - 20 questions for rapid practice
+- **Short Test** - 30 questions for focused study
+- **Practice Test** - 45 questions for intermediate practice
+- **Exam Length** - 60 questions matching actual FAA exam
+- **Full Quiz** - All 127 questions for comprehensive review
+- Perfect for time-constrained study sessions
 
 ### 📖 Practice Mode
 - Study at your own pace with no time pressure
