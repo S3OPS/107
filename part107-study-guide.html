@@ -1734,6 +1734,13 @@
             <h2>Welcome to Your Interactive Study Guide!</h2>
             <p>This comprehensive guide covers everything you need to know to pass the Part 107 FAA Remote Pilot exam. Answer multiple choice questions, get instant feedback, and track your progress.</p>
             
+            <!-- Your Progress Summary -->
+            <div id="progressSummary" style="display: none; margin: 20px 0; padding: 20px; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 10px; border: 2px solid #4CAF50;">
+                <h3 style="margin: 0 0 10px 0; color: #2E7D32;">📊 Your Progress Summary</h3>
+                <div id="progressSummaryContent" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                </div>
+            </div>
+            
             <!-- Continue Session Banner -->
             <div id="continueSession" class="continue-session">
                 <h3>📚 Continue Your Last Session</h3>
@@ -1761,6 +1768,10 @@
                 <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer; margin-bottom: 15px;">
                     <input type="checkbox" id="randomizeToggle" checked style="width: 20px; height: 20px; cursor: pointer;">
                     <span>🔀 Randomize question order (recommended)</span>
+                </label>
+                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer; margin-bottom: 15px;">
+                    <input type="checkbox" id="smartShuffleToggle" style="width: 20px; height: 20px; cursor: pointer;">
+                    <span>🎯 Smart shuffle (prioritizes difficult & incorrect questions)</span>
                 </label>
                 <div style="border-top: 1px solid #e0e0e0; padding-top: 15px;">
                     <label style="font-size: 1em; color: #666; margin-bottom: 8px; display: block;">📝 Quiz Length:</label>
@@ -4841,6 +4852,51 @@ Your progress is saved automatically. You can close the browser and return anyti
                 infoText.textContent = `You answered ${answered} questions with a ${score}% score. Continue where you left off?`;
                 continueDiv.classList.add('show');
             }
+            
+            // Display overall progress summary
+            displayProgressSummary();
+        }
+
+        // Display Progress Summary on Start Screen
+        function displayProgressSummary() {
+            const history = getSessionHistory();
+            if (history.length === 0) return;
+            
+            const summaryDiv = document.getElementById('progressSummary');
+            const contentDiv = document.getElementById('progressSummaryContent');
+            
+            if (!summaryDiv || !contentDiv) return;
+            
+            // Calculate statistics
+            const totalSessions = history.length;
+            const avgScore = Math.round(history.reduce((sum, s) => sum + s.score, 0) / totalSessions);
+            const bestScore = Math.max(...history.map(s => s.score));
+            const recentScore = history[0].score;
+            const improvementRate = history.length >= 2 ? 
+                ((recentScore - history[history.length - 1].score) / history.length).toFixed(1) : 0;
+            
+            contentDiv.innerHTML = `
+                <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.5em; font-weight: bold; color: #4CAF50;">${totalSessions}</div>
+                    <div style="font-size: 0.9em; color: #666;">Total Sessions</div>
+                </div>
+                <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.5em; font-weight: bold; color: #2196F3;">${avgScore}%</div>
+                    <div style="font-size: 0.9em; color: #666;">Average Score</div>
+                </div>
+                <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.5em; font-weight: bold; color: #FF9800;">${bestScore}%</div>
+                    <div style="font-size: 0.9em; color: #666;">Best Score</div>
+                </div>
+                <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.5em; font-weight: bold; color: ${improvementRate > 0 ? '#4CAF50' : '#F44336'};">
+                        ${improvementRate > 0 ? '+' : ''}${improvementRate}%
+                    </div>
+                    <div style="font-size: 0.9em; color: #666;">Improvement Rate</div>
+                </div>
+            `;
+            
+            summaryDiv.style.display = 'block';
         }
 
         function continueSession() {
@@ -5263,6 +5319,40 @@ Your progress is saved automatically. You can close the browser and return anyti
             return newArray;
         }
 
+        // Spaced Repetition Smart Shuffle
+        // Prioritizes questions based on difficulty and past performance
+        function smartShuffleArray(array) {
+            // Get question difficulties
+            const weightedQuestions = array.map((q, index) => {
+                const difficulty = getQuestionDifficulty(questions.indexOf(q));
+                const isBookmarked = bookmarkedQuestions.has(questions.indexOf(q));
+                const isIncorrect = incorrectQuestionIndices.has(index);
+                
+                // Calculate priority weight (higher = more important to review)
+                let weight = 1.0;
+                
+                if (difficulty === 'Hard') weight += 2.0;
+                else if (difficulty === 'Medium') weight += 1.0;
+                
+                if (isBookmarked) weight += 1.5;
+                if (isIncorrect) weight += 2.0;
+                
+                return { question: q, weight, random: Math.random() };
+            });
+            
+            // Sort by weight first (descending), then by random
+            // This ensures harder questions appear earlier while still maintaining some randomness
+            weightedQuestions.sort((a, b) => {
+                const weightDiff = b.weight - a.weight;
+                if (Math.abs(weightDiff) > 0.5) {
+                    return weightDiff;
+                }
+                return a.random - b.random;
+            });
+            
+            return weightedQuestions.map(wq => wq.question);
+        }
+
         // Helper function to get randomization preference
         function getShouldRandomize() {
             // Default to true if toggle doesn't exist
@@ -5290,7 +5380,13 @@ Your progress is saved automatically. You can close the browser and return anyti
                 
                 // Randomize questions if enabled
                 let questionsToUse = questions;
-                if (getShouldRandomize()) {
+                const smartShuffleToggle = document.getElementById('smartShuffleToggle');
+                const useSmartShuffle = smartShuffleToggle ? smartShuffleToggle.checked : false;
+                
+                if (useSmartShuffle) {
+                    questionsToUse = smartShuffleArray(questions);
+                    showToast('🎯 Using smart shuffle - prioritizing challenging questions', 'info', 3000);
+                } else if (getShouldRandomize()) {
                     questionsToUse = shuffleArray(questions);
                 } else {
                     questionsToUse = [...questions];
@@ -5715,6 +5811,22 @@ Your progress is saved automatically. You can close the browser and return anyti
                 recommendations += '• Review official FAA study materials<br>';
                 recommendations += '• Retake the quiz in a few days';
             }
+            
+            // Add Performance Comparison
+            recommendations += '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;"><strong>📊 Performance Comparison:</strong><br>';
+            recommendations += '<div style="margin: 10px 0; padding: 10px; background: #f0f7ff; border-radius: 5px;">';
+            recommendations += `<strong>Your Score:</strong> ${scorePercent}%<br>`;
+            recommendations += `<strong>Passing Score:</strong> 70%<br>`;
+            recommendations += `<strong>Recommended Score:</strong> 80%+ for confidence<br>`;
+            if (scorePercent >= 80) {
+                recommendations += `<strong>Status:</strong> 🎯 Excellent! You're ${scorePercent - 70}% above passing threshold`;
+            } else if (scorePercent >= 70) {
+                recommendations += `<strong>Status:</strong> ✅ Passing, but ${80 - scorePercent}% away from recommended confidence level`;
+            } else {
+                recommendations += `<strong>Status:</strong> ⚠️ ${70 - scorePercent}% below passing - keep studying!`;
+            }
+            recommendations += '</div></div>';
+            
             recommendations += '</div></div>';
             
             // Add to results screen
