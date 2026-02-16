@@ -28,7 +28,12 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **🔒 Robust Error Handling** - Safe localStorage operations with automatic error recovery
 - **🔥 Answer Streak Tracking** - Track consecutive correct answers with milestone celebrations
 - **🔄 Review Mode** - Filter to study only bookmarked or incorrectly answered questions
-- **🔀 NEW: Question Randomization Toggle** - Optional shuffling for varied practice sessions
+- **🔀 Question Randomization Toggle** - Optional shuffling for varied practice sessions
+- **📊 NEW: Session History Tracking** - Track your performance across multiple quiz sessions (last 50)
+- **📈 NEW: Performance Trends** - Visual chart showing score progression over time
+- **⭐ NEW: Question Difficulty Indicators** - Smart badges showing Easy/Medium/Hard based on your performance
+- **💡 NEW: Personalized Study Recommendations** - AI-powered suggestions based on your weak and strong areas
+- **🎯 NEW: Smart Next Steps** - Customized guidance on what to study next based on your score
 - **📝 Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
   - Exam format, logistics, and requirements (60 questions, 2 hours, computer-based)
   - Question distribution breakdown by topic
@@ -232,6 +237,34 @@ This section is displayed on the start screen before you begin studying, so you 
 - **Remembers preference** - Your choice applies to quiz restarts
 - Recommended for exam preparation to avoid memorizing question order
 
+### 📊 Session History & Performance Analytics (NEW!)
+- **Comprehensive Session Tracking** - Automatically tracks up to 50 most recent quiz sessions
+- **Performance Trends Chart** - Visual line chart showing score progression over time
+- **Historical Statistics** - View average score, best score, and improvement trends
+- **Date-Based Tracking** - See when you took each quiz and how you've improved
+- **Passing Line Indicator** - 70% passing threshold displayed on the chart
+- **Session Comparison** - Compare your current performance to previous attempts
+- Access via **View History 📊** button on results screen
+
+### ⭐ Smart Question Difficulty (NEW!)
+- **Dynamic Difficulty Ratings** - Questions automatically rated as Easy/Medium/Hard
+- **Performance-Based** - Difficulty calculated from your historical answer patterns
+- **Visual Badges** - Color-coded indicators (Green=Easy, Orange=Medium, Red=Hard)
+- **Track Improvement** - Watch questions become "easier" as you master them
+- **Adaptive Learning** - Focus on harder questions to improve faster
+
+### 💡 Personalized Study Recommendations (NEW!)
+- **Focus Areas** - Automatically identifies categories where you scored below 70%
+- **Strong Areas** - Celebrates categories where you excelled (90%+)
+- **Time Analysis** - Provides feedback on your answering speed
+- **Improvement Tracking** - Monitors your progress trends across sessions
+- **Smart Next Steps** - Customized action plan based on your score:
+  - **90%+ score**: Ready for exam mode and real exam scheduling
+  - **80-89% score**: Practice with exam timer and review weak areas
+  - **70-79% score**: Use review mode and focus on specific categories
+  - **<70% score**: Study fundamentals and use category filters
+- **Category-Specific Advice** - Detailed guidance for each weak category
+
 ### ❓ Help & Tutorial
 - Click the **?** button for comprehensive help
 - View all keyboard shortcuts
@@ -288,6 +321,10 @@ This section is displayed on the start screen before you begin studying, so you 
 13. **🔥 Track your streaks** - Challenge yourself to maintain longer answer streaks
 14. **🔄 Use Review Mode** - Focus on bookmarked or incorrect questions for targeted practice
 15. **🔀 Randomize questions** - Keep the order fresh to avoid pattern memorization
+16. **📊 Monitor your history** - Check your performance trends to see improvement over time
+17. **⭐ Watch difficulty ratings** - Pay attention to "Hard" questions and master them
+18. **💡 Follow personalized recommendations** - Use the smart suggestions after each quiz
+19. **🎯 Act on Next Steps** - Follow the customized action plan based on your score
 
 ## 📖 Official FAA Study Materials
 
