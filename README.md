@@ -208,9 +208,6 @@ This section is displayed on the start screen before you begin studying, so you 
 - **Flexible learning** - Disable for sequential topic study
 - **Remembers preference** - Your choice applies to quiz restarts
 - Recommended for exam preparation to avoid memorizing question order
-- **JSON parse error recovery** - Handles corrupted data gracefully
-- **User-friendly error messages** via toast notifications
-- Console logging for debugging while maintaining user experience
 
 ### ❓ Help & Tutorial
 - Click the **?** button for comprehensive help

@@ -1652,7 +1652,7 @@
             
             <!-- Quiz Options -->
             <div style="text-align: center; margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 10px; border: 2px solid #e0e0e0;">
-                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer;">
+                <label for="randomizeToggle" style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer;">
                     <input type="checkbox" id="randomizeToggle" checked style="width: 20px; height: 20px; cursor: pointer;">
                     <span>🔀 Randomize question order (recommended)</span>
                 </label>
@@ -4378,6 +4378,11 @@
         const TIMER_WARNING_10MIN = 600;  // 10 minutes
         const TIMER_CRITICAL_5MIN = 300;  // 5 minutes
 
+        // Streak milestone thresholds
+        const STREAK_MILESTONE_SMALL = 5;
+        const STREAK_MILESTONE_MEDIUM = 10;
+        const STREAK_MILESTONE_LARGE = 20;
+
         // LocalStorage Keys
         const STORAGE_KEYS = {
             PROGRESS: 'part107_progress',
@@ -4717,10 +4722,13 @@ Your progress is saved automatically. You can close the browser and return anyti
                 infoEl.textContent = '';
                 showToast('📚 Showing all questions', 'info', 2000);
             } else if (reviewModeFilter === 'bookmarked') {
+                // Create a map for O(1) lookup instead of O(n) indexOf
+                const questionMap = new Map(questions.map((q, i) => [q, i]));
+                
                 // Filter to only bookmarked questions
                 shuffledQuestions = originalQuestions.filter(q => {
-                    const idx = questions.indexOf(q);
-                    return bookmarkedQuestions.has(idx);
+                    const idx = questionMap.get(q);
+                    return idx !== undefined && bookmarkedQuestions.has(idx);
                 });
                 
                 if (shuffledQuestions.length === 0) {
@@ -4732,10 +4740,19 @@ Your progress is saved automatically. You can close the browser and return anyti
                     showToast(`Reviewing ${shuffledQuestions.length} bookmarked questions`, 'success', 2000);
                 }
             } else if (reviewModeFilter === 'incorrect') {
-                // Filter to only questions answered incorrectly
-                shuffledQuestions = originalQuestions.filter((q, idx) => {
-                    return userAnswers[idx] && !userAnswers[idx].isCorrect;
+                // Build a set of incorrectly answered questions from the current quiz
+                const incorrectQuestions = new Set();
+                
+                // userAnswers is indexed by position in shuffledQuestions during the quiz
+                // so we need to map back to the actual question objects
+                userAnswers.forEach((answer, idx) => {
+                    if (answer && !answer.isCorrect && shuffledQuestions[idx]) {
+                        incorrectQuestions.add(shuffledQuestions[idx]);
+                    }
                 });
+                
+                // Filter originalQuestions to only those that were answered incorrectly
+                shuffledQuestions = originalQuestions.filter(q => incorrectQuestions.has(q));
                 
                 if (shuffledQuestions.length === 0) {
                     shuffledQuestions = [...originalQuestions];
@@ -4763,11 +4780,11 @@ Your progress is saved automatically. You can close the browser and return anyti
                 }
                 
                 // Show streak milestone notifications
-                if (currentStreak === 5) {
+                if (currentStreak === STREAK_MILESTONE_SMALL) {
                     showToast('🔥 5 in a row! Keep it up!', 'success', 2000);
-                } else if (currentStreak === 10) {
+                } else if (currentStreak === STREAK_MILESTONE_MEDIUM) {
                     showToast('🔥🔥 10 streak! Excellent!', 'success', 2000);
-                } else if (currentStreak === 20) {
+                } else if (currentStreak === STREAK_MILESTONE_LARGE) {
                     showToast('🔥🔥🔥 20 streak! You\'re on fire!', 'success', 2000);
                 }
             } else {
@@ -4996,8 +5013,9 @@ Your progress is saved automatically. You can close the browser and return anyti
                 maxStreak = 0;
                 
                 // Check if randomization is enabled
+                // Default to true if toggle doesn't exist (e.g., during resume)
                 const randomizeToggle = document.getElementById('randomizeToggle');
-                const shouldRandomize = !randomizeToggle || randomizeToggle.checked;
+                const shouldRandomize = randomizeToggle ? randomizeToggle.checked : true;
                 
                 // Randomize questions if enabled
                 if (shouldRandomize) {
@@ -5281,8 +5299,9 @@ Your progress is saved automatically. You can close the browser and return anyti
             maxStreak = 0;
             
             // Randomize questions again for the new quiz
+            // Default to true if toggle doesn't exist (e.g., after quiz completion)
             const randomizeToggle = document.getElementById('randomizeToggle');
-            const shouldRandomize = !randomizeToggle || randomizeToggle.checked;
+            const shouldRandomize = randomizeToggle ? randomizeToggle.checked : true;
             
             if (shouldRandomize) {
                 shuffledQuestions = shuffleArray(questions);
