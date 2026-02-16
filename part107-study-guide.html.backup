@@ -998,392 +998,15 @@
         body.dark-mode .continue-session p {
             color: #b0b0b0;
         }
-
-        /* Accessibility: Focus Indicators */
-        *:focus-visible {
-            outline: 3px solid #d32f2f;
-            outline-offset: 2px;
-        }
-
-        body.dark-mode *:focus-visible {
-            outline-color: #ff6b6b;
-        }
-
-        .option:focus-visible,
-        .btn:focus-visible,
-        .settings-btn:focus-visible,
-        .mode-btn:focus-visible {
-            outline: 3px solid #d32f2f;
-            outline-offset: 3px;
-        }
-
-        /* Category Filter Styles */
-        .category-filter {
-            padding: 20px 30px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
-            border-bottom: 2px solid #d32f2f;
-        }
-
-        .category-filter h3 {
-            color: #d32f2f;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-
-        .category-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .category-tag {
-            padding: 8px 16px;
-            background: white;
-            border: 2px solid #d32f2f;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9em;
-            font-weight: 500;
-            color: #d32f2f;
-        }
-
-        .category-tag:hover {
-            background: #d32f2f;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .category-tag.active {
-            background: #d32f2f;
-            color: white;
-        }
-
-        body.dark-mode .category-filter {
-            background: linear-gradient(135deg, #252525 0%, #2a2a2a 100%);
-            border-bottom-color: #ff6b6b;
-        }
-
-        body.dark-mode .category-filter h3 {
-            color: #ff6b6b;
-        }
-
-        body.dark-mode .category-tag {
-            background: #1a1a1a;
-            border-color: #ff6b6b;
-            color: #ff6b6b;
-        }
-
-        body.dark-mode .category-tag:hover,
-        body.dark-mode .category-tag.active {
-            background: #ff6b6b;
-            color: #1a1a1a;
-        }
-
-        /* Timer Warning States */
-        .exam-timer.warning {
-            background: rgba(255, 152, 0, 0.15);
-            border-color: #ff9800;
-        }
-
-        .exam-timer.warning .timer-label,
-        .exam-timer.warning .timer-value {
-            color: #ff9800;
-        }
-
-        .exam-timer.critical {
-            background: rgba(244, 67, 54, 0.15);
-            border-color: #f44336;
-            animation: pulse 1s infinite;
-        }
-
-        .exam-timer.critical .timer-label,
-        .exam-timer.critical .timer-value {
-            color: #f44336;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        /* Bookmarks View */
-        .bookmarks-view {
-            padding: 20px 30px;
-            background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
-            border-bottom: 2px solid #ffc107;
-            display: none;
-        }
-
-        .bookmarks-view.show {
-            display: block;
-        }
-
-        .bookmarks-view h3 {
-            color: #ffc107;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .bookmarks-count {
-            background: #ffc107;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.9em;
-        }
-
-        .bookmarks-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .bookmarks-actions .btn {
-            font-size: 0.95em;
-            padding: 10px 20px;
-        }
-
-        body.dark-mode .bookmarks-view {
-            background: linear-gradient(135deg, #2a2620 0%, #2a2a2a 100%);
-            border-bottom-color: #ffc107;
-        }
-
-        /* Review Screen */
-        .review-screen {
-            padding: 30px;
-            display: none;
-        }
-
-        .review-screen.show {
-            display: block;
-        }
-
-        .review-summary {
-            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            border: 2px solid #d32f2f;
-        }
-
-        .review-summary h2 {
-            color: #d32f2f;
-            margin-bottom: 20px;
-        }
-
-        .review-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .review-stat-box {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            border: 2px solid #e0e0e0;
-        }
-
-        .review-stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #d32f2f;
-        }
-
-        .review-stat-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .review-question-list {
-            display: grid;
-            gap: 15px;
-        }
-
-        .review-question-item {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px solid #e0e0e0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .review-question-item:hover {
-            border-color: #d32f2f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .review-question-item.correct {
-            border-left: 5px solid #28a745;
-        }
-
-        .review-question-item.incorrect {
-            border-left: 5px solid #dc3545;
-        }
-
-        .review-question-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .review-question-number {
-            font-weight: bold;
-            color: #d32f2f;
-        }
-
-        .review-question-status {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85em;
-            font-weight: bold;
-        }
-
-        .review-question-status.correct {
-            background: #d4edda;
-            color: #28a745;
-        }
-
-        .review-question-status.incorrect {
-            background: #f8d7da;
-            color: #dc3545;
-        }
-
-        body.dark-mode .review-summary {
-            background: linear-gradient(135deg, #252525 0%, #2a2a2a 100%);
-            border-color: #ff6b6b;
-        }
-
-        body.dark-mode .review-summary h2 {
-            color: #ff6b6b;
-        }
-
-        body.dark-mode .review-stat-box {
-            background: #1a1a1a;
-            border-color: #333;
-        }
-
-        body.dark-mode .review-stat-value {
-            color: #ff6b6b;
-        }
-
-        body.dark-mode .review-question-item {
-            background: #1a1a1a;
-            border-color: #333;
-        }
-
-        body.dark-mode .review-question-item:hover {
-            border-color: #ff6b6b;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                border-radius: 15px;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .header p {
-                font-size: 1em;
-            }
-
-            .question-container {
-                padding: 20px;
-            }
-
-            .option {
-                padding: 15px;
-                min-height: 60px;
-            }
-
-            .option-letter {
-                width: 35px;
-                height: 35px;
-                font-size: 1em;
-            }
-
-            .option-text {
-                font-size: 1em;
-            }
-
-            .btn {
-                padding: 12px 20px;
-                font-size: 1em;
-            }
-
-            .navigation {
-                padding: 20px;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            .settings-panel {
-                top: 10px;
-                right: 10px;
-            }
-
-            .settings-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1.3em;
-            }
-
-            .mode-btn {
-                min-width: 150px;
-            }
-
-            .category-tags {
-                gap: 8px;
-            }
-
-            .category-tag {
-                padding: 6px 12px;
-                font-size: 0.85em;
-            }
-
-            .stat-value {
-                font-size: 1.5em;
-            }
-
-            .stat-label {
-                font-size: 0.8em;
-            }
-        }
     </style>
 </head>
 <body>
     <!-- Settings Panel -->
     <div class="settings-panel">
-        <button class="settings-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode" aria-label="Toggle Dark Mode" tabindex="0">
+        <button class="settings-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
             🌙
         </button>
-        <button class="settings-btn" id="bookmarksViewBtn" onclick="toggleBookmarksView()" title="View Bookmarks" aria-label="View Bookmarks" style="display: none;" tabindex="0">
-            ⭐
-        </button>
-        <button class="settings-btn" id="reviewBtn" onclick="showReviewScreen()" title="Review Answers" aria-label="Review Answers" style="display: none;" tabindex="0">
-            📝
-        </button>
-        <button class="settings-btn" id="categoryFilterBtn" onclick="toggleCategoryFilter()" title="Filter by Category" aria-label="Filter by Category" style="display: none;" tabindex="0">
-            📚
-        </button>
-        <button class="settings-btn" onclick="showHelp()" title="Help & Keyboard Shortcuts" aria-label="Help" tabindex="0">
+        <button class="settings-btn" onclick="showHelp()" title="Help & Keyboard Shortcuts" aria-label="Help">
             ❓
         </button>
     </div>
@@ -1403,18 +1026,18 @@
                 <h3>📚 Continue Your Last Session</h3>
                 <p id="sessionInfo">You have progress saved from your last study session.</p>
                 <div class="continue-session-buttons">
-                    <button class="btn btn-primary" onclick="continueSession()" aria-label="Continue your last study session">Continue Session</button>
-                    <button class="btn btn-secondary" onclick="startNewSession()" aria-label="Start a fresh study session">Start Fresh</button>
+                    <button class="btn btn-primary" onclick="continueSession()">Continue Session</button>
+                    <button class="btn btn-secondary" onclick="startNewSession()">Start Fresh</button>
                 </div>
             </div>
 
             <!-- Mode Selection -->
             <div class="mode-selection">
-                <div class="mode-btn" onclick="startQuiz('practice')" role="button" tabindex="0" aria-label="Start practice mode" onkeydown="if(event.key==='Enter'||event.key===' '){startQuiz('practice');event.preventDefault();}">
+                <div class="mode-btn" onclick="startQuiz('practice')">
                     <h3>📖 Practice Mode</h3>
                     <p>Study at your own pace with immediate feedback and explanations</p>
                 </div>
-                <div class="mode-btn" onclick="startQuiz('exam')" role="button" tabindex="0" aria-label="Start exam simulator mode" onkeydown="if(event.key==='Enter'||event.key===' '){startQuiz('exam');event.preventDefault();}">
+                <div class="mode-btn" onclick="startQuiz('exam')">
                     <h3>⏱️ Exam Simulator</h3>
                     <p>2-hour timed test mimicking real exam conditions</p>
                 </div>
@@ -1504,7 +1127,7 @@
                     <h3>🗺️ Sectional Chart Visual Guide - What You'll See on the Test</h3>
                     <p style="text-align: center; color: #666; margin-bottom: 20px;">This annotated chart shows how airspace and symbols appear on actual VFR sectional charts used in the FAA exam</p>
                     
-                    <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" style="width: 100%; max-width: 900px; margin: 0 auto; display: block; background: #f5f3e8; border: 2px solid #333; border-radius: 8px;" role="img" aria-label="Annotated sectional chart showing airspace classes, symbols, and navigation aids">
+                    <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" style="width: 100%; max-width: 900px; margin: 0 auto; display: block; background: #f5f3e8; border: 2px solid #333; border-radius: 8px;">
                         <!-- Background terrain colors -->
                         <rect x="0" y="0" width="800" height="600" fill="#f5f3e8"/>
                         
@@ -2192,36 +1815,6 @@
                 <div class="timer-value" id="timerDisplay">2:00:00</div>
             </div>
 
-            <!-- Category Filter -->
-            <div id="categoryFilter" class="category-filter" style="display: none;">
-                <h3>📚 Filter by Category</h3>
-                <div class="category-tags" id="categoryTags">
-                    <div class="category-tag active" data-category="all" onclick="filterByCategory('all')" role="button" tabindex="0" aria-label="Show all categories">
-                        All Questions
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bookmarks View -->
-            <div id="bookmarksView" class="bookmarks-view">
-                <h3>
-                    ⭐ Bookmarked Questions
-                    <span class="bookmarks-count" id="bookmarksCount">0</span>
-                </h3>
-                <p id="bookmarksMessage">You haven't bookmarked any questions yet. Click the ⭐ star button on questions you want to review later.</p>
-                <div class="bookmarks-actions">
-                    <button class="btn btn-primary" onclick="practiceBookmarked()" id="practiceBookmarkedBtn" style="display: none;" aria-label="Practice bookmarked questions">
-                        Practice Bookmarked
-                    </button>
-                    <button class="btn btn-secondary" onclick="clearBookmarks()" id="clearBookmarksBtn" style="display: none;" aria-label="Clear all bookmarks">
-                        Clear Bookmarks
-                    </button>
-                    <button class="btn btn-secondary" onclick="hideBookmarksView()" aria-label="Hide bookmarks view">
-                        Close
-                    </button>
-                </div>
-            </div>
-
             <div class="progress-bar">
                 <div class="progress-fill" id="progressBar">0%</div>
             </div>
@@ -2251,48 +1844,17 @@
 
                 <div class="options" id="optionsContainer"></div>
 
-                <div class="feedback" id="feedback" role="alert" aria-live="polite" aria-atomic="true"></div>
+                <div class="feedback" id="feedback"></div>
             </div>
 
             <div class="navigation">
-                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" aria-label="Go to previous question">← Previous</button>
-                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled aria-label="Go to next question">Next →</button>
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">← Previous</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
             </div>
             
             <div class="keyboard-hint">
                 💡 Tip: Use <strong>A, B, C, D</strong> keys to select answers | <strong>← / ↓</strong> Previous | <strong>→ / ↑</strong> Next | <strong>Space</strong> Bookmark
             </div>
-        </div>
-
-        <!-- Review Screen -->
-        <div id="reviewScreen" class="review-screen">
-            <div class="review-summary">
-                <h2>📝 Review Your Answers</h2>
-                <div class="review-stats-grid">
-                    <div class="review-stat-box">
-                        <div class="review-stat-value" id="reviewTotalQuestions">0</div>
-                        <div class="review-stat-label">Total Questions</div>
-                    </div>
-                    <div class="review-stat-box">
-                        <div class="review-stat-value" id="reviewCorrectAnswers">0</div>
-                        <div class="review-stat-label">Correct</div>
-                    </div>
-                    <div class="review-stat-box">
-                        <div class="review-stat-value" id="reviewIncorrectAnswers">0</div>
-                        <div class="review-stat-label">Incorrect</div>
-                    </div>
-                    <div class="review-stat-box">
-                        <div class="review-stat-value" id="reviewScorePercent">0%</div>
-                        <div class="review-stat-label">Score</div>
-                    </div>
-                </div>
-                <div class="navigation" style="justify-content: center; gap: 15px;">
-                    <button class="btn btn-secondary" onclick="backToQuiz()" aria-label="Go back to quiz">← Back to Quiz</button>
-                    <button class="btn btn-primary" onclick="finishQuiz()" aria-label="Finish quiz and see results">Finish Quiz →</button>
-                </div>
-            </div>
-            <h3 style="margin-bottom: 15px; color: #d32f2f;">Click any question to review it</h3>
-            <div class="review-question-list" id="reviewQuestionList"></div>
         </div>
 
         <div id="resultsScreen" class="results-container">
@@ -4433,26 +3995,14 @@ Your progress is saved automatically. You can close the browser and return anyti
             // Clear and populate options
             const optionsContainer = document.getElementById('optionsContainer');
             optionsContainer.innerHTML = '';
-            optionsContainer.setAttribute('role', 'radiogroup');
-            optionsContainer.setAttribute('aria-label', 'Answer options');
 
             const letters = ['A', 'B', 'C', 'D'];
             question.options.forEach((option, index) => {
                 const optionDiv = document.createElement('div');
                 optionDiv.className = 'option';
-                optionDiv.setAttribute('role', 'radio');
-                optionDiv.setAttribute('aria-checked', 'false');
-                optionDiv.setAttribute('aria-label', `Option ${letters[index]}: ${option}`);
-                optionDiv.setAttribute('tabindex', '0');
                 optionDiv.onclick = () => selectAnswer(index);
-                optionDiv.onkeydown = (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        selectAnswer(index);
-                        e.preventDefault();
-                    }
-                };
                 optionDiv.innerHTML = `
-                    <div class="option-letter" aria-hidden="true">${letters[index]}</div>
+                    <div class="option-letter">${letters[index]}</div>
                     <div class="option-text">${option}</div>
                 `;
                 optionsContainer.appendChild(optionDiv);
@@ -4899,328 +4449,6 @@ Your progress is saved automatically. You can close the browser and return anyti
                 });
             }
         }
-
-        // Category Filter Functions
-        let categoryFilter = 'all';
-        let originalQuestions = [];
-
-        function toggleCategoryFilter() {
-            const filterDiv = document.getElementById('categoryFilter');
-            const currentDisplay = filterDiv.style.display;
-            filterDiv.style.display = currentDisplay === 'none' ? 'block' : 'none';
-        }
-
-        function initializeCategoryFilter() {
-            const categories = [...new Set(questions.map(q => q.category))];
-            const tagsContainer = document.getElementById('categoryTags');
-            
-            categories.forEach(category => {
-                const tag = document.createElement('div');
-                tag.className = 'category-tag';
-                tag.setAttribute('data-category', category);
-                tag.setAttribute('role', 'button');
-                tag.setAttribute('tabindex', '0');
-                tag.setAttribute('aria-label', `Filter by ${category}`);
-                tag.textContent = category;
-                tag.onclick = () => filterByCategory(category);
-                tag.onkeydown = (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        filterByCategory(category);
-                        e.preventDefault();
-                    }
-                };
-                tagsContainer.appendChild(tag);
-            });
-
-            // Show filter button in quiz mode
-            document.getElementById('categoryFilterBtn').style.display = 'flex';
-        }
-
-        function filterByCategory(category) {
-            categoryFilter = category;
-            
-            // Update active tag
-            document.querySelectorAll('.category-tag').forEach(tag => {
-                tag.classList.remove('active');
-                if (tag.getAttribute('data-category') === category) {
-                    tag.classList.add('active');
-                }
-            });
-
-            // Filter questions
-            if (category === 'all') {
-                shuffledQuestions = originalQuestions;
-            } else {
-                shuffledQuestions = originalQuestions.filter(q => q.category === category);
-            }
-
-            // Reset quiz state
-            currentQuestionIndex = 0;
-            correctAnswers = 0;
-            userAnswers = [];
-            
-            loadQuestion();
-        }
-
-        // Bookmarks View Functions
-        function toggleBookmarksView() {
-            const bookmarksView = document.getElementById('bookmarksView');
-            const currentDisplay = bookmarksView.style.display;
-            
-            if (currentDisplay === 'none' || !currentDisplay) {
-                showBookmarksViewPanel();
-            } else {
-                hideBookmarksView();
-            }
-        }
-
-        function showBookmarksViewPanel() {
-            const bookmarksView = document.getElementById('bookmarksView');
-            const bookmarks = loadBookmarks();
-            const count = bookmarks.length;
-            
-            document.getElementById('bookmarksCount').textContent = count;
-            
-            if (count === 0) {
-                document.getElementById('bookmarksMessage').style.display = 'block';
-                document.getElementById('practiceBookmarkedBtn').style.display = 'none';
-                document.getElementById('clearBookmarksBtn').style.display = 'none';
-            } else {
-                document.getElementById('bookmarksMessage').style.display = 'none';
-                document.getElementById('practiceBookmarkedBtn').style.display = 'inline-block';
-                document.getElementById('clearBookmarksBtn').style.display = 'inline-block';
-            }
-            
-            bookmarksView.style.display = 'block';
-        }
-
-        function hideBookmarksView() {
-            document.getElementById('bookmarksView').style.display = 'none';
-        }
-
-        function practiceBookmarked() {
-            const bookmarks = loadBookmarks();
-            if (bookmarks.length === 0) {
-                alert('You have no bookmarked questions to practice.');
-                return;
-            }
-            
-            // Filter to only bookmarked questions
-            shuffledQuestions = questions.filter((q, index) => bookmarks.includes(index));
-            
-            // Start quiz with bookmarked questions
-            currentQuestionIndex = 0;
-            correctAnswers = 0;
-            userAnswers = [];
-            selectedAnswer = null;
-            
-            hideBookmarksView();
-            document.getElementById('startScreen').style.display = 'none';
-            document.getElementById('quizScreen').style.display = 'block';
-            
-            loadQuestion();
-        }
-
-        function clearBookmarks() {
-            if (confirm('Are you sure you want to clear all bookmarks?')) {
-                localStorage.removeItem('part107Bookmarks');
-                showBookmarksViewPanel();
-                updateBookmarkButton();
-            }
-        }
-
-        // Review Screen Functions
-        function showReviewScreen() {
-            const answered = userAnswers.filter(a => a !== undefined).length;
-            
-            if (answered === 0) {
-                alert('Please answer some questions first before reviewing.');
-                return;
-            }
-            
-            // Hide quiz screen, show review screen
-            document.getElementById('quizScreen').style.display = 'none';
-            document.getElementById('reviewScreen').style.display = 'block';
-            document.getElementById('reviewScreen').classList.add('show');
-            
-            // Update review stats
-            const correct = userAnswers.filter(a => a && a.isCorrect).length;
-            const score = answered > 0 ? Math.round((correct / answered) * 100) : 0;
-            
-            document.getElementById('reviewTotalQuestions').textContent = answered;
-            document.getElementById('reviewCorrectAnswers').textContent = correct;
-            document.getElementById('reviewIncorrectAnswers').textContent = answered - correct;
-            document.getElementById('reviewScorePercent').textContent = score + '%';
-            
-            // Build review question list
-            const listContainer = document.getElementById('reviewQuestionList');
-            listContainer.innerHTML = '';
-            
-            userAnswers.forEach((answer, index) => {
-                if (answer === undefined) return;
-                
-                const question = shuffledQuestions[index];
-                const itemDiv = document.createElement('div');
-                itemDiv.className = `review-question-item ${answer.isCorrect ? 'correct' : 'incorrect'}`;
-                itemDiv.setAttribute('role', 'button');
-                itemDiv.setAttribute('tabindex', '0');
-                itemDiv.setAttribute('aria-label', `Question ${index + 1}, ${answer.isCorrect ? 'correct' : 'incorrect'}`);
-                itemDiv.onclick = () => goToQuestion(index);
-                itemDiv.onkeydown = (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        goToQuestion(index);
-                        e.preventDefault();
-                    }
-                };
-                
-                itemDiv.innerHTML = `
-                    <div class="review-question-header">
-                        <span class="review-question-number">Question ${index + 1}</span>
-                        <span class="review-question-status ${answer.isCorrect ? 'correct' : 'incorrect'}">
-                            ${answer.isCorrect ? '✓ Correct' : '✗ Incorrect'}
-                        </span>
-                    </div>
-                    <div style="color: #666; font-size: 0.9em; margin-top: 5px;">
-                        ${question.question.substring(0, 100)}${question.question.length > 100 ? '...' : ''}
-                    </div>
-                    <div style="margin-top: 8px; font-size: 0.85em;">
-                        <span class="category-badge">${question.category}</span>
-                    </div>
-                `;
-                
-                listContainer.appendChild(itemDiv);
-            });
-        }
-
-        function backToQuiz() {
-            document.getElementById('reviewScreen').style.display = 'none';
-            document.getElementById('reviewScreen').classList.remove('show');
-            document.getElementById('quizScreen').style.display = 'block';
-        }
-
-        function goToQuestion(index) {
-            currentQuestionIndex = index;
-            backToQuiz();
-            loadQuestion();
-        }
-
-        function finishQuiz() {
-            document.getElementById('reviewScreen').style.display = 'none';
-            document.getElementById('reviewScreen').classList.remove('show');
-            showResults();
-        }
-
-        // Enhanced Timer Functions
-        let examTimeRemaining = 7200; // 2 hours in seconds
-        let examTimerInterval = null;
-
-        function startExamTimer() {
-            examTimeRemaining = 7200;
-            const timerElement = document.getElementById('examTimer');
-            timerElement.classList.add('active');
-            timerElement.classList.remove('warning', 'critical');
-            
-            updateTimerDisplay();
-            
-            examTimerInterval = setInterval(() => {
-                examTimeRemaining--;
-                updateTimerDisplay();
-                
-                // Update timer state based on remaining time
-                if (examTimeRemaining <= 300) { // 5 minutes
-                    timerElement.classList.add('critical');
-                    timerElement.classList.remove('warning');
-                } else if (examTimeRemaining <= 1800) { // 30 minutes
-                    timerElement.classList.add('warning');
-                    timerElement.classList.remove('critical');
-                }
-                
-                // Show alerts at specific times
-                if (examTimeRemaining === 1800) {
-                    showTimerAlert('⏰ 30 minutes remaining!');
-                } else if (examTimeRemaining === 600) {
-                    showTimerAlert('⚠️ 10 minutes remaining!');
-                } else if (examTimeRemaining === 300) {
-                    showTimerAlert('🚨 Only 5 minutes left!');
-                }
-                
-                if (examTimeRemaining <= 0) {
-                    stopExamTimer();
-                    alert('⏰ Time\'s up! The exam has ended.');
-                    showResults();
-                }
-            }, 1000);
-        }
-
-        function stopExamTimer() {
-            if (examTimerInterval) {
-                clearInterval(examTimerInterval);
-                examTimerInterval = null;
-            }
-            document.getElementById('examTimer').classList.remove('active', 'warning', 'critical');
-        }
-
-        function updateTimerDisplay() {
-            const hours = Math.floor(examTimeRemaining / 3600);
-            const minutes = Math.floor((examTimeRemaining % 3600) / 60);
-            const seconds = examTimeRemaining % 60;
-            
-            const display = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            document.getElementById('timerDisplay').textContent = display;
-        }
-
-        function showTimerAlert(message) {
-            // Create temporary alert element
-            const alert = document.createElement('div');
-            alert.style.cssText = `
-                position: fixed;
-                top: 100px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(244, 67, 54, 0.95);
-                color: white;
-                padding: 15px 30px;
-                border-radius: 10px;
-                font-size: 1.2em;
-                font-weight: bold;
-                z-index: 10000;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-                animation: slideDown 0.3s ease;
-            `;
-            alert.setAttribute('role', 'alert');
-            alert.setAttribute('aria-live', 'assertive');
-            alert.textContent = message;
-            document.body.appendChild(alert);
-            
-            setTimeout(() => {
-                alert.style.opacity = '0';
-                alert.style.transition = 'opacity 0.5s ease';
-                setTimeout(() => alert.remove(), 500);
-            }, 3000);
-        }
-
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            loadDarkModePreference();
-            checkSavedProgress();
-            
-            // Show bookmarks button
-            document.getElementById('bookmarksViewBtn').style.display = 'flex';
-        });
-
-        // Modified startQuiz to initialize category filter and show review button
-        const originalStartQuiz = startQuiz;
-        startQuiz = function(mode = 'practice', isResume = false) {
-            originalStartQuiz(mode, isResume);
-            
-            if (!isResume) {
-                originalQuestions = [...shuffledQuestions];
-                initializeCategoryFilter();
-            }
-            
-            // Show review button
-            document.getElementById('reviewBtn').style.display = 'flex';
-        };
     </script>
 </body>
 </html>
