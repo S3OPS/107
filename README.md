@@ -17,11 +17,14 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **⌨️ Keyboard Navigation** - Use A/B/C/D keys to answer, arrow keys to navigate
 - **⭐ Bookmark Questions** - Flag questions for later review
 - **📖 Dual Study Modes** - Choose between Practice Mode or Exam Simulator
-- **🔍 NEW: Question Search** - Instantly search questions by keyword, topic, or category
-- **💾 NEW: Export Progress** - Download your study progress and bookmarks as JSON
-- **🎨 NEW: Toast Notifications** - Modern, non-intrusive feedback messages
-- **♿ NEW: Enhanced Accessibility** - Improved focus indicators, reduced motion support, screen reader optimizations
-- **🔒 NEW: Robust Error Handling** - Safe localStorage operations with automatic error recovery
+- **🔍 Question Search** - Instantly search questions by keyword, topic, or category
+- **💾 Export Progress** - Download your study progress and bookmarks as JSON
+- **🎨 Toast Notifications** - Modern, non-intrusive feedback messages
+- **♿ Enhanced Accessibility** - Improved focus indicators, reduced motion support, screen reader optimizations
+- **🔒 Robust Error Handling** - Safe localStorage operations with automatic error recovery
+- **🔥 NEW: Answer Streak Tracking** - Track consecutive correct answers with milestone celebrations
+- **🔄 NEW: Review Mode** - Filter to study only bookmarked or incorrectly answered questions
+- **🔀 NEW: Question Randomization Toggle** - Optional shuffling for varied practice sessions
 - **📝 Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
   - Exam format, logistics, and requirements (60 questions, 2 hours, computer-based)
   - Question distribution breakdown by topic
@@ -179,6 +182,33 @@ This section is displayed on the start screen before you begin studying, so you 
 - **User-friendly error messages** via toast notifications
 - Console logging for debugging while maintaining user experience
 
+### 🔥 Answer Streak Tracking (NEW!)
+- **Track consecutive correct answers** - See your streak count in real-time
+- **Milestone celebrations** - Get encouraging messages at 5, 10, and 20 streaks
+- **Longest streak display** - Your best streak is shown in the results screen
+- **Visual feedback** - 🔥 emoji appears only when you have an active streak
+- **Automatic reset** - Streak resets on incorrect answer to motivate improvement
+- Helps identify when you're in "the zone" and learning effectively
+
+### 🔄 Review Mode (NEW!)
+- **Targeted practice** - Focus on areas that need improvement
+- **Three filter options:**
+  - 📚 **All Questions** - Standard quiz mode
+  - ⭐ **Bookmarked Only** - Review questions you flagged
+  - ❌ **Incorrect Only** - Practice questions you answered wrong
+- **Smart filtering** - Shows count of filtered questions
+- **Toast notifications** - Clear feedback on what you're reviewing
+- **Easy toggle** - Click the 🔄 button to activate/deactivate
+- Perfect for final exam preparation when you want to focus on weak areas
+
+### 🔀 Question Randomization (NEW!)
+- **Optional shuffling** - Choose whether to randomize question order
+- **Checkbox on start screen** - Easy to enable/disable (enabled by default)
+- **Varied practice sessions** - Different order each time for better retention
+- **Flexible learning** - Disable for sequential topic study
+- **Remembers preference** - Your choice applies to quiz restarts
+- Recommended for exam preparation to avoid memorizing question order
+
 ### ❓ Help & Tutorial
 - Click the **?** button for comprehensive help
 - View all keyboard shortcuts
@@ -232,6 +262,9 @@ This section is displayed on the start screen before you begin studying, so you 
 10. **Set a goal** - Aim for 80%+ consistently before taking the real exam
 11. **Understand, don't memorize** - The FAA exam questions may be worded differently
 12. **Use additional resources** - Supplement with official FAA materials
+13. **🔥 Track your streaks** - Challenge yourself to maintain longer answer streaks
+14. **🔄 Use Review Mode** - Focus on bookmarked or incorrect questions for targeted practice
+15. **🔀 Randomize questions** - Keep the order fresh to avoid pattern memorization
 
 ## 📖 Official FAA Study Materials
 
