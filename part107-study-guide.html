@@ -1652,7 +1652,7 @@
             
             <!-- Quiz Options -->
             <div style="text-align: center; margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 10px; border: 2px solid #e0e0e0;">
-                <label for="randomizeToggle" style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer;">
+                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer;">
                     <input type="checkbox" id="randomizeToggle" checked style="width: 20px; height: 20px; cursor: pointer;">
                     <span>🔀 Randomize question order (recommended)</span>
                 </label>
@@ -4365,6 +4365,7 @@
         let maxStreak = 0;
         let reviewModeActive = false;
         let reviewModeFilter = 'all'; // 'all', 'bookmarked', 'incorrect'
+        let incorrectQuestionIndices = new Set(); // Track indices of incorrectly answered questions
 
         // Constants
         const PROGRESS_EXPIRY_DAYS = 7;
@@ -4722,13 +4723,10 @@ Your progress is saved automatically. You can close the browser and return anyti
                 infoEl.textContent = '';
                 showToast('📚 Showing all questions', 'info', 2000);
             } else if (reviewModeFilter === 'bookmarked') {
-                // Create a map for O(1) lookup instead of O(n) indexOf
-                const questionMap = new Map(questions.map((q, i) => [q, i]));
-                
-                // Filter to only bookmarked questions
+                // Filter to only bookmarked questions by comparing indices in original questions array
                 shuffledQuestions = originalQuestions.filter(q => {
-                    const idx = questionMap.get(q);
-                    return idx !== undefined && bookmarkedQuestions.has(idx);
+                    const originalIdx = questions.indexOf(q);
+                    return originalIdx !== -1 && bookmarkedQuestions.has(originalIdx);
                 });
                 
                 if (shuffledQuestions.length === 0) {
@@ -4740,19 +4738,11 @@ Your progress is saved automatically. You can close the browser and return anyti
                     showToast(`Reviewing ${shuffledQuestions.length} bookmarked questions`, 'success', 2000);
                 }
             } else if (reviewModeFilter === 'incorrect') {
-                // Build a set of incorrectly answered questions from the current quiz
-                const incorrectQuestions = new Set();
-                
-                // userAnswers is indexed by position in shuffledQuestions during the quiz
-                // so we need to map back to the actual question objects
-                userAnswers.forEach((answer, idx) => {
-                    if (answer && !answer.isCorrect && shuffledQuestions[idx]) {
-                        incorrectQuestions.add(shuffledQuestions[idx]);
-                    }
+                // Filter to questions that were answered incorrectly (tracked by original index)
+                shuffledQuestions = originalQuestions.filter(q => {
+                    const originalIdx = questions.indexOf(q);
+                    return originalIdx !== -1 && incorrectQuestionIndices.has(originalIdx);
                 });
-                
-                // Filter originalQuestions to only those that were answered incorrectly
-                shuffledQuestions = originalQuestions.filter(q => incorrectQuestions.has(q));
                 
                 if (shuffledQuestions.length === 0) {
                     shuffledQuestions = [...originalQuestions];
@@ -4999,6 +4989,13 @@ Your progress is saved automatically. You can close the browser and return anyti
             return newArray;
         }
 
+        // Helper function to get randomization preference
+        function getShouldRandomize() {
+            // Default to true if toggle doesn't exist
+            const randomizeToggle = document.getElementById('randomizeToggle');
+            return randomizeToggle ? randomizeToggle.checked : true;
+        }
+
         // Start Quiz
         function startQuiz(mode = 'practice', isResume = false) {
             quizMode = mode;
@@ -5011,14 +5008,10 @@ Your progress is saved automatically. You can close the browser and return anyti
                 userAnswers = [];
                 currentStreak = 0;
                 maxStreak = 0;
-                
-                // Check if randomization is enabled
-                // Default to true if toggle doesn't exist (e.g., during resume)
-                const randomizeToggle = document.getElementById('randomizeToggle');
-                const shouldRandomize = randomizeToggle ? randomizeToggle.checked : true;
+                incorrectQuestionIndices.clear(); // Clear incorrect questions from previous quiz
                 
                 // Randomize questions if enabled
-                if (shouldRandomize) {
+                if (getShouldRandomize()) {
                     shuffledQuestions = shuffleArray(questions);
                 } else {
                     shuffledQuestions = [...questions];
@@ -5131,6 +5124,12 @@ Your progress is saved automatically. You can close the browser and return anyti
 
             if (isCorrect) {
                 correctAnswers++;
+            } else {
+                // Track incorrect question by its index in the original questions array
+                const originalIndex = questions.indexOf(question);
+                if (originalIndex !== -1) {
+                    incorrectQuestionIndices.add(originalIndex);
+                }
             }
 
             // Update streak
@@ -5297,13 +5296,10 @@ Your progress is saved automatically. You can close the browser and return anyti
             userAnswers = [];
             currentStreak = 0;
             maxStreak = 0;
+            incorrectQuestionIndices.clear(); // Clear incorrect questions from previous quiz
             
             // Randomize questions again for the new quiz
-            // Default to true if toggle doesn't exist (e.g., after quiz completion)
-            const randomizeToggle = document.getElementById('randomizeToggle');
-            const shouldRandomize = randomizeToggle ? randomizeToggle.checked : true;
-            
-            if (shouldRandomize) {
+            if (getShouldRandomize()) {
                 shuffledQuestions = shuffleArray(questions);
             } else {
                 shuffledQuestions = [...questions];
