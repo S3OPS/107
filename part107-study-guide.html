@@ -676,9 +676,341 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0505 50%, #0a0a0a 100%);
+        }
+
+        body.dark-mode .container {
+            background: #1a1a1a;
+            border-color: #333;
+        }
+
+        body.dark-mode .start-screen,
+        body.dark-mode .question-container,
+        body.dark-mode .results-container {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .start-screen h2,
+        body.dark-mode .start-screen h3,
+        body.dark-mode .reference-title {
+            color: #ff6b6b;
+        }
+
+        body.dark-mode .start-screen p,
+        body.dark-mode .start-screen li {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .visual-reference,
+        body.dark-mode .visual-dashboard,
+        body.dark-mode .test-info-section {
+            background: #222;
+            border-color: #333;
+        }
+
+        body.dark-mode .airspace-layer {
+            background: #2a2a2a;
+            border-color: #444;
+        }
+
+        body.dark-mode .airspace-name,
+        body.dark-mode .chart-title {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .airspace-desc {
+            color: #999;
+        }
+
+        body.dark-mode .reference-card {
+            background: #252525;
+            border-color: #333;
+        }
+
+        body.dark-mode .reference-card h4 {
+            color: #ff6b6b;
+        }
+
+        body.dark-mode .reference-card li {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .question-text,
+        body.dark-mode .category-badge {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .option {
+            background: #252525;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .option:hover {
+            background: #2a2a2a;
+            border-color: #ff6b6b;
+        }
+
+        body.dark-mode .option.correct {
+            background: #1a3d1a;
+            border-color: #4caf50;
+        }
+
+        body.dark-mode .option.incorrect {
+            background: #3d1a1a;
+            border-color: #f44336;
+        }
+
+        body.dark-mode .stats {
+            background: #222;
+            border-bottom-color: #ff6b6b;
+        }
+
+        body.dark-mode .stat-label {
+            color: #999;
+        }
+
+        body.dark-mode .progress-bar {
+            background: #333;
+        }
+
+        body.dark-mode .results-title {
+            color: #ff6b6b;
+        }
+
+        body.dark-mode .performance-table {
+            background: #252525;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .performance-table th {
+            background: #333;
+            color: #ff6b6b;
+        }
+
+        body.dark-mode .performance-table td {
+            border-color: #444;
+        }
+
+        /* Settings Panel */
+        .settings-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .settings-btn {
+            background: rgba(211, 47, 47, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-btn:hover {
+            transform: scale(1.1);
+            background: rgba(183, 28, 28, 0.9);
+        }
+
+        body.dark-mode .settings-btn {
+            background: rgba(255, 107, 107, 0.9);
+        }
+
+        body.dark-mode .settings-btn:hover {
+            background: rgba(255, 87, 87, 0.9);
+        }
+
+        /* Exam Timer */
+        .exam-timer {
+            background: rgba(211, 47, 47, 0.1);
+            border: 2px solid #d32f2f;
+            border-radius: 12px;
+            padding: 15px 25px;
+            margin: 20px 30px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .exam-timer.active {
+            display: flex;
+        }
+
+        .timer-label {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        .timer-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        body.dark-mode .exam-timer {
+            background: rgba(255, 107, 107, 0.1);
+            border-color: #ff6b6b;
+        }
+
+        body.dark-mode .timer-label,
+        body.dark-mode .timer-value {
+            color: #ff6b6b;
+        }
+
+        /* Mode Selection */
+        .mode-selection {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            border: 3px solid #d32f2f;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3);
+            border-color: #b71c1c;
+        }
+
+        .mode-btn h3 {
+            color: #d32f2f;
+            margin-bottom: 10px;
+        }
+
+        .mode-btn p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        body.dark-mode .mode-btn {
+            background: linear-gradient(135deg, #252525 0%, #2a2a2a 100%);
+            border-color: #ff6b6b;
+        }
+
+        body.dark-mode .mode-btn:hover {
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+            border-color: #ff8787;
+        }
+
+        body.dark-mode .mode-btn h3 {
+            color: #ff6b6b;
+        }
+
+        body.dark-mode .mode-btn p {
+            color: #b0b0b0;
+        }
+
+        /* Bookmark Button */
+        .bookmark-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .bookmark-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .bookmark-btn.bookmarked {
+            color: #ffc107;
+        }
+
+        /* Question Navigation Helper */
+        .keyboard-hint {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.85em;
+            color: #999;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .keyboard-hint {
+            color: #666;
+            border-top-color: #333;
+        }
+
+        /* Continue Session Banner */
+        .continue-session {
+            background: rgba(33, 150, 243, 0.1);
+            border: 2px solid #2196F3;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .continue-session.show {
+            display: block;
+        }
+
+        .continue-session h3 {
+            color: #2196F3;
+            margin-bottom: 10px;
+        }
+
+        .continue-session p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .continue-session-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        body.dark-mode .continue-session {
+            background: rgba(33, 150, 243, 0.15);
+        }
+
+        body.dark-mode .continue-session p {
+            color: #b0b0b0;
+        }
     </style>
 </head>
 <body>
+    <!-- Settings Panel -->
+    <div class="settings-panel">
+        <button class="settings-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
+            🌙
+        </button>
+        <button class="settings-btn" onclick="showHelp()" title="Help & Keyboard Shortcuts" aria-label="Help">
+            ❓
+        </button>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>✈️ Part 107 FAA Exam Study Guide</h1>
@@ -688,6 +1020,28 @@
         <div id="startScreen" class="start-screen">
             <h2>Welcome to Your Interactive Study Guide!</h2>
             <p>This comprehensive guide covers everything you need to know to pass the Part 107 FAA Remote Pilot exam. Answer multiple choice questions, get instant feedback, and track your progress.</p>
+            
+            <!-- Continue Session Banner -->
+            <div id="continueSession" class="continue-session">
+                <h3>📚 Continue Your Last Session</h3>
+                <p id="sessionInfo">You have progress saved from your last study session.</p>
+                <div class="continue-session-buttons">
+                    <button class="btn btn-primary" onclick="continueSession()">Continue Session</button>
+                    <button class="btn btn-secondary" onclick="startNewSession()">Start Fresh</button>
+                </div>
+            </div>
+
+            <!-- Mode Selection -->
+            <div class="mode-selection">
+                <div class="mode-btn" onclick="startQuiz('practice')">
+                    <h3>📖 Practice Mode</h3>
+                    <p>Study at your own pace with immediate feedback and explanations</p>
+                </div>
+                <div class="mode-btn" onclick="startQuiz('exam')">
+                    <h3>⏱️ Exam Simulator</h3>
+                    <p>2-hour timed test mimicking real exam conditions</p>
+                </div>
+            </div>
             
             <div class="topics-list">
                 <h3>📚 Topics Covered:</h3>
@@ -1451,10 +1805,16 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" onclick="startQuiz()">Start Studying 🚀</button>
+            <button class="btn btn-primary" onclick="startQuiz('practice')" style="display: none;">Start Studying 🚀</button>
         </div>
 
         <div id="quizScreen" style="display: none;">
+            <!-- Exam Timer -->
+            <div id="examTimer" class="exam-timer">
+                <div class="timer-label">⏱️ Exam Time Remaining:</div>
+                <div class="timer-value" id="timerDisplay">2:00:00</div>
+            </div>
+
             <div class="progress-bar">
                 <div class="progress-fill" id="progressBar">0%</div>
             </div>
@@ -1475,6 +1835,7 @@
             </div>
 
             <div class="question-container">
+                <button class="bookmark-btn" id="bookmarkBtn" onclick="toggleBookmark()" title="Bookmark this question">⭐</button>
                 <div class="question-header">
                     <div class="category-badge" id="category"></div>
                     <div class="question-text" id="questionText"></div>
@@ -1489,6 +1850,10 @@
             <div class="navigation">
                 <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">← Previous</button>
                 <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+            </div>
+            
+            <div class="keyboard-hint">
+                💡 Tip: Use <strong>A, B, C, D</strong> keys to select answers | <strong>← / ↓</strong> Previous | <strong>→ / ↑</strong> Next | <strong>Space</strong> Bookmark
             </div>
         </div>
 
@@ -3276,6 +3641,292 @@
         let selectedAnswer = null;
         let userAnswers = [];
         let shuffledQuestions = [];
+        let quizMode = 'practice'; // 'practice' or 'exam'
+        let examStartTime = null;
+        let examTimer = null;
+        let bookmarkedQuestions = new Set();
+
+        // Constants
+        const PROGRESS_EXPIRY_DAYS = 7;
+        const EXAM_DURATION_MS = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+        const WARNING_THRESHOLD_30MIN_MS = 30 * 60 * 1000;
+        const WARNING_THRESHOLD_10MIN_MS = 10 * 60 * 1000;
+
+        // LocalStorage Keys
+        const STORAGE_KEYS = {
+            PROGRESS: 'part107_progress',
+            DARK_MODE: 'part107_dark_mode',
+            BOOKMARKS: 'part107_bookmarks',
+            STATS: 'part107_stats'
+        };
+
+        // Initialize on page load
+        window.onload = function() {
+            console.log(`Loaded ${questions.length} questions for Part 107 study guide`);
+            
+            // Load dark mode preference
+            loadDarkModePreference();
+            
+            // Load bookmarks
+            loadBookmarks();
+            
+            // Check for saved progress
+            checkSavedProgress();
+            
+            // Initialize category chart on start screen
+            initializeCategoryChart();
+            
+            // Setup keyboard navigation
+            setupKeyboardNavigation();
+        };
+
+        // Dark Mode Functions
+        function loadDarkModePreference() {
+            const darkMode = localStorage.getItem(STORAGE_KEYS.DARK_MODE);
+            if (darkMode === 'true') {
+                document.body.classList.add('dark-mode');
+                updateDarkModeIcon();
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem(STORAGE_KEYS.DARK_MODE, isDark);
+            updateDarkModeIcon();
+        }
+
+        function updateDarkModeIcon() {
+            const isDark = document.body.classList.contains('dark-mode');
+            const btn = document.querySelector('.settings-panel .settings-btn');
+            btn.textContent = isDark ? '☀️' : '🌙';
+            btn.title = isDark ? 'Light Mode' : 'Dark Mode';
+        }
+
+        // Help/Tutorial Function
+        function showHelp() {
+            alert(`📚 Part 107 Study Guide - Help & Keyboard Shortcuts
+
+KEYBOARD SHORTCUTS:
+• A, B, C, D - Select answer options
+• ← / ↓ (Left/Down Arrow) - Previous question
+• → / ↑ (Right/Up Arrow) - Next question  
+• Space - Bookmark current question
+• Esc - Clear selection (if not answered)
+
+FEATURES:
+🌙 Dark Mode - Toggle with the moon/sun button
+⏱️ Exam Simulator - Practice with 2-hour timer
+📊 Progress Tracking - Your progress is automatically saved
+⭐ Bookmarks - Mark questions for later review
+📈 Analytics - View performance by category
+
+MODES:
+📖 Practice Mode - Study at your own pace with immediate feedback
+⏱️ Exam Mode - Timed 2-hour test simulating real exam conditions
+
+Your progress is saved automatically. You can close the browser and return anytime!`);
+        }
+
+        // Progress Persistence
+        function saveProgress() {
+            const progress = {
+                currentQuestionIndex,
+                correctAnswers,
+                userAnswers,
+                shuffledQuestions: shuffledQuestions.map(q => questions.indexOf(q)),
+                quizMode,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEYS.PROGRESS);
+            if (!saved) return null;
+            
+            try {
+                const progress = JSON.parse(saved);
+                // Don't load progress older than PROGRESS_EXPIRY_DAYS
+                const expiryMs = PROGRESS_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
+                if (Date.now() - progress.timestamp > expiryMs) {
+                    localStorage.removeItem(STORAGE_KEYS.PROGRESS);
+                    return null;
+                }
+                return progress;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function clearProgress() {
+            localStorage.removeItem(STORAGE_KEYS.PROGRESS);
+        }
+
+        function checkSavedProgress() {
+            const progress = loadProgress();
+            if (progress && progress.userAnswers.length > 0) {
+                const continueDiv = document.getElementById('continueSession');
+                const infoText = document.getElementById('sessionInfo');
+                const answered = progress.userAnswers.filter(a => a !== undefined).length;
+                const score = Math.round((progress.correctAnswers / answered) * 100);
+                
+                infoText.textContent = `You answered ${answered} questions with a ${score}% score. Continue where you left off?`;
+                continueDiv.classList.add('show');
+            }
+        }
+
+        function continueSession() {
+            const progress = loadProgress();
+            if (!progress) {
+                startNewSession();
+                return;
+            }
+            
+            // Restore state
+            currentQuestionIndex = progress.currentQuestionIndex;
+            correctAnswers = progress.correctAnswers;
+            userAnswers = progress.userAnswers;
+            quizMode = progress.quizMode;
+            shuffledQuestions = progress.shuffledQuestions.map(idx => questions[idx]);
+            
+            // Start quiz in resume mode
+            startQuiz(quizMode, true);
+        }
+
+        function startNewSession() {
+            clearProgress();
+            document.getElementById('continueSession').classList.remove('show');
+        }
+
+        // Bookmark Functions
+        function loadBookmarks() {
+            const saved = localStorage.getItem(STORAGE_KEYS.BOOKMARKS);
+            if (saved) {
+                try {
+                    bookmarkedQuestions = new Set(JSON.parse(saved));
+                } catch (e) {
+                    bookmarkedQuestions = new Set();
+                }
+            }
+        }
+
+        function saveBookmarks() {
+            localStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify([...bookmarkedQuestions]));
+        }
+
+        function toggleBookmark() {
+            const question = shuffledQuestions[currentQuestionIndex];
+            const questionIndex = questions.indexOf(question);
+            const btn = document.getElementById('bookmarkBtn');
+            
+            if (bookmarkedQuestions.has(questionIndex)) {
+                bookmarkedQuestions.delete(questionIndex);
+                btn.classList.remove('bookmarked');
+                btn.title = 'Bookmark this question';
+            } else {
+                bookmarkedQuestions.add(questionIndex);
+                btn.classList.add('bookmarked');
+                btn.title = 'Remove bookmark';
+            }
+            
+            saveBookmarks();
+        }
+
+        function updateBookmarkButton() {
+            const question = shuffledQuestions[currentQuestionIndex];
+            const questionIndex = questions.indexOf(question);
+            const btn = document.getElementById('bookmarkBtn');
+            
+            if (bookmarkedQuestions.has(questionIndex)) {
+                btn.classList.add('bookmarked');
+                btn.title = 'Remove bookmark';
+            } else {
+                btn.classList.remove('bookmarked');
+                btn.title = 'Bookmark this question';
+            }
+        }
+
+        // Exam Timer Functions
+        function startExamTimer() {
+            examStartTime = Date.now();
+            const timerDisplay = document.getElementById('timerDisplay');
+            const timerDiv = document.getElementById('examTimer');
+            timerDiv.classList.add('active');
+            
+            examTimer = setInterval(() => {
+                const elapsed = Date.now() - examStartTime;
+                const remaining = Math.max(0, EXAM_DURATION_MS - elapsed);
+                
+                const hours = Math.floor(remaining / (60 * 60 * 1000));
+                const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
+                const seconds = Math.floor((remaining % (60 * 1000)) / 1000);
+                
+                timerDisplay.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Warning colors
+                if (remaining < WARNING_THRESHOLD_10MIN_MS) {
+                    timerDisplay.style.color = '#f44336';
+                } else if (remaining < WARNING_THRESHOLD_30MIN_MS) {
+                    timerDisplay.style.color = '#ff9800';
+                }
+                
+                // Time's up
+                if (remaining === 0) {
+                    clearInterval(examTimer);
+                    alert('⏰ Time\'s up! The exam has ended.');
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function stopExamTimer() {
+            if (examTimer) {
+                clearInterval(examTimer);
+                examTimer = null;
+            }
+            document.getElementById('examTimer').classList.remove('active');
+        }
+
+        // Keyboard Navigation
+        function setupKeyboardNavigation() {
+            document.addEventListener('keydown', (e) => {
+                // Only handle shortcuts when quiz is active
+                if (document.getElementById('quizScreen').style.display === 'none') {
+                    return;
+                }
+                
+                const key = e.key.toLowerCase();
+                
+                // Answer selection (A, B, C, D)
+                if (['a', 'b', 'c', 'd'].includes(key) && selectedAnswer === null) {
+                    const index = ['a', 'b', 'c', 'd'].indexOf(key);
+                    selectAnswer(index);
+                    e.preventDefault();
+                }
+                
+                // Navigation
+                if (key === 'arrowleft' || key === 'arrowdown') {
+                    if (!document.getElementById('prevBtn').disabled) {
+                        previousQuestion();
+                    }
+                    e.preventDefault();
+                }
+                
+                if (key === 'arrowright' || key === 'arrowup') {
+                    if (!document.getElementById('nextBtn').disabled) {
+                        nextQuestion();
+                    }
+                    e.preventDefault();
+                }
+                
+                // Bookmark
+                if (key === ' ' && e.target.tagName !== 'BUTTON') {
+                    toggleBookmark();
+                    e.preventDefault();
+                }
+            });
+        }
 
         // Shuffle array function
         function shuffleArray(array) {
@@ -3288,12 +3939,30 @@
         }
 
         // Start Quiz
-        function startQuiz() {
-            // Randomize questions at the start of each quiz
-            shuffledQuestions = shuffleArray(questions);
+        function startQuiz(mode = 'practice', isResume = false) {
+            quizMode = mode;
+            
+            // Clear any saved progress when starting fresh
+            if (!isResume) {
+                currentQuestionIndex = 0;
+                correctAnswers = 0;
+                selectedAnswer = null;
+                userAnswers = [];
+                
+                // Randomize questions at the start of each quiz
+                shuffledQuestions = shuffleArray(questions);
+            }
             
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('quizScreen').style.display = 'block';
+            
+            // Start exam timer if in exam mode
+            if (quizMode === 'exam') {
+                startExamTimer();
+            } else {
+                stopExamTimer();
+            }
+            
             loadQuestion();
         }
 
@@ -3306,6 +3975,9 @@
             document.getElementById('category').textContent = question.category;
             document.getElementById('questionText').textContent = question.question;
             document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+
+            // Update bookmark button
+            updateBookmarkButton();
 
             // Render visual if available
             const visualContainer = document.getElementById('questionVisual');
@@ -3345,6 +4017,9 @@
             // Update navigation buttons
             document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
             document.getElementById('nextBtn').disabled = true;
+            
+            // Save progress
+            saveProgress();
         }
 
         // Select Answer
@@ -3385,6 +4060,9 @@
 
             // Update stats
             updateStats();
+            
+            // Save progress
+            saveProgress();
         }
 
         // Show Feedback
@@ -3471,6 +4149,12 @@
         function showResults() {
             document.getElementById('quizScreen').style.display = 'none';
             document.getElementById('resultsScreen').classList.add('show');
+            
+            // Stop exam timer
+            stopExamTimer();
+            
+            // Clear saved progress
+            clearProgress();
 
             const totalQuestions = shuffledQuestions.length;
             const scorePercent = Math.round((correctAnswers / totalQuestions) * 100);
@@ -3508,21 +4192,20 @@
             
             // Randomize questions again for the new quiz
             shuffledQuestions = shuffleArray(questions);
+            
+            // Clear saved progress
+            clearProgress();
+            
+            // Stop exam timer
+            stopExamTimer();
 
             document.getElementById('resultsScreen').classList.remove('show');
             document.getElementById('quizScreen').style.display = 'block';
             
-            loadQuestion();
+            // Return to start screen to select mode
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
         }
-
-        // Initialize on page load
-        window.onload = function() {
-            // Questions are already loaded in order
-            console.log(`Loaded ${questions.length} questions for Part 107 study guide`);
-            
-            // Initialize category chart on start screen
-            initializeCategoryChart();
-        };
 
         // Initialize Category Distribution Chart (Custom Canvas Implementation)
         function initializeCategoryChart() {

@@ -11,7 +11,13 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
 - **Beautiful, responsive design** that works on desktop and mobile devices
-- **📝 NEW: Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
+- **🌙 NEW: Dark Mode** - Eye-friendly dark theme with automatic preference saving
+- **⏱️ NEW: Exam Simulator Mode** - Full 2-hour timed test mimicking real exam conditions
+- **💾 NEW: Progress Persistence** - Automatically saves your progress; pick up where you left off
+- **⌨️ NEW: Keyboard Navigation** - Use A/B/C/D keys to answer, arrow keys to navigate
+- **⭐ NEW: Bookmark Questions** - Flag questions for later review
+- **📖 NEW: Dual Study Modes** - Choose between Practice Mode or Exam Simulator
+- **📝 Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
   - Exam format, logistics, and requirements (60 questions, 2 hours, computer-based)
   - Question distribution breakdown by topic
   - Test-taking strategies specific to Part 107
@@ -91,17 +97,64 @@ Each question is designed to match actual FAA exam scenarios where you must:
 
 This section is displayed on the start screen before you begin studying, so you can understand exactly what to expect on test day and how to maximize your chances of passing!
 
+## ✨ Enhanced Features (New!)
+
+### 🌙 Dark Mode
+- Toggle between light and dark themes for comfortable studying day or night
+- Automatic preference saving - your choice persists between sessions
+- Eye-friendly color scheme reduces strain during long study sessions
+
+### ⏱️ Exam Simulator Mode
+- **Full 2-hour countdown timer** matching actual FAA exam conditions
+- Practice time management and exam pacing
+- Experience the pressure of a timed test in a safe environment
+- Timer displays in the format HH:MM:SS with color warnings as time runs low
+
+### 📖 Practice Mode
+- Study at your own pace with no time pressure
+- Immediate feedback and detailed explanations after each answer
+- Perfect for learning and understanding concepts thoroughly
+- Review questions as many times as needed
+
+### 💾 Progress Persistence
+- **Automatically saves your progress** as you study
+- Close your browser and return anytime - pick up exactly where you left off
+- "Continue Session" banner shows your last score and progress
+- Progress stored locally on your device (works offline)
+- Saved progress expires after 7 days
+
+### ⌨️ Keyboard Navigation
+- **A, B, C, D** keys - Select answer options
+- **← (Left Arrow)** - Go to previous question
+- **→ (Right Arrow)** - Go to next question
+- **Space** - Bookmark current question for review
+- **Esc** - Clear selection (before submitting answer)
+- Keyboard shortcuts shown at bottom of quiz screen
+
+### ⭐ Bookmark Questions
+- Flag questions you want to review later
+- Click the ⭐ star button or press **Space** key
+- Bookmarks persist between sessions
+- Bookmarked questions highlighted for easy identification
+
+### ❓ Help & Tutorial
+- Click the **?** button for comprehensive help
+- View all keyboard shortcuts
+- Learn about study modes and features
+- Quick reference guide always available
+
 ## 🚀 Getting Started
 
 ### How to Use
 
 1. **Open the file**: Simply open `part107-study-guide.html` in any modern web browser (Chrome, Firefox, Safari, Edge)
 2. **No installation required**: This is a standalone HTML file - no servers, no dependencies
-3. **Click "Start Studying"** to begin the quiz
-4. **Answer questions** by clicking on your choice (A, B, C, or D)
+3. **Choose your mode**: Select Practice Mode for learning or Exam Simulator for test preparation
+4. **Answer questions**: Click on options or use keyboard (A, B, C, D)
 5. **Read explanations** after each answer to learn the correct information
 6. **Track your progress** with the live score counter at the top
-7. **Review and improve** - you can go back to previous questions or restart the quiz
+7. **Use bookmarks** to flag questions for later review
+8. **Toggle dark mode** for comfortable viewing in any lighting condition
 
 ### Features
 
@@ -115,20 +168,28 @@ This section is displayed on the start screen before you begin studying, so you 
 - Current question number
 - Correct answer count
 - Visual progress bar
+- Session persistence across browser restarts
 
 #### Responsive Design
 - Works on desktop computers
 - Tablet-friendly
 - Mobile-responsive for studying on the go
+- Touch-friendly interface for mobile devices
 
 ## 📚 Study Tips
 
-1. **Take the quiz multiple times** - Repetition helps reinforce knowledge
-2. **Read all explanations** - Even when you answer correctly
-3. **Focus on weak areas** - Pay special attention to topics where you struggle
-4. **Set a goal** - Aim for 80%+ consistently before taking the real exam
-5. **Understand, don't memorize** - The FAA exam questions may be worded differently
-6. **Use additional resources** - Supplement with official FAA materials
+1. **Start with Practice Mode** - Learn concepts thoroughly with immediate feedback
+2. **Use Exam Simulator** - Practice with the 2-hour timer once you're confident
+3. **Bookmark difficult questions** - Flag questions you want to review later
+4. **Take advantage of keyboard shortcuts** - Speed up your study sessions
+5. **Use dark mode for night studying** - Reduce eye strain during evening sessions
+6. **Take the quiz multiple times** - Repetition helps reinforce knowledge
+7. **Read all explanations** - Even when you answer correctly
+8. **Focus on weak areas** - Pay special attention to topics where you struggle
+9. **Let progress save automatically** - Come back anytime to continue
+10. **Set a goal** - Aim for 80%+ consistently before taking the real exam
+11. **Understand, don't memorize** - The FAA exam questions may be worded differently
+12. **Use additional resources** - Supplement with official FAA materials
 
 ## 📖 Official FAA Study Materials
 
