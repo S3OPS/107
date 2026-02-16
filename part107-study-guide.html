@@ -4332,6 +4332,7 @@
         const EXAM_DURATION_MS = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
         const WARNING_THRESHOLD_30MIN_MS = 30 * 60 * 1000;
         const WARNING_THRESHOLD_10MIN_MS = 10 * 60 * 1000;
+        const IMPORT_RELOAD_DELAY_MS = 1500; // Delay before reloading page after import
         
         // Timer thresholds in seconds
         const TIMER_WARNING_30MIN = 1800; // 30 minutes
@@ -4360,7 +4361,11 @@
 
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
+            
+            // Set aria-live based on toast type - assertive for errors/warnings
+            const ariaLive = (type === 'error' || type === 'warning') ? 'assertive' : 'polite';
             toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', ariaLive);
             
             toast.innerHTML = `
                 <span class="toast-icon">${icons[type] || icons.info}</span>
@@ -4635,13 +4640,23 @@ Your progress is saved automatically. You can close the browser and return anyti
         // Question Search Functions
         let searchTerm = '';
         let filteredQuestionIndices = [];
+        let searchDebounceTimer = null;
+        let lastSearchNotification = '';
 
         function setupSearch() {
             const searchInput = document.getElementById('questionSearch');
             if (searchInput) {
                 searchInput.addEventListener('input', (e) => {
                     searchTerm = e.target.value.trim().toLowerCase();
-                    performSearch();
+                    
+                    // Debounce the search to avoid excessive updates
+                    if (searchDebounceTimer) {
+                        clearTimeout(searchDebounceTimer);
+                    }
+                    
+                    searchDebounceTimer = setTimeout(() => {
+                        performSearch();
+                    }, 300); // Wait 300ms after user stops typing
                 });
             }
         }
@@ -4656,23 +4671,23 @@ Your progress is saved automatically. You can close the browser and return anyti
                 filteredQuestionIndices = [];
                 if (clearBtn) clearBtn.style.display = 'none';
                 if (resultsInfo) resultsInfo.textContent = '';
+                lastSearchNotification = '';
                 return;
             }
 
             // Show clear button
             if (clearBtn) clearBtn.style.display = 'inline-block';
 
-            // Filter questions
-            filteredQuestionIndices = questions
-                .map((q, index) => {
-                    const matches = 
-                        q.question.toLowerCase().includes(searchTerm) ||
-                        q.options.some(opt => opt.toLowerCase().includes(searchTerm)) ||
-                        q.explanation.toLowerCase().includes(searchTerm) ||
-                        q.category.toLowerCase().includes(searchTerm);
-                    return matches ? index : null;
-                })
-                .filter(index => index !== null);
+            // Filter questions using reduce for better performance
+            filteredQuestionIndices = questions.reduce((matches, q, index) => {
+                const hasMatch = 
+                    q.question.toLowerCase().includes(searchTerm) ||
+                    q.options.some(opt => opt.toLowerCase().includes(searchTerm)) ||
+                    q.explanation.toLowerCase().includes(searchTerm) ||
+                    q.category.toLowerCase().includes(searchTerm);
+                if (hasMatch) matches.push(index);
+                return matches;
+            }, []);
 
             // Update results info
             if (resultsInfo) {
@@ -4683,11 +4698,19 @@ Your progress is saved automatically. You can close the browser and return anyti
                 resultsInfo.style.color = count > 0 ? '#666' : '#f44336';
             }
 
-            // Show toast with results
-            if (filteredQuestionIndices.length > 0) {
-                showToast(`Found ${filteredQuestionIndices.length} matching questions!`, 'success', 2000);
-            } else {
-                showToast('No questions match your search.', 'info', 2000);
+            // Show toast with results only if different from last notification
+            const notificationText = filteredQuestionIndices.length > 0
+                ? `Found ${filteredQuestionIndices.length} matching questions!`
+                : 'No questions match your search.';
+            
+            if (notificationText !== lastSearchNotification) {
+                lastSearchNotification = notificationText;
+                if (filteredQuestionIndices.length > 0) {
+                    showToast(notificationText, 'success', 2000);
+                } else if (searchTerm.length >= 3) {
+                    // Only show "no results" if user has typed at least 3 characters
+                    showToast(notificationText, 'info', 2000);
+                }
             }
         }
 
@@ -5672,7 +5695,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                     showToast('✅ Progress imported successfully!', 'success', 3000);
                     
                     // Reload page to reflect changes
-                    setTimeout(() => location.reload(), 1500);
+                    setTimeout(() => location.reload(), IMPORT_RELOAD_DELAY_MS);
                 } catch (error) {
                     console.error('Import error:', error);
                     showToast('❌ Failed to import progress. Check file format.', 'error', 3000);
