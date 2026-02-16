@@ -4830,8 +4830,6 @@ Your progress is saved automatically. You can close the browser and return anyti
             const secs = seconds % 60;
             return `${mins}m ${secs}s`;
         }
-            return Array.from(bookmarkedQuestions);
-        }
 
         function saveBookmarks() {
             storage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify([...bookmarkedQuestions]));
