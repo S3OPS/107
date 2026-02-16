@@ -2688,7 +2688,10 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top: 30px;">Try Again 🔄</button>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 30px;">
+                <button class="btn btn-primary" onclick="restartQuiz()">Try Again 🔄</button>
+                <button class="btn btn-secondary" onclick="showSessionHistoryChart()" style="background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);">View History 📊</button>
+            </div>
         </div>
     </div>
 
@@ -4456,7 +4459,9 @@
             BOOKMARKS: 'part107_bookmarks',
             STATS: 'part107_stats',
             SOUND_ENABLED: 'part107_sound_enabled',
-            QUESTION_TIMES: 'part107_question_times'
+            QUESTION_TIMES: 'part107_question_times',
+            SESSION_HISTORY: 'part107_session_history',
+            QUESTION_DIFFICULTY: 'part107_question_difficulty'
         };
 
         // Toast Notification System
@@ -5277,7 +5282,14 @@ Your progress is saved automatically. You can close the browser and return anyti
             selectedAnswer = null;
 
             // Update header
-            document.getElementById('category').textContent = question.category;
+            const difficultyLevel = getQuestionDifficulty(question);
+            const difficultyBadges = {
+                'easy': '<span style="background: #4CAF50; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; margin-left: 10px;">⭐ Easy</span>',
+                'medium': '<span style="background: #FF9800; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; margin-left: 10px;">⭐⭐ Medium</span>',
+                'hard': '<span style="background: #F44336; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; margin-left: 10px;">⭐⭐⭐ Hard</span>',
+                'unknown': ''
+            };
+            document.getElementById('category').innerHTML = question.category + (difficultyBadges[difficultyLevel] || '');
             document.getElementById('questionText').textContent = question.question;
             document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
 
@@ -5534,8 +5546,120 @@ Your progress is saved automatically. You can close the browser and return anyti
 
             document.getElementById('resultsMessage').textContent = message;
             
+            // Save session to history
+            saveSessionToHistory();
+            
+            // Show study recommendations
+            displayStudyRecommendations();
+            
             // Initialize performance charts
             initializePerformanceCharts();
+        }
+        
+        // Display Study Recommendations
+        function displayStudyRecommendations() {
+            // Calculate category performance
+            const categoryStats = {};
+            shuffledQuestions.forEach((q, index) => {
+                if (!categoryStats[q.category]) {
+                    categoryStats[q.category] = { correct: 0, total: 0 };
+                }
+                categoryStats[q.category].total++;
+                if (userAnswers[index] && userAnswers[index].isCorrect) {
+                    categoryStats[q.category].correct++;
+                }
+            });
+            
+            // Find weak categories (< 70%)
+            const weakCategories = [];
+            const strongCategories = [];
+            Object.keys(categoryStats).forEach(category => {
+                const stats = categoryStats[category];
+                const percentage = (stats.correct / stats.total) * 100;
+                if (percentage < 70) {
+                    weakCategories.push({ category, percentage: percentage.toFixed(1) });
+                } else if (percentage >= 90) {
+                    strongCategories.push({ category, percentage: percentage.toFixed(1) });
+                }
+            });
+            
+            // Get session history to check for improvement
+            const history = getSessionHistory();
+            let improvementTrend = 'neutral';
+            if (history.length >= 2) {
+                const recent = history[0].score;
+                const previous = history[1].score;
+                if (recent > previous + 5) improvementTrend = 'improving';
+                else if (recent < previous - 5) improvementTrend = 'declining';
+            }
+            
+            // Build recommendations
+            let recommendations = '<div style="background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%); padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #2196F3;">';
+            recommendations += '<h3 style="margin: 0 0 15px 0; color: #2196F3;">💡 Personalized Study Recommendations</h3>';
+            
+            if (weakCategories.length > 0) {
+                recommendations += '<div style="margin-bottom: 15px;"><strong>📚 Focus Areas:</strong><br>';
+                recommendations += '<ul style="margin: 5px 0; padding-left: 20px;">';
+                weakCategories.forEach(cat => {
+                    recommendations += `<li><strong>${cat.category}</strong> (${cat.percentage}%) - Review FAA materials and retake questions in this category</li>`;
+                });
+                recommendations += '</ul></div>';
+            }
+            
+            if (strongCategories.length > 0) {
+                recommendations += '<div style="margin-bottom: 15px;"><strong>🌟 Strong Areas:</strong><br>';
+                recommendations += '<ul style="margin: 5px 0; padding-left: 20px;">';
+                strongCategories.slice(0, 3).forEach(cat => {
+                    recommendations += `<li><strong>${cat.category}</strong> (${cat.percentage}%) - Great job!</li>`;
+                });
+                recommendations += '</ul></div>';
+            }
+            
+            // Improvement trend
+            if (improvementTrend === 'improving') {
+                recommendations += '<div style="background: #e8f5e9; padding: 10px; border-radius: 5px; margin-bottom: 10px;">📈 <strong>Great progress!</strong> Your scores are improving. Keep up the consistent study routine!</div>';
+            } else if (improvementTrend === 'declining') {
+                recommendations += '<div style="background: #fff3e0; padding: 10px; border-radius: 5px; margin-bottom: 10px;">⚠️ Consider taking a break and reviewing fundamentals. Everyone has off days!</div>';
+            }
+            
+            // Time-based recommendations
+            const avgTime = getAverageTimePerQuestion();
+            if (avgTime > 0) {
+                if (avgTime < 30) {
+                    recommendations += '<div style="margin-bottom: 10px;">⏱️ You\'re answering quickly (avg ' + formatTime(avgTime) + '/question). Make sure you\'re reading questions carefully!</div>';
+                } else if (avgTime > 120) {
+                    recommendations += '<div style="margin-bottom: 10px;">⏱️ Take your time learning (avg ' + formatTime(avgTime) + '/question), but try to build confidence for faster decision-making on exam day.</div>';
+                }
+            }
+            
+            // Next steps
+            const totalQuestions = shuffledQuestions.length;
+            const scorePercent = Math.round((correctAnswers / totalQuestions) * 100);
+            recommendations += '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;"><strong>🎯 Next Steps:</strong><br>';
+            if (scorePercent >= 80) {
+                recommendations += '• Take the quiz in Exam Mode with the 2-hour timer<br>';
+                recommendations += '• Review the FAA Remote Pilot Study Guide<br>';
+                recommendations += '• Schedule your Part 107 exam!';
+            } else if (scorePercent >= 70) {
+                recommendations += '• Focus on your weak categories<br>';
+                recommendations += '• Use Review Mode to practice incorrect answers<br>';
+                recommendations += '• Retake the quiz tomorrow to reinforce learning';
+            } else {
+                recommendations += '• Study one category at a time using the filter<br>';
+                recommendations += '• Read each explanation carefully<br>';
+                recommendations += '• Review official FAA study materials<br>';
+                recommendations += '• Retake the quiz in a few days';
+            }
+            recommendations += '</div></div>';
+            
+            // Add to results screen
+            const resultsMessage = document.getElementById('resultsMessage');
+            if (resultsMessage && resultsMessage.nextSibling) {
+                const recommendDiv = document.createElement('div');
+                recommendDiv.id = 'studyRecommendations';
+                recommendDiv.innerHTML = recommendations;
+                resultsMessage.parentNode.insertBefore(recommendDiv, resultsMessage.nextSibling);
+            }
         }
 
         // Restart Quiz
@@ -5560,6 +5684,12 @@ Your progress is saved automatically. You can close the browser and return anyti
             
             // Stop exam timer
             stopExamTimer();
+            
+            // Clear study recommendations
+            const recommendDiv = document.getElementById('studyRecommendations');
+            if (recommendDiv) {
+                recommendDiv.remove();
+            }
 
             document.getElementById('resultsScreen').classList.remove('show');
             document.getElementById('quizScreen').style.display = 'block';
@@ -5810,6 +5940,337 @@ Your progress is saved automatically. You can close the browser and return anyti
                     tableBody.appendChild(row);
                 });
             }
+        }
+
+        // Session History Management
+        function saveSessionToHistory() {
+            try {
+                const totalQuestions = shuffledQuestions.length;
+                const scorePercent = Math.round((correctAnswers / totalQuestions) * 100);
+                
+                // Calculate category performance
+                const categoryPerformance = {};
+                shuffledQuestions.forEach((q, index) => {
+                    if (!categoryPerformance[q.category]) {
+                        categoryPerformance[q.category] = { correct: 0, total: 0 };
+                    }
+                    categoryPerformance[q.category].total++;
+                    if (userAnswers[index] && userAnswers[index].isCorrect) {
+                        categoryPerformance[q.category].correct++;
+                    }
+                });
+                
+                const session = {
+                    date: new Date().toISOString(),
+                    timestamp: Date.now(),
+                    score: scorePercent,
+                    correct: correctAnswers,
+                    total: totalQuestions,
+                    quizMode: quizMode,
+                    categoryPerformance: categoryPerformance,
+                    avgTimePerQuestion: getAverageTimePerQuestion(),
+                    maxStreak: maxStreak
+                };
+                
+                // Load existing history
+                let history = [];
+                const savedHistory = storage.getItem(STORAGE_KEYS.SESSION_HISTORY);
+                if (savedHistory) {
+                    try {
+                        history = JSON.parse(savedHistory);
+                    } catch (e) {
+                        console.error('Error parsing session history:', e);
+                    }
+                }
+                
+                // Add new session (keep last 50 sessions)
+                history.unshift(session);
+                if (history.length > 50) {
+                    history = history.slice(0, 50);
+                }
+                
+                storage.setItem(STORAGE_KEYS.SESSION_HISTORY, JSON.stringify(history));
+                
+                // Update question difficulty ratings
+                updateQuestionDifficulty();
+                
+            } catch (e) {
+                console.error('Error saving session history:', e);
+            }
+        }
+        
+        function getSessionHistory() {
+            try {
+                const savedHistory = storage.getItem(STORAGE_KEYS.SESSION_HISTORY);
+                if (savedHistory) {
+                    return JSON.parse(savedHistory);
+                }
+            } catch (e) {
+                console.error('Error loading session history:', e);
+            }
+            return [];
+        }
+        
+        function updateQuestionDifficulty() {
+            try {
+                let difficulty = {};
+                const savedDifficulty = storage.getItem(STORAGE_KEYS.QUESTION_DIFFICULTY);
+                if (savedDifficulty) {
+                    try {
+                        difficulty = JSON.parse(savedDifficulty);
+                    } catch (e) {
+                        console.error('Error parsing difficulty data:', e);
+                    }
+                }
+                
+                // Update difficulty based on current session
+                shuffledQuestions.forEach((q, index) => {
+                    const questionKey = q.question.substring(0, 50); // Use first 50 chars as key
+                    if (!difficulty[questionKey]) {
+                        difficulty[questionKey] = { attempts: 0, correct: 0 };
+                    }
+                    difficulty[questionKey].attempts++;
+                    if (userAnswers[index] && userAnswers[index].isCorrect) {
+                        difficulty[questionKey].correct++;
+                    }
+                });
+                
+                storage.setItem(STORAGE_KEYS.QUESTION_DIFFICULTY, JSON.stringify(difficulty));
+            } catch (e) {
+                console.error('Error updating question difficulty:', e);
+            }
+        }
+        
+        function getQuestionDifficulty(question) {
+            try {
+                const savedDifficulty = storage.getItem(STORAGE_KEYS.QUESTION_DIFFICULTY);
+                if (savedDifficulty) {
+                    const difficulty = JSON.parse(savedDifficulty);
+                    const questionKey = question.question.substring(0, 50);
+                    if (difficulty[questionKey] && difficulty[questionKey].attempts > 0) {
+                        const successRate = (difficulty[questionKey].correct / difficulty[questionKey].attempts) * 100;
+                        if (successRate < 50) return 'hard';
+                        if (successRate < 75) return 'medium';
+                        return 'easy';
+                    }
+                }
+            } catch (e) {
+                console.error('Error getting question difficulty:', e);
+            }
+            return 'unknown';
+        }
+        
+        function showSessionHistoryChart() {
+            const history = getSessionHistory();
+            if (history.length === 0) {
+                showToast('No session history available yet. Complete a quiz to start tracking!', 'info');
+                return;
+            }
+            
+            // Get last 10 sessions (in reverse chronological order)
+            const recentSessions = history.slice(0, 10).reverse();
+            
+            // Create modal overlay
+            const modal = document.createElement('div');
+            modal.id = 'historyModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                padding: 20px;
+            `;
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                border-radius: 15px;
+                padding: 30px;
+                max-width: 800px;
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            `;
+            
+            // Add dark mode support
+            if (document.body.classList.contains('dark-mode')) {
+                modalContent.style.background = '#2a2a2a';
+                modalContent.style.color = '#e0e0e0';
+            }
+            
+            // Create chart canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = 700;
+            canvas.height = 400;
+            canvas.style.width = '100%';
+            canvas.style.height = 'auto';
+            
+            modalContent.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0; color: #d32f2f;">📊 Performance History</h2>
+                    <button onclick="document.getElementById('historyModal').remove()" 
+                            style="background: #f44336; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 1.1em;">✕</button>
+                </div>
+                <p style="margin-bottom: 20px; ${document.body.classList.contains('dark-mode') ? 'color: #b0b0b0;' : 'color: #666;'}">
+                    Your last ${recentSessions.length} quiz sessions - track your improvement over time!
+                </p>
+            `;
+            
+            modalContent.appendChild(canvas);
+            
+            // Add statistics summary
+            const avgScore = Math.round(recentSessions.reduce((sum, s) => sum + s.score, 0) / recentSessions.length);
+            const bestScore = Math.max(...recentSessions.map(s => s.score));
+            const improvement = recentSessions.length > 1 ? recentSessions[recentSessions.length - 1].score - recentSessions[0].score : 0;
+            
+            const statsDiv = document.createElement('div');
+            statsDiv.style.cssText = `
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+                margin-top: 20px;
+            `;
+            
+            statsDiv.innerHTML = `
+                <div style="background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%); padding: 15px; border-radius: 10px; text-align: center; color: white;">
+                    <div style="font-size: 2em; font-weight: bold;">${avgScore}%</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">Average Score</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%); padding: 15px; border-radius: 10px; text-align: center; color: white;">
+                    <div style="font-size: 2em; font-weight: bold;">${bestScore}%</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">Best Score</div>
+                </div>
+                <div style="background: linear-gradient(135deg, ${improvement >= 0 ? '#FF9800' : '#F44336'} 0%, ${improvement >= 0 ? '#F57C00' : '#D32F2F'} 100%); padding: 15px; border-radius: 10px; text-align: center; color: white;">
+                    <div style="font-size: 2em; font-weight: bold;">${improvement >= 0 ? '+' : ''}${improvement}%</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">Improvement</div>
+                </div>
+            `;
+            
+            modalContent.appendChild(statsDiv);
+            
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            
+            // Draw line chart
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.fillStyle = document.body.classList.contains('dark-mode') ? '#2a2a2a' : 'white';
+            ctx.fillRect(0, 0, width, height);
+            
+            const padding = { top: 40, right: 40, bottom: 80, left: 60 };
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            // Draw axes
+            ctx.strokeStyle = document.body.classList.contains('dark-mode') ? '#666' : '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, padding.top);
+            ctx.lineTo(padding.left, height - padding.bottom);
+            ctx.lineTo(width - padding.right, height - padding.bottom);
+            ctx.stroke();
+            
+            // Draw grid lines and Y-axis labels
+            ctx.strokeStyle = document.body.classList.contains('dark-mode') ? '#444' : '#e0e0e0';
+            ctx.lineWidth = 1;
+            ctx.fillStyle = document.body.classList.contains('dark-mode') ? '#b0b0b0' : '#666';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'right';
+            
+            for (let i = 0; i <= 100; i += 20) {
+                const y = height - padding.bottom - (i / 100) * chartHeight;
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(width - padding.right, y);
+                ctx.stroke();
+                ctx.fillText(i + '%', padding.left - 10, y + 5);
+            }
+            
+            // Draw passing line (70%)
+            ctx.strokeStyle = '#4CAF50';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            const passingY = height - padding.bottom - (70 / 100) * chartHeight;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, passingY);
+            ctx.lineTo(width - padding.right, passingY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Add passing line label
+            ctx.fillStyle = '#4CAF50';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('Passing (70%)', width - padding.right + 5, passingY + 5);
+            
+            // Plot data points and line
+            const xStep = chartWidth / (recentSessions.length - 1 || 1);
+            
+            ctx.strokeStyle = '#d32f2f';
+            ctx.fillStyle = '#d32f2f';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            recentSessions.forEach((session, i) => {
+                const x = padding.left + i * xStep;
+                const y = height - padding.bottom - (session.score / 100) * chartHeight;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+            
+            // Draw data points
+            recentSessions.forEach((session, i) => {
+                const x = padding.left + i * xStep;
+                const y = height - padding.bottom - (session.score / 100) * chartHeight;
+                
+                // Point
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = session.score >= 70 ? '#4CAF50' : '#F44336';
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // X-axis label (date)
+                const date = new Date(session.date);
+                const label = `${date.getMonth() + 1}/${date.getDate()}`;
+                ctx.save();
+                ctx.translate(x, height - padding.bottom + 15);
+                ctx.rotate(-Math.PI / 4);
+                ctx.fillStyle = document.body.classList.contains('dark-mode') ? '#b0b0b0' : '#666';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText(label, 0, 0);
+                ctx.restore();
+                
+                // Score label above point
+                ctx.fillStyle = document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(session.score + '%', x, y - 15);
+            });
+            
+            // Chart title
+            ctx.fillStyle = document.body.classList.contains('dark-mode') ? '#e0e0e0' : '#333';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Score Progression Over Time', width / 2, 25);
         }
 
         // Category Filter Functions
