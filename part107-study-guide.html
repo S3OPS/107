@@ -2640,6 +2640,10 @@
                     <div class="breakdown-value" id="totalIncorrect">0</div>
                     <div class="breakdown-label">Incorrect Answers</div>
                 </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-value" id="avgTimePerQuestion">--</div>
+                    <div class="breakdown-label">⏱️ Avg Time/Question</div>
+                </div>
             </div>
 
             <!-- Performance Charts -->
@@ -4415,6 +4419,8 @@
         let reviewModeActive = false;
         let reviewModeFilter = 'all'; // 'all', 'bookmarked', 'incorrect'
         let incorrectQuestionIndices = new Set(); // Track indices of incorrectly answered questions
+        let questionStartTime = null; // Track when question was loaded
+        let questionTimes = {}; // Store time spent on each question (in seconds)
 
         // Constants
         const PROGRESS_EXPIRY_DAYS = 7;
@@ -4439,7 +4445,8 @@
             DARK_MODE: 'part107_dark_mode',
             BOOKMARKS: 'part107_bookmarks',
             STATS: 'part107_stats',
-            SOUND_ENABLED: 'part107_sound_enabled'
+            SOUND_ENABLED: 'part107_sound_enabled',
+            QUESTION_TIMES: 'part107_question_times'
         };
 
         // Toast Notification System
@@ -4551,6 +4558,9 @@
             
             // Load bookmarks
             loadBookmarks();
+            
+            // Load question times
+            loadQuestionTimes();
             
             // Check for saved progress
             checkSavedProgress();
@@ -4775,6 +4785,41 @@ Your progress is saved automatically. You can close the browser and return anyti
                     bookmarkedQuestions = new Set();
                 }
             }
+        }
+
+        // Question Time Tracking Functions
+        function saveQuestionTimes() {
+            try {
+                storage.setItem(STORAGE_KEYS.QUESTION_TIMES, JSON.stringify(questionTimes));
+            } catch (e) {
+                console.error('Error saving question times:', e);
+            }
+        }
+
+        function loadQuestionTimes() {
+            const saved = storage.getItem(STORAGE_KEYS.QUESTION_TIMES);
+            if (saved) {
+                try {
+                    questionTimes = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Error loading question times:', e);
+                    questionTimes = {};
+                }
+            }
+        }
+
+        function getAverageTimePerQuestion() {
+            const times = Object.values(questionTimes);
+            if (times.length === 0) return 0;
+            const sum = times.reduce((a, b) => a + b, 0);
+            return Math.round(sum / times.length);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}m ${secs}s`;
+        }
             return Array.from(bookmarkedQuestions);
         }
 
@@ -5180,6 +5225,19 @@ Your progress is saved automatically. You can close the browser and return anyti
 
         // Load Question
         function loadQuestion() {
+            // Record time spent on previous question (if any)
+            if (questionStartTime !== null && currentQuestionIndex > 0) {
+                const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
+                const prevQuestion = shuffledQuestions[currentQuestionIndex - 1];
+                const prevQuestionIndex = questions.indexOf(prevQuestion);
+                if (prevQuestionIndex !== -1) {
+                    questionTimes[prevQuestionIndex] = (questionTimes[prevQuestionIndex] || 0) + timeSpent;
+                }
+            }
+            
+            // Start timing for this question
+            questionStartTime = Date.now();
+            
             const question = shuffledQuestions[currentQuestionIndex];
             selectedAnswer = null;
 
@@ -5249,6 +5307,17 @@ Your progress is saved automatically. You can close the browser and return anyti
         // Select Answer
         function selectAnswer(index) {
             if (selectedAnswer !== null) return; // Already answered
+
+            // Record time spent on this question
+            if (questionStartTime !== null) {
+                const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
+                const question = shuffledQuestions[currentQuestionIndex];
+                const questionIndex = questions.indexOf(question);
+                if (questionIndex !== -1) {
+                    questionTimes[questionIndex] = (questionTimes[questionIndex] || 0) + timeSpent;
+                }
+                saveQuestionTimes();
+            }
 
             selectedAnswer = index;
             const question = shuffledQuestions[currentQuestionIndex];
@@ -5405,6 +5474,10 @@ Your progress is saved automatically. You can close the browser and return anyti
             document.getElementById('totalAnswered').textContent = totalQuestions;
             document.getElementById('totalCorrect').textContent = correctAnswers;
             document.getElementById('totalIncorrect').textContent = totalQuestions - correctAnswers;
+            
+            // Display average time per question
+            const avgTime = getAverageTimePerQuestion();
+            document.getElementById('avgTimePerQuestion').textContent = avgTime > 0 ? formatTime(avgTime) : '--';
 
             let message = '';
             if (scorePercent >= 90) {
