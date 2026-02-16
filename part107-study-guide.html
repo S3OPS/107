@@ -873,6 +873,49 @@
             color: #ff6b6b;
         }
 
+        .timer-control-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer-control-btn:hover {
+            background: #b71c1c;
+            transform: scale(1.05);
+        }
+
+        .timer-control-btn:active {
+            transform: scale(0.95);
+        }
+
+        body.dark-mode .timer-control-btn {
+            background: #ff6b6b;
+        }
+
+        body.dark-mode .timer-control-btn:hover {
+            background: #ff5757;
+        }
+
+        .exam-timer.paused {
+            opacity: 0.7;
+            border-style: dashed;
+        }
+
+        .exam-timer.paused .timer-value {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         /* Mode Selection */
         .mode-selection {
             display: flex;
@@ -1612,6 +1655,9 @@
         </button>
         <button class="settings-btn" onclick="showHelp()" title="Help & Keyboard Shortcuts" aria-label="Help">
             ❓
+        </button>
+        <button class="settings-btn" id="soundToggleBtn" onclick="toggleSoundEffects()" title="Toggle Sound Effects" aria-label="Toggle Sound Effects">
+            🔊
         </button>
         <button class="settings-btn" id="exportBtn" onclick="exportProgress()" title="Export Study Progress" aria-label="Export Progress" style="display: none;">
             💾
@@ -2428,6 +2474,9 @@
             <div id="examTimer" class="exam-timer">
                 <div class="timer-label">⏱️ Exam Time Remaining:</div>
                 <div class="timer-value" id="timerDisplay">2:00:00</div>
+                <button id="pauseResumeBtn" class="timer-control-btn" onclick="togglePauseTimer()" title="Pause/Resume Timer">
+                    ⏸️
+                </button>
             </div>
 
             <!-- Question Search -->
@@ -4389,7 +4438,8 @@
             PROGRESS: 'part107_progress',
             DARK_MODE: 'part107_dark_mode',
             BOOKMARKS: 'part107_bookmarks',
-            STATS: 'part107_stats'
+            STATS: 'part107_stats',
+            SOUND_ENABLED: 'part107_sound_enabled'
         };
 
         // Toast Notification System
@@ -4496,6 +4546,9 @@
             // Load dark mode preference
             loadDarkModePreference();
             
+            // Load sound effects preference
+            loadSoundPreference();
+            
             // Load bookmarks
             loadBookmarks();
             
@@ -4535,6 +4588,75 @@
             btn.title = isDark ? 'Light Mode' : 'Dark Mode';
         }
 
+        // Sound Effects Functions
+        let soundEnabled = true;
+
+        function loadSoundPreference() {
+            const sound = storage.getItem(STORAGE_KEYS.SOUND_ENABLED);
+            soundEnabled = sound === null ? true : sound === 'true';
+            updateSoundIcon();
+        }
+
+        function toggleSoundEffects() {
+            soundEnabled = !soundEnabled;
+            storage.setItem(STORAGE_KEYS.SOUND_ENABLED, soundEnabled);
+            updateSoundIcon();
+            showToast(soundEnabled ? '🔊 Sound effects enabled' : '🔇 Sound effects disabled', 'info', 2000);
+        }
+
+        function updateSoundIcon() {
+            const btn = document.getElementById('soundToggleBtn');
+            if (btn) {
+                btn.textContent = soundEnabled ? '🔊' : '🔇';
+                btn.title = soundEnabled ? 'Disable Sound Effects' : 'Enable Sound Effects';
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            
+            // Using Web Audio API to generate simple tones
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Different sound frequencies for different events
+            switch(type) {
+                case 'correct':
+                    oscillator.frequency.value = 800; // High tone
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                    break;
+                case 'incorrect':
+                    oscillator.frequency.value = 200; // Low tone
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                    break;
+                case 'streak':
+                    // Ascending tones for streak
+                    oscillator.frequency.value = 600;
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.15);
+                    break;
+                case 'bookmark':
+                    oscillator.frequency.value = 1000;
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                    break;
+            }
+        }
+
         // Help/Tutorial Function
         function showHelp() {
             alert(`📚 Part 107 Study Guide - Help & Keyboard Shortcuts
@@ -4548,18 +4670,24 @@ KEYBOARD SHORTCUTS:
 
 FEATURES:
 🌙 Dark Mode - Toggle with the moon/sun button
-⏱️ Exam Simulator - Practice with 2-hour timer
+⏱️ Exam Simulator - Practice with 2-hour timer (with pause/resume)
 📊 Progress Tracking - Your progress is automatically saved
 ⭐ Bookmarks - Mark questions for later review
 📈 Analytics - View performance by category
 🔥 Answer Streak - Track consecutive correct answers
 🔄 Review Mode - Filter to study only bookmarked or incorrect questions
 🔀 Question Randomization - Optional shuffling of questions
+🔊 Sound Effects - Toggle audio feedback (on by default)
 
 MODES:
 📖 Practice Mode - Study at your own pace with immediate feedback
-⏱️ Exam Mode - Timed 2-hour test simulating real exam conditions
+⏱️ Exam Mode - Timed 2-hour test simulating real exam conditions (can be paused)
 🔄 Review Mode - Focus on bookmarked or incorrectly answered questions
+
+EXAM TIMER CONTROLS:
+⏸️ Pause Button - Pause/resume the exam timer at any time
+• Timer continues running until you pause it manually
+• Use pause if you need a break during practice
 
 Your progress is saved automatically. You can close the browser and return anytime!`);
         }
@@ -4667,6 +4795,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                 bookmarkedQuestions.add(questionIndex);
                 btn.classList.add('bookmarked');
                 btn.title = 'Remove bookmark';
+                playSound('bookmark'); // Play sound when bookmarking
             }
             
             saveBookmarks();
@@ -4779,10 +4908,13 @@ Your progress is saved automatically. You can close the browser and return anyti
                 // Show streak milestone notifications
                 if (currentStreak === STREAK_MILESTONE_SMALL) {
                     showToast('🔥 5 in a row! Keep it up!', 'success', 2000);
+                    playSound('streak');
                 } else if (currentStreak === STREAK_MILESTONE_MEDIUM) {
                     showToast('🔥🔥 10 streak! Excellent!', 'success', 2000);
+                    playSound('streak');
                 } else if (currentStreak === STREAK_MILESTONE_LARGE) {
                     showToast('🔥🔥🔥 20 streak! You\'re on fire!', 'success', 2000);
+                    playSound('streak');
                 }
             } else {
                 currentStreak = 0;
@@ -5141,6 +5273,9 @@ Your progress is saved automatically. You can close the browser and return anyti
 
             // Update streak
             updateStreak(isCorrect);
+
+            // Play sound effect
+            playSound(isCorrect ? 'correct' : 'incorrect');
 
             // Update option styling and ARIA
             const options = document.querySelectorAll('.option');
@@ -5777,42 +5912,71 @@ Your progress is saved automatically. You can close the browser and return anyti
         // Enhanced Timer Functions
         let examTimeRemaining = 7200; // 2 hours in seconds
         let examTimerInterval = null;
+        let isTimerPaused = false;
+
+        function togglePauseTimer() {
+            const pauseBtn = document.getElementById('pauseResumeBtn');
+            const timerElement = document.getElementById('examTimer');
+            
+            if (isTimerPaused) {
+                // Resume timer
+                isTimerPaused = false;
+                pauseBtn.textContent = '⏸️';
+                pauseBtn.title = 'Pause Timer';
+                timerElement.classList.remove('paused');
+                showToast('▶️ Timer resumed', 'info', 2000);
+            } else {
+                // Pause timer
+                isTimerPaused = true;
+                pauseBtn.textContent = '▶️';
+                pauseBtn.title = 'Resume Timer';
+                timerElement.classList.add('paused');
+                showToast('⏸️ Timer paused', 'warning', 2000);
+            }
+        }
 
         function startExamTimer() {
             examTimeRemaining = 7200;
+            isTimerPaused = false;
             const timerElement = document.getElementById('examTimer');
+            const pauseBtn = document.getElementById('pauseResumeBtn');
             timerElement.classList.add('active');
-            timerElement.classList.remove('warning', 'critical');
+            timerElement.classList.remove('warning', 'critical', 'paused');
+            pauseBtn.textContent = '⏸️';
+            pauseBtn.title = 'Pause Timer';
             
             updateTimerDisplay();
             
             examTimerInterval = setInterval(() => {
-                examTimeRemaining--;
-                updateTimerDisplay();
-                
-                // Update timer state based on remaining time
-                // Remove all state classes first to avoid conflicts
-                timerElement.classList.remove('warning', 'critical');
-                
-                if (examTimeRemaining <= TIMER_CRITICAL_5MIN) {
-                    timerElement.classList.add('critical');
-                } else if (examTimeRemaining <= TIMER_WARNING_30MIN) {
-                    timerElement.classList.add('warning');
-                }
-                
-                // Show alerts at specific times
-                if (examTimeRemaining === TIMER_WARNING_30MIN) {
-                    showTimerAlert('⏰ 30 minutes remaining!');
-                } else if (examTimeRemaining === TIMER_WARNING_10MIN) {
-                    showTimerAlert('⚠️ 10 minutes remaining!');
-                } else if (examTimeRemaining === TIMER_CRITICAL_5MIN) {
-                    showTimerAlert('🚨 Only 5 minutes left!');
-                }
-                
-                if (examTimeRemaining <= 0) {
-                    stopExamTimer();
-                    alert('⏰ Time\'s up! The exam has ended.');
-                    showResults();
+                // Only decrement if not paused
+                if (!isTimerPaused) {
+                    examTimeRemaining--;
+                    updateTimerDisplay();
+                    
+                    // Update timer state based on remaining time
+                    // Remove all state classes first to avoid conflicts
+                    timerElement.classList.remove('warning', 'critical');
+                    
+                    if (examTimeRemaining <= TIMER_CRITICAL_5MIN) {
+                        timerElement.classList.add('critical');
+                    } else if (examTimeRemaining <= TIMER_WARNING_30MIN) {
+                        timerElement.classList.add('warning');
+                    }
+                    
+                    // Show alerts at specific times
+                    if (examTimeRemaining === TIMER_WARNING_30MIN) {
+                        showTimerAlert('⏰ 30 minutes remaining!');
+                    } else if (examTimeRemaining === TIMER_WARNING_10MIN) {
+                        showTimerAlert('⚠️ 10 minutes remaining!');
+                    } else if (examTimeRemaining === TIMER_CRITICAL_5MIN) {
+                        showTimerAlert('🚨 Only 5 minutes left!');
+                    }
+                    
+                    if (examTimeRemaining <= 0) {
+                        stopExamTimer();
+                        alert('⏰ Time\'s up! The exam has ended.');
+                        showResults();
+                    }
                 }
             }, 1000);
         }

@@ -12,7 +12,9 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **Progress tracking** with live scoring
 - **Beautiful, responsive design** that works on desktop and mobile devices
 - **🌙 Dark Mode** - Eye-friendly dark theme with automatic preference saving
-- **⏱️ Exam Simulator Mode** - Full 2-hour timed test mimicking real exam conditions
+- **⏱️ Exam Simulator Mode** - Full 2-hour timed test mimicking real exam conditions with pause/resume
+- **⏸️ NEW: Timer Pause/Resume** - Pause and resume the exam timer at any time during practice
+- **🔊 NEW: Sound Effects** - Optional audio feedback for answers, streaks, and bookmarks (toggleable)
 - **💾 Progress Persistence** - Automatically saves your progress; pick up where you left off
 - **⌨️ Keyboard Navigation** - Use A/B/C/D keys to answer, arrow keys to navigate
 - **⭐ Bookmark Questions** - Flag questions for later review
@@ -22,8 +24,8 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **🎨 Toast Notifications** - Modern, non-intrusive feedback messages
 - **♿ Enhanced Accessibility** - Improved focus indicators, reduced motion support, screen reader optimizations
 - **🔒 Robust Error Handling** - Safe localStorage operations with automatic error recovery
-- **🔥 NEW: Answer Streak Tracking** - Track consecutive correct answers with milestone celebrations
-- **🔄 NEW: Review Mode** - Filter to study only bookmarked or incorrectly answered questions
+- **🔥 Answer Streak Tracking** - Track consecutive correct answers with milestone celebrations
+- **🔄 Review Mode** - Filter to study only bookmarked or incorrectly answered questions
 - **🔀 NEW: Question Randomization Toggle** - Optional shuffling for varied practice sessions
 - **📝 Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
   - Exam format, logistics, and requirements (60 questions, 2 hours, computer-based)
@@ -114,9 +116,19 @@ This section is displayed on the start screen before you begin studying, so you 
 
 ### ⏱️ Exam Simulator Mode
 - **Full 2-hour countdown timer** matching actual FAA exam conditions
+- **⏸️ Pause/Resume functionality** - Take breaks during practice without losing your place
 - Practice time management and exam pacing
 - Experience the pressure of a timed test in a safe environment
 - Timer displays in the format HH:MM:SS with color warnings as time runs low
+- Visual indicators when timer is paused
+
+### 🔊 Sound Effects (NEW!)
+- **Optional audio feedback** for enhanced learning experience
+- Different tones for correct/incorrect answers
+- Special sound for streak milestones
+- Bookmark confirmation sound
+- Easy toggle on/off with 🔊/🔇 button
+- Preference saved between sessions
 
 ### 📖 Practice Mode
 - Study at your own pace with no time pressure
