@@ -6025,7 +6025,8 @@ Your progress is saved automatically. You can close the browser and return anyti
                 
                 // Update difficulty based on current session
                 shuffledQuestions.forEach((q, index) => {
-                    const questionKey = q.question.substring(0, 50); // Use first 50 chars as key
+                    // Create unique key using category and first 80 chars to avoid collisions
+                    const questionKey = q.category + '::' + q.question.substring(0, 80);
                     if (!difficulty[questionKey]) {
                         difficulty[questionKey] = { attempts: 0, correct: 0 };
                     }
@@ -6046,7 +6047,8 @@ Your progress is saved automatically. You can close the browser and return anyti
                 const savedDifficulty = storage.getItem(STORAGE_KEYS.QUESTION_DIFFICULTY);
                 if (savedDifficulty) {
                     const difficulty = JSON.parse(savedDifficulty);
-                    const questionKey = question.question.substring(0, 50);
+                    // Use same key format as updateQuestionDifficulty
+                    const questionKey = question.category + '::' + question.question.substring(0, 80);
                     if (difficulty[questionKey] && difficulty[questionKey].attempts > 0) {
                         const successRate = (difficulty[questionKey].correct / difficulty[questionKey].attempts) * 100;
                         if (successRate < 50) return 'hard';
@@ -6214,7 +6216,7 @@ Your progress is saved automatically. You can close the browser and return anyti
             ctx.fillText('Passing (70%)', width - padding.right + 5, passingY + 5);
             
             // Plot data points and line
-            const xStep = chartWidth / (recentSessions.length - 1 || 1);
+            const xStep = recentSessions.length > 1 ? chartWidth / (recentSessions.length - 1) : 0;
             
             ctx.strokeStyle = '#d32f2f';
             ctx.fillStyle = '#d32f2f';
