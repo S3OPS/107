@@ -1080,6 +1080,67 @@
             color: #1a1a1a;
         }
 
+        /* Question Search */
+        .question-search {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #f3e5f5 0%, #fff 100%);
+            border-bottom: 2px solid #9c27b0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #9c27b0;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #7b1fa2;
+            box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.1);
+        }
+
+        .search-clear {
+            padding: 8px 16px;
+            background: #9c27b0;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .search-clear:hover {
+            background: #7b1fa2;
+            transform: scale(1.05);
+        }
+
+        .search-results-info {
+            color: #666;
+            font-size: 0.9em;
+            margin-left: 5px;
+        }
+
+        body.dark-mode .question-search {
+            background: linear-gradient(135deg, #2d1f30 0%, #2a2a2a 100%);
+        }
+
+        body.dark-mode .search-input {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            border-color: #ba68c8;
+        }
+
+        body.dark-mode .search-clear {
+            background: #ba68c8;
+        }
+
         /* Timer Warning States */
         .exam-timer.warning {
             background: rgba(255, 152, 0, 0.15);
@@ -1366,9 +1427,172 @@
                 font-size: 0.8em;
             }
         }
+
+        /* Accessibility: Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Accessibility: Enhanced Focus Indicators */
+        button:focus-visible,
+        .option:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #d32f2f;
+            outline-offset: 2px;
+        }
+
+        body.dark-mode button:focus-visible,
+        body.dark-mode .option:focus-visible,
+        body.dark-mode a:focus-visible {
+            outline-color: #ff6b6b;
+        }
+
+        /* Skip to main content link for screen readers */
+        .skip-to-main {
+            position: absolute;
+            left: -9999px;
+            z-index: 999;
+            padding: 1em;
+            background-color: #d32f2f;
+            color: white;
+            text-decoration: none;
+            border-radius: 0 0 5px 0;
+        }
+
+        .skip-to-main:focus {
+            left: 0;
+            top: 0;
+        }
+
+        /* Toast Notification System */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: white;
+            color: #333;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            max-width: 500px;
+            pointer-events: auto;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid #d32f2f;
+        }
+
+        .toast.success {
+            border-left-color: #28a745;
+        }
+
+        .toast.warning {
+            border-left-color: #ffc107;
+        }
+
+        .toast.error {
+            border-left-color: #dc3545;
+        }
+
+        .toast.info {
+            border-left-color: #2196F3;
+        }
+
+        .toast-icon {
+            font-size: 1.5em;
+            flex-shrink: 0;
+        }
+
+        .toast-message {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            flex-shrink: 0;
+        }
+
+        .toast-close:hover {
+            color: #333;
+        }
+
+        body.dark-mode .toast {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .toast-close {
+            color: #999;
+        }
+
+        body.dark-mode .toast-close:hover {
+            color: #e0e0e0;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .toast.removing {
+            animation: slideOutRight 0.3s ease;
+        }
     </style>
 </head>
 <body>
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Skip to main content for keyboard/screen reader users -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
     <!-- Settings Panel -->
     <div class="settings-panel">
         <button class="settings-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
@@ -1388,7 +1612,7 @@
         </button>
     </div>
 
-    <div class="container">
+    <div class="container" id="main-content" role="main">
         <div class="header">
             <h1>✈️ Part 107 FAA Exam Study Guide</h1>
             <p>Master Your Remote Pilot Knowledge</p>
@@ -2190,6 +2414,22 @@
             <div id="examTimer" class="exam-timer">
                 <div class="timer-label">⏱️ Exam Time Remaining:</div>
                 <div class="timer-value" id="timerDisplay">2:00:00</div>
+            </div>
+
+            <!-- Question Search -->
+            <div class="question-search">
+                <input 
+                    type="search" 
+                    class="search-input" 
+                    id="questionSearch" 
+                    placeholder="🔍 Search questions by keyword..." 
+                    aria-label="Search questions"
+                    autocomplete="off"
+                />
+                <span class="search-results-info" id="searchResultsInfo"></span>
+                <button class="search-clear" id="searchClearBtn" onclick="clearSearch()" style="display: none;" aria-label="Clear search">
+                    Clear
+                </button>
             </div>
 
             <!-- Category Filter -->
@@ -4103,6 +4343,91 @@
             STATS: 'part107_stats'
         };
 
+        // Toast Notification System
+        function showToast(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const icons = {
+                success: '✅',
+                warning: '⚠️',
+                error: '❌',
+                info: 'ℹ️'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.setAttribute('role', 'alert');
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type] || icons.info}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close" aria-label="Close notification" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            container.appendChild(toast);
+
+            // Auto-remove after duration
+            setTimeout(() => {
+                toast.classList.add('removing');
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.remove();
+                    }
+                }, 300);
+            }, duration);
+
+            return toast;
+        }
+
+        // Safe localStorage wrapper with error handling
+        const storage = {
+            getItem: function(key) {
+                try {
+                    return localStorage.getItem(key);
+                } catch (error) {
+                    console.error('Error reading from localStorage:', error);
+                    this.showStorageError('read');
+                    return null;
+                }
+            },
+            setItem: function(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                    return true;
+                } catch (error) {
+                    console.error('Error writing to localStorage:', error);
+                    if (error.name === 'QuotaExceededError') {
+                        this.showStorageError('quota');
+                    } else {
+                        this.showStorageError('write');
+                    }
+                    return false;
+                }
+            },
+            removeItem: function(key) {
+                try {
+                    localStorage.removeItem(key);
+                    return true;
+                } catch (error) {
+                    console.error('Error removing from localStorage:', error);
+                    this.showStorageError('write');
+                    return false;
+                }
+            },
+            showStorageError: function(type) {
+                let message = '';
+                if (type === 'quota') {
+                    message = '⚠️ Storage limit reached. Some progress may not be saved.';
+                } else if (type === 'write') {
+                    message = '⚠️ Unable to save progress. Check browser settings.';
+                } else {
+                    message = '⚠️ Unable to load saved data.';
+                }
+                showToast(message, 'warning');
+            }
+        };
+
         // Helper Functions
         function handleButtonKeydown(event, callback) {
             if (event.key === 'Enter' || event.key === ' ') {
@@ -4129,11 +4454,14 @@
             
             // Setup keyboard navigation
             setupKeyboardNavigation();
+            
+            // Setup search functionality
+            setupSearch();
         };
 
         // Dark Mode Functions
         function loadDarkModePreference() {
-            const darkMode = localStorage.getItem(STORAGE_KEYS.DARK_MODE);
+            const darkMode = storage.getItem(STORAGE_KEYS.DARK_MODE);
             if (darkMode === 'true') {
                 document.body.classList.add('dark-mode');
                 updateDarkModeIcon();
@@ -4143,7 +4471,7 @@
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem(STORAGE_KEYS.DARK_MODE, isDark);
+            storage.setItem(STORAGE_KEYS.DARK_MODE, isDark);
             updateDarkModeIcon();
         }
 
@@ -4189,11 +4517,11 @@ Your progress is saved automatically. You can close the browser and return anyti
                 quizMode,
                 timestamp: Date.now()
             };
-            localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progress));
+            storage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progress));
         }
 
         function loadProgress() {
-            const saved = localStorage.getItem(STORAGE_KEYS.PROGRESS);
+            const saved = storage.getItem(STORAGE_KEYS.PROGRESS);
             if (!saved) return null;
             
             try {
@@ -4201,17 +4529,18 @@ Your progress is saved automatically. You can close the browser and return anyti
                 // Don't load progress older than PROGRESS_EXPIRY_DAYS
                 const expiryMs = PROGRESS_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
                 if (Date.now() - progress.timestamp > expiryMs) {
-                    localStorage.removeItem(STORAGE_KEYS.PROGRESS);
+                    storage.removeItem(STORAGE_KEYS.PROGRESS);
                     return null;
                 }
                 return progress;
             } catch (e) {
+                console.error('Error loading progress:', e);
                 return null;
             }
         }
 
         function clearProgress() {
-            localStorage.removeItem(STORAGE_KEYS.PROGRESS);
+            storage.removeItem(STORAGE_KEYS.PROGRESS);
         }
 
         function checkSavedProgress() {
@@ -4252,11 +4581,12 @@ Your progress is saved automatically. You can close the browser and return anyti
 
         // Bookmark Functions
         function loadBookmarks() {
-            const saved = localStorage.getItem(STORAGE_KEYS.BOOKMARKS);
+            const saved = storage.getItem(STORAGE_KEYS.BOOKMARKS);
             if (saved) {
                 try {
                     bookmarkedQuestions = new Set(JSON.parse(saved));
                 } catch (e) {
+                    console.error('Error loading bookmarks:', e);
                     bookmarkedQuestions = new Set();
                 }
             }
@@ -4264,7 +4594,7 @@ Your progress is saved automatically. You can close the browser and return anyti
         }
 
         function saveBookmarks() {
-            localStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify([...bookmarkedQuestions]));
+            storage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify([...bookmarkedQuestions]));
         }
 
         function toggleBookmark() {
@@ -4297,6 +4627,87 @@ Your progress is saved automatically. You can close the browser and return anyti
                 btn.classList.remove('bookmarked');
                 btn.title = 'Bookmark this question';
             }
+        }
+
+        // Question Search Functions
+        let searchTerm = '';
+        let filteredQuestionIndices = [];
+
+        function setupSearch() {
+            const searchInput = document.getElementById('questionSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchTerm = e.target.value.trim().toLowerCase();
+                    performSearch();
+                });
+            }
+        }
+
+        function performSearch() {
+            const searchInput = document.getElementById('questionSearch');
+            const clearBtn = document.getElementById('searchClearBtn');
+            const resultsInfo = document.getElementById('searchResultsInfo');
+            
+            if (searchTerm.length === 0) {
+                // No search term - reset to show all questions
+                filteredQuestionIndices = [];
+                if (clearBtn) clearBtn.style.display = 'none';
+                if (resultsInfo) resultsInfo.textContent = '';
+                return;
+            }
+
+            // Show clear button
+            if (clearBtn) clearBtn.style.display = 'inline-block';
+
+            // Filter questions
+            filteredQuestionIndices = questions
+                .map((q, index) => {
+                    const matches = 
+                        q.question.toLowerCase().includes(searchTerm) ||
+                        q.options.some(opt => opt.toLowerCase().includes(searchTerm)) ||
+                        q.explanation.toLowerCase().includes(searchTerm) ||
+                        q.category.toLowerCase().includes(searchTerm);
+                    return matches ? index : null;
+                })
+                .filter(index => index !== null);
+
+            // Update results info
+            if (resultsInfo) {
+                const count = filteredQuestionIndices.length;
+                resultsInfo.textContent = count > 0 
+                    ? `${count} question${count !== 1 ? 's' : ''} found`
+                    : 'No questions found';
+                resultsInfo.style.color = count > 0 ? '#666' : '#f44336';
+            }
+
+            // Show toast with results
+            if (filteredQuestionIndices.length > 0) {
+                showToast(`Found ${filteredQuestionIndices.length} matching questions!`, 'success', 2000);
+            } else {
+                showToast('No questions match your search.', 'info', 2000);
+            }
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('questionSearch');
+            const clearBtn = document.getElementById('searchClearBtn');
+            const resultsInfo = document.getElementById('searchResultsInfo');
+            
+            if (searchInput) searchInput.value = '';
+            searchTerm = '';
+            filteredQuestionIndices = [];
+            
+            if (clearBtn) clearBtn.style.display = 'none';
+            if (resultsInfo) resultsInfo.textContent = '';
+            
+            showToast('Search cleared', 'info', 1500);
+        }
+
+        function getSearchFilteredQuestions() {
+            if (filteredQuestionIndices.length > 0) {
+                return filteredQuestionIndices.map(i => questions[i]);
+            }
+            return questions;
         }
 
         // Exam Timer Functions
@@ -5045,7 +5456,7 @@ Your progress is saved automatically. You can close the browser and return anyti
 
         function clearBookmarks() {
             if (confirm('Are you sure you want to clear all bookmarks?')) {
-                localStorage.removeItem('part107Bookmarks');
+                storage.removeItem('part107Bookmarks');
                 showBookmarksViewPanel();
                 updateBookmarkButton();
             }
