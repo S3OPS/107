@@ -4872,8 +4872,9 @@ Your progress is saved automatically. You can close the browser and return anyti
             const avgScore = Math.round(history.reduce((sum, s) => sum + s.score, 0) / totalSessions);
             const bestScore = Math.max(...history.map(s => s.score));
             const recentScore = history[0].score;
+            // Calculate improvement per session: (most recent - oldest) / number of sessions
             const improvementRate = history.length >= 2 ? 
-                ((recentScore - history[history.length - 1].score) / history.length).toFixed(1) : 0;
+                ((history[0].score - history[history.length - 1].score) / history.length).toFixed(1) : 0;
             
             contentDiv.innerHTML = `
                 <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -5324,9 +5325,10 @@ Your progress is saved automatically. You can close the browser and return anyti
         function smartShuffleArray(array) {
             // Get question difficulties
             const weightedQuestions = array.map((q, index) => {
-                const difficulty = getQuestionDifficulty(questions.indexOf(q));
-                const isBookmarked = bookmarkedQuestions.has(questions.indexOf(q));
-                const isIncorrect = incorrectQuestionIndices.has(index);
+                const questionIndex = questions.indexOf(q);
+                const difficulty = getQuestionDifficulty(questionIndex);
+                const isBookmarked = bookmarkedQuestions.has(questionIndex);
+                const isIncorrect = incorrectQuestionIndices.has(questionIndex);
                 
                 // Calculate priority weight (higher = more important to review)
                 let weight = 1.0;
