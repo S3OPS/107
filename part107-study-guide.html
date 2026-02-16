@@ -4389,8 +4389,7 @@
             PROGRESS: 'part107_progress',
             DARK_MODE: 'part107_dark_mode',
             BOOKMARKS: 'part107_bookmarks',
-            STATS: 'part107_stats',
-            RANDOMIZE: 'part107_randomize'
+            STATS: 'part107_stats'
         };
 
         // Toast Notification System
@@ -4723,10 +4722,14 @@ Your progress is saved automatically. You can close the browser and return anyti
                 infoEl.textContent = '';
                 showToast('📚 Showing all questions', 'info', 2000);
             } else if (reviewModeFilter === 'bookmarked') {
-                // Filter to only bookmarked questions by comparing indices in original questions array
+                // Create index map once for O(n) instead of O(n²) indexOf in loop
+                const questionToIndex = new Map();
+                questions.forEach((q, idx) => questionToIndex.set(q, idx));
+                
+                // Filter to only bookmarked questions by comparing indices
                 shuffledQuestions = originalQuestions.filter(q => {
-                    const originalIdx = questions.indexOf(q);
-                    return originalIdx !== -1 && bookmarkedQuestions.has(originalIdx);
+                    const originalIdx = questionToIndex.get(q);
+                    return originalIdx !== undefined && bookmarkedQuestions.has(originalIdx);
                 });
                 
                 if (shuffledQuestions.length === 0) {
@@ -4738,10 +4741,14 @@ Your progress is saved automatically. You can close the browser and return anyti
                     showToast(`Reviewing ${shuffledQuestions.length} bookmarked questions`, 'success', 2000);
                 }
             } else if (reviewModeFilter === 'incorrect') {
+                // Create index map once for O(n) instead of O(n²) indexOf in loop
+                const questionToIndex = new Map();
+                questions.forEach((q, idx) => questionToIndex.set(q, idx));
+                
                 // Filter to questions that were answered incorrectly (tracked by original index)
                 shuffledQuestions = originalQuestions.filter(q => {
-                    const originalIdx = questions.indexOf(q);
-                    return originalIdx !== -1 && incorrectQuestionIndices.has(originalIdx);
+                    const originalIdx = questionToIndex.get(q);
+                    return originalIdx !== undefined && incorrectQuestionIndices.has(originalIdx);
                 });
                 
                 if (shuffledQuestions.length === 0) {
