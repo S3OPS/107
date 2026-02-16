@@ -11,12 +11,17 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
 - **Beautiful, responsive design** that works on desktop and mobile devices
-- **🌙 NEW: Dark Mode** - Eye-friendly dark theme with automatic preference saving
-- **⏱️ NEW: Exam Simulator Mode** - Full 2-hour timed test mimicking real exam conditions
-- **💾 NEW: Progress Persistence** - Automatically saves your progress; pick up where you left off
-- **⌨️ NEW: Keyboard Navigation** - Use A/B/C/D keys to answer, arrow keys to navigate
-- **⭐ NEW: Bookmark Questions** - Flag questions for later review
-- **📖 NEW: Dual Study Modes** - Choose between Practice Mode or Exam Simulator
+- **🌙 Dark Mode** - Eye-friendly dark theme with automatic preference saving
+- **⏱️ Exam Simulator Mode** - Full 2-hour timed test mimicking real exam conditions
+- **💾 Progress Persistence** - Automatically saves your progress; pick up where you left off
+- **⌨️ Keyboard Navigation** - Use A/B/C/D keys to answer, arrow keys to navigate
+- **⭐ Bookmark Questions** - Flag questions for later review
+- **📖 Dual Study Modes** - Choose between Practice Mode or Exam Simulator
+- **🔍 NEW: Question Search** - Instantly search questions by keyword, topic, or category
+- **💾 NEW: Export Progress** - Download your study progress and bookmarks as JSON
+- **🎨 NEW: Toast Notifications** - Modern, non-intrusive feedback messages
+- **♿ NEW: Enhanced Accessibility** - Improved focus indicators, reduced motion support, screen reader optimizations
+- **🔒 NEW: Robust Error Handling** - Safe localStorage operations with automatic error recovery
 - **📝 Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
   - Exam format, logistics, and requirements (60 questions, 2 hours, computer-based)
   - Question distribution breakdown by topic
@@ -27,9 +32,9 @@ This study guide provides a game-formatted multiple choice question test coverin
   - Additional resources and tools
 - **Complete topic coverage** including:
   - Airspace Classification & Requirements
-  - **Sectional Chart Reading** (NEW - comprehensive VFR chart interpretation)
-  - **Chart Legends & Symbols** (NEW - airport symbols, airspace boundaries, terrain)
-  - **Chart Supplement Usage** (NEW - airport data interpretation)
+  - **Sectional Chart Reading** - comprehensive VFR chart interpretation
+  - **Chart Legends & Symbols** - airport symbols, airspace boundaries, terrain
+  - **Chart Supplement Usage** - airport data interpretation
   - Weather Theory & Meteorology
   - Regulations & Operating Requirements (including Remote ID)
   - Loading & Performance
@@ -38,8 +43,8 @@ This study guide provides a game-formatted multiple choice question test coverin
   - Radio Communication & Airport Operations
   - Aeronautical Decision Making
   - Maintenance & Preflight Procedures
-  - **Night Operations** (NEW - lighting requirements, training, visibility)
-  - **Operations Over People** (NEW - Categories 1-4, safety requirements)
+  - **Night Operations** - lighting requirements, training, visibility
+  - **Operations Over People** - Categories 1-4, safety requirements
 
 ## 🗺️ Enhanced Chart Reading Coverage
 
@@ -97,7 +102,7 @@ Each question is designed to match actual FAA exam scenarios where you must:
 
 This section is displayed on the start screen before you begin studying, so you can understand exactly what to expect on test day and how to maximize your chances of passing!
 
-## ✨ Enhanced Features (New!)
+## ✨ Enhanced Features
 
 ### 🌙 Dark Mode
 - Toggle between light and dark themes for comfortable studying day or night
@@ -136,6 +141,43 @@ This section is displayed on the start screen before you begin studying, so you 
 - Click the ⭐ star button or press **Space** key
 - Bookmarks persist between sessions
 - Bookmarked questions highlighted for easy identification
+
+### 🔍 Question Search (NEW!)
+- **Instant search** across all questions, answers, and explanations
+- Search by keyword, topic, category, or concept
+- Real-time results display showing number of matches
+- Clear button to reset search instantly
+- Works seamlessly with dark mode
+
+### 💾 Export Progress (NEW!)
+- **Download your study data** as a JSON file
+- Includes bookmarks, settings, and session data
+- Perfect for backing up your progress
+- Can be used to transfer progress between devices
+- File includes timestamp for easy organization
+
+### 🎨 Toast Notifications (NEW!)
+- **Modern notification system** replacing old alert dialogs
+- Non-intrusive slide-in messages from the top-right
+- Color-coded by type: success (green), warning (yellow), error (red), info (blue)
+- Auto-dismisses after a few seconds
+- Works beautifully in both light and dark modes
+- Dismissible with click if needed
+
+### ♿ Enhanced Accessibility (NEW!)
+- **Reduced motion support** - Respects user's system preferences for reduced motion
+- **Enhanced focus indicators** - Clear, visible outlines for keyboard navigation
+- **Skip to main content** link for screen readers
+- **Proper ARIA labels** throughout the application
+- **Error handling** with user-friendly messages
+- Semantic HTML for better screen reader compatibility
+
+### 🔒 Robust Error Handling (NEW!)
+- **Safe localStorage operations** - Graceful fallback if storage is unavailable
+- **Quota exceeded handling** - Alerts users when storage limit is reached
+- **JSON parse error recovery** - Handles corrupted data gracefully
+- **User-friendly error messages** via toast notifications
+- Console logging for debugging while maintaining user experience
 
 ### ❓ Help & Tutorial
 - Click the **?** button for comprehensive help
