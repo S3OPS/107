@@ -1705,11 +1705,11 @@
                 <div style="border-top: 1px solid #e0e0e0; padding-top: 15px;">
                     <label style="font-size: 1em; color: #666; margin-bottom: 8px; display: block;">📝 Quiz Length:</label>
                     <select id="quizLengthSelect" style="padding: 8px 15px; font-size: 1em; border-radius: 8px; border: 2px solid #d32f2f; background: white; cursor: pointer;">
-                        <option value="all">Full Quiz (127 questions)</option>
                         <option value="20">Quick Test (20 questions)</option>
                         <option value="30">Short Test (30 questions)</option>
                         <option value="45">Practice Test (45 questions)</option>
                         <option value="60">Exam Length (60 questions)</option>
+                        <option value="all" selected>Full Quiz (127 questions)</option>
                     </select>
                 </div>
             </div>
@@ -4610,6 +4610,14 @@
 
         // Sound Effects Functions
         let soundEnabled = true;
+        let audioContext = null; // Reuse audioContext for efficiency
+
+        function getAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
 
         function loadSoundPreference() {
             const sound = storage.getItem(STORAGE_KEYS.SOUND_ENABLED);
@@ -4635,45 +4643,49 @@
         function playSound(type) {
             if (!soundEnabled) return;
             
-            // Using Web Audio API to generate simple tones
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            // Different sound frequencies for different events
-            switch(type) {
-                case 'correct':
-                    oscillator.frequency.value = 800; // High tone
-                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.3);
-                    break;
-                case 'incorrect':
-                    oscillator.frequency.value = 200; // Low tone
-                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.2);
-                    break;
-                case 'streak':
-                    // Ascending tones for streak
-                    oscillator.frequency.value = 600;
-                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.15);
-                    break;
-                case 'bookmark':
-                    oscillator.frequency.value = 1000;
-                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.1);
-                    break;
+            try {
+                // Using Web Audio API to generate simple tones
+                const audioCtx = getAudioContext();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                // Different sound frequencies for different events
+                switch(type) {
+                    case 'correct':
+                        oscillator.frequency.value = 800; // High tone
+                        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                        oscillator.start(audioCtx.currentTime);
+                        oscillator.stop(audioCtx.currentTime + 0.3);
+                        break;
+                    case 'incorrect':
+                        oscillator.frequency.value = 200; // Low tone
+                        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                        oscillator.start(audioCtx.currentTime);
+                        oscillator.stop(audioCtx.currentTime + 0.2);
+                        break;
+                    case 'streak':
+                        // Ascending tones for streak
+                        oscillator.frequency.value = 600;
+                        gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                        oscillator.start(audioCtx.currentTime);
+                        oscillator.stop(audioCtx.currentTime + 0.15);
+                        break;
+                    case 'bookmark':
+                        oscillator.frequency.value = 1000;
+                        gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                        oscillator.start(audioCtx.currentTime);
+                        oscillator.stop(audioCtx.currentTime + 0.1);
+                        break;
+                }
+            } catch (error) {
+                console.error('Error playing sound:', error);
             }
         }
 
@@ -4828,7 +4840,7 @@ Your progress is saved automatically. You can close the browser and return anyti
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
-            return `${mins}m ${secs}s`;
+            return `${mins}m ${secs.toString().padStart(2, '0')}s`;
         }
 
         function saveBookmarks() {
@@ -5248,11 +5260,12 @@ Your progress is saved automatically. You can close the browser and return anyti
         // Load Question
         function loadQuestion() {
             // Record time spent on previous question (if any)
-            if (questionStartTime !== null && currentQuestionIndex > 0) {
+            if (questionStartTime !== null) {
                 const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
-                const prevQuestion = shuffledQuestions[currentQuestionIndex - 1];
+                const prevQuestion = shuffledQuestions[currentQuestionIndex];
                 const prevQuestionIndex = questions.indexOf(prevQuestion);
-                if (prevQuestionIndex !== -1) {
+                if (prevQuestionIndex !== -1 && userAnswers[currentQuestionIndex] !== undefined) {
+                    // Only record if question was answered
                     questionTimes[prevQuestionIndex] = (questionTimes[prevQuestionIndex] || 0) + timeSpent;
                 }
             }
