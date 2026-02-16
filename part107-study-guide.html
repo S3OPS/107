@@ -873,6 +873,49 @@
             color: #ff6b6b;
         }
 
+        .timer-control-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer-control-btn:hover {
+            background: #b71c1c;
+            transform: scale(1.05);
+        }
+
+        .timer-control-btn:active {
+            transform: scale(0.95);
+        }
+
+        body.dark-mode .timer-control-btn {
+            background: #ff6b6b;
+        }
+
+        body.dark-mode .timer-control-btn:hover {
+            background: #ff5757;
+        }
+
+        .exam-timer.paused {
+            opacity: 0.7;
+            border-style: dashed;
+        }
+
+        .exam-timer.paused .timer-value {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         /* Mode Selection */
         .mode-selection {
             display: flex;
@@ -1613,6 +1656,9 @@
         <button class="settings-btn" onclick="showHelp()" title="Help & Keyboard Shortcuts" aria-label="Help">
             ❓
         </button>
+        <button class="settings-btn" id="soundToggleBtn" onclick="toggleSoundEffects()" title="Toggle Sound Effects" aria-label="Toggle Sound Effects">
+            🔊
+        </button>
         <button class="settings-btn" id="exportBtn" onclick="exportProgress()" title="Export Study Progress" aria-label="Export Progress" style="display: none;">
             💾
         </button>
@@ -1652,10 +1698,20 @@
             
             <!-- Quiz Options -->
             <div style="text-align: center; margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 10px; border: 2px solid #e0e0e0;">
-                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer;">
+                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer; margin-bottom: 15px;">
                     <input type="checkbox" id="randomizeToggle" checked style="width: 20px; height: 20px; cursor: pointer;">
                     <span>🔀 Randomize question order (recommended)</span>
                 </label>
+                <div style="border-top: 1px solid #e0e0e0; padding-top: 15px;">
+                    <label style="font-size: 1em; color: #666; margin-bottom: 8px; display: block;">📝 Quiz Length:</label>
+                    <select id="quizLengthSelect" style="padding: 8px 15px; font-size: 1em; border-radius: 8px; border: 2px solid #d32f2f; background: white; cursor: pointer;">
+                        <option value="20">Quick Test (20 questions)</option>
+                        <option value="30">Short Test (30 questions)</option>
+                        <option value="45">Practice Test (45 questions)</option>
+                        <option value="60">Exam Length (60 questions)</option>
+                        <option value="all" selected>Full Quiz (127 questions)</option>
+                    </select>
+                </div>
             </div>
             
             <div class="topics-list">
@@ -2428,6 +2484,9 @@
             <div id="examTimer" class="exam-timer">
                 <div class="timer-label">⏱️ Exam Time Remaining:</div>
                 <div class="timer-value" id="timerDisplay">2:00:00</div>
+                <button id="pauseResumeBtn" class="timer-control-btn" onclick="togglePauseTimer()" title="Pause/Resume Timer">
+                    ⏸️
+                </button>
             </div>
 
             <!-- Question Search -->
@@ -2590,6 +2649,10 @@
                 <div class="breakdown-item">
                     <div class="breakdown-value" id="totalIncorrect">0</div>
                     <div class="breakdown-label">Incorrect Answers</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-value" id="avgTimePerQuestion">--</div>
+                    <div class="breakdown-label">⏱️ Avg Time/Question</div>
                 </div>
             </div>
 
@@ -4366,6 +4429,8 @@
         let reviewModeActive = false;
         let reviewModeFilter = 'all'; // 'all', 'bookmarked', 'incorrect'
         let incorrectQuestionIndices = new Set(); // Track indices of incorrectly answered questions
+        let questionStartTime = null; // Track when question was loaded
+        let questionTimes = {}; // Store time spent on each question (in seconds)
 
         // Constants
         const PROGRESS_EXPIRY_DAYS = 7;
@@ -4389,7 +4454,9 @@
             PROGRESS: 'part107_progress',
             DARK_MODE: 'part107_dark_mode',
             BOOKMARKS: 'part107_bookmarks',
-            STATS: 'part107_stats'
+            STATS: 'part107_stats',
+            SOUND_ENABLED: 'part107_sound_enabled',
+            QUESTION_TIMES: 'part107_question_times'
         };
 
         // Toast Notification System
@@ -4496,8 +4563,14 @@
             // Load dark mode preference
             loadDarkModePreference();
             
+            // Load sound effects preference
+            loadSoundPreference();
+            
             // Load bookmarks
             loadBookmarks();
+            
+            // Load question times
+            loadQuestionTimes();
             
             // Check for saved progress
             checkSavedProgress();
@@ -4535,6 +4608,87 @@
             btn.title = isDark ? 'Light Mode' : 'Dark Mode';
         }
 
+        // Sound Effects Functions
+        let soundEnabled = true;
+        let audioContext = null; // Reuse audioContext for efficiency
+
+        function getAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        function loadSoundPreference() {
+            const sound = storage.getItem(STORAGE_KEYS.SOUND_ENABLED);
+            soundEnabled = sound === null ? true : sound === 'true';
+            updateSoundIcon();
+        }
+
+        function toggleSoundEffects() {
+            soundEnabled = !soundEnabled;
+            storage.setItem(STORAGE_KEYS.SOUND_ENABLED, soundEnabled);
+            updateSoundIcon();
+            showToast(soundEnabled ? '🔊 Sound effects enabled' : '🔇 Sound effects disabled', 'info', 2000);
+        }
+
+        function updateSoundIcon() {
+            const btn = document.getElementById('soundToggleBtn');
+            if (btn) {
+                btn.textContent = soundEnabled ? '🔊' : '🔇';
+                btn.title = soundEnabled ? 'Disable Sound Effects' : 'Enable Sound Effects';
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            
+            try {
+                // Using Web Audio API to generate simple tones
+                const audioCtx = getAudioContext();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                // Different sound frequencies for different events
+                switch(type) {
+                    case 'correct':
+                        oscillator.frequency.value = 800; // High tone
+                        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                        oscillator.start(audioCtx.currentTime);
+                        oscillator.stop(audioCtx.currentTime + 0.3);
+                        break;
+                    case 'incorrect':
+                        oscillator.frequency.value = 200; // Low tone
+                        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                        oscillator.start(audioCtx.currentTime);
+                        oscillator.stop(audioCtx.currentTime + 0.2);
+                        break;
+                    case 'streak':
+                        // Ascending tones for streak
+                        oscillator.frequency.value = 600;
+                        gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                        oscillator.start(audioCtx.currentTime);
+                        oscillator.stop(audioCtx.currentTime + 0.15);
+                        break;
+                    case 'bookmark':
+                        oscillator.frequency.value = 1000;
+                        gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                        oscillator.start(audioCtx.currentTime);
+                        oscillator.stop(audioCtx.currentTime + 0.1);
+                        break;
+                }
+            } catch (error) {
+                console.error('Error playing sound:', error);
+            }
+        }
+
         // Help/Tutorial Function
         function showHelp() {
             alert(`📚 Part 107 Study Guide - Help & Keyboard Shortcuts
@@ -4548,18 +4702,24 @@ KEYBOARD SHORTCUTS:
 
 FEATURES:
 🌙 Dark Mode - Toggle with the moon/sun button
-⏱️ Exam Simulator - Practice with 2-hour timer
+⏱️ Exam Simulator - Practice with 2-hour timer (with pause/resume)
 📊 Progress Tracking - Your progress is automatically saved
 ⭐ Bookmarks - Mark questions for later review
 📈 Analytics - View performance by category
 🔥 Answer Streak - Track consecutive correct answers
 🔄 Review Mode - Filter to study only bookmarked or incorrect questions
 🔀 Question Randomization - Optional shuffling of questions
+🔊 Sound Effects - Toggle audio feedback (on by default)
 
 MODES:
 📖 Practice Mode - Study at your own pace with immediate feedback
-⏱️ Exam Mode - Timed 2-hour test simulating real exam conditions
+⏱️ Exam Mode - Timed 2-hour test simulating real exam conditions (can be paused)
 🔄 Review Mode - Focus on bookmarked or incorrectly answered questions
+
+EXAM TIMER CONTROLS:
+⏸️ Pause Button - Pause/resume the exam timer at any time
+• Timer continues running until you pause it manually
+• Use pause if you need a break during practice
 
 Your progress is saved automatically. You can close the browser and return anytime!`);
         }
@@ -4647,7 +4807,40 @@ Your progress is saved automatically. You can close the browser and return anyti
                     bookmarkedQuestions = new Set();
                 }
             }
-            return Array.from(bookmarkedQuestions);
+        }
+
+        // Question Time Tracking Functions
+        function saveQuestionTimes() {
+            try {
+                storage.setItem(STORAGE_KEYS.QUESTION_TIMES, JSON.stringify(questionTimes));
+            } catch (e) {
+                console.error('Error saving question times:', e);
+            }
+        }
+
+        function loadQuestionTimes() {
+            const saved = storage.getItem(STORAGE_KEYS.QUESTION_TIMES);
+            if (saved) {
+                try {
+                    questionTimes = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Error loading question times:', e);
+                    questionTimes = {};
+                }
+            }
+        }
+
+        function getAverageTimePerQuestion() {
+            const times = Object.values(questionTimes);
+            if (times.length === 0) return 0;
+            const sum = times.reduce((a, b) => a + b, 0);
+            return Math.round(sum / times.length);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}m ${secs.toString().padStart(2, '0')}s`;
         }
 
         function saveBookmarks() {
@@ -4667,6 +4860,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                 bookmarkedQuestions.add(questionIndex);
                 btn.classList.add('bookmarked');
                 btn.title = 'Remove bookmark';
+                playSound('bookmark'); // Play sound when bookmarking
             }
             
             saveBookmarks();
@@ -4779,10 +4973,13 @@ Your progress is saved automatically. You can close the browser and return anyti
                 // Show streak milestone notifications
                 if (currentStreak === STREAK_MILESTONE_SMALL) {
                     showToast('🔥 5 in a row! Keep it up!', 'success', 2000);
+                    playSound('streak');
                 } else if (currentStreak === STREAK_MILESTONE_MEDIUM) {
                     showToast('🔥🔥 10 streak! Excellent!', 'success', 2000);
+                    playSound('streak');
                 } else if (currentStreak === STREAK_MILESTONE_LARGE) {
                     showToast('🔥🔥🔥 20 streak! You\'re on fire!', 'success', 2000);
+                    playSound('streak');
                 }
             } else {
                 currentStreak = 0;
@@ -5017,11 +5214,25 @@ Your progress is saved automatically. You can close the browser and return anyti
                 maxStreak = 0;
                 incorrectQuestionIndices.clear(); // Clear incorrect questions from previous quiz
                 
+                // Get quiz length selection
+                const quizLengthSelect = document.getElementById('quizLengthSelect');
+                const quizLength = quizLengthSelect ? quizLengthSelect.value : 'all';
+                
                 // Randomize questions if enabled
+                let questionsToUse = questions;
                 if (getShouldRandomize()) {
-                    shuffledQuestions = shuffleArray(questions);
+                    questionsToUse = shuffleArray(questions);
                 } else {
-                    shuffledQuestions = [...questions];
+                    questionsToUse = [...questions];
+                }
+                
+                // Apply quiz length limit
+                if (quizLength !== 'all') {
+                    const numQuestions = parseInt(quizLength);
+                    shuffledQuestions = questionsToUse.slice(0, numQuestions);
+                    showToast(`📝 Starting ${numQuestions}-question quiz`, 'info', 3000);
+                } else {
+                    shuffledQuestions = questionsToUse;
                 }
                 
                 // Initialize category filter and save original questions
@@ -5048,6 +5259,20 @@ Your progress is saved automatically. You can close the browser and return anyti
 
         // Load Question
         function loadQuestion() {
+            // Record time spent on previous question (if any)
+            if (questionStartTime !== null) {
+                const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
+                const prevQuestion = shuffledQuestions[currentQuestionIndex];
+                const prevQuestionIndex = questions.indexOf(prevQuestion);
+                if (prevQuestionIndex !== -1 && userAnswers[currentQuestionIndex] !== undefined) {
+                    // Only record if question was answered
+                    questionTimes[prevQuestionIndex] = (questionTimes[prevQuestionIndex] || 0) + timeSpent;
+                }
+            }
+            
+            // Start timing for this question
+            questionStartTime = Date.now();
+            
             const question = shuffledQuestions[currentQuestionIndex];
             selectedAnswer = null;
 
@@ -5118,6 +5343,17 @@ Your progress is saved automatically. You can close the browser and return anyti
         function selectAnswer(index) {
             if (selectedAnswer !== null) return; // Already answered
 
+            // Record time spent on this question
+            if (questionStartTime !== null) {
+                const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
+                const question = shuffledQuestions[currentQuestionIndex];
+                const questionIndex = questions.indexOf(question);
+                if (questionIndex !== -1) {
+                    questionTimes[questionIndex] = (questionTimes[questionIndex] || 0) + timeSpent;
+                }
+                saveQuestionTimes();
+            }
+
             selectedAnswer = index;
             const question = shuffledQuestions[currentQuestionIndex];
             const isCorrect = index === question.correct;
@@ -5141,6 +5377,9 @@ Your progress is saved automatically. You can close the browser and return anyti
 
             // Update streak
             updateStreak(isCorrect);
+
+            // Play sound effect
+            playSound(isCorrect ? 'correct' : 'incorrect');
 
             // Update option styling and ARIA
             const options = document.querySelectorAll('.option');
@@ -5270,6 +5509,10 @@ Your progress is saved automatically. You can close the browser and return anyti
             document.getElementById('totalAnswered').textContent = totalQuestions;
             document.getElementById('totalCorrect').textContent = correctAnswers;
             document.getElementById('totalIncorrect').textContent = totalQuestions - correctAnswers;
+            
+            // Display average time per question
+            const avgTime = getAverageTimePerQuestion();
+            document.getElementById('avgTimePerQuestion').textContent = avgTime > 0 ? formatTime(avgTime) : '--';
 
             let message = '';
             if (scorePercent >= 90) {
@@ -5777,42 +6020,71 @@ Your progress is saved automatically. You can close the browser and return anyti
         // Enhanced Timer Functions
         let examTimeRemaining = 7200; // 2 hours in seconds
         let examTimerInterval = null;
+        let isTimerPaused = false;
+
+        function togglePauseTimer() {
+            const pauseBtn = document.getElementById('pauseResumeBtn');
+            const timerElement = document.getElementById('examTimer');
+            
+            if (isTimerPaused) {
+                // Resume timer
+                isTimerPaused = false;
+                pauseBtn.textContent = '⏸️';
+                pauseBtn.title = 'Pause Timer';
+                timerElement.classList.remove('paused');
+                showToast('▶️ Timer resumed', 'info', 2000);
+            } else {
+                // Pause timer
+                isTimerPaused = true;
+                pauseBtn.textContent = '▶️';
+                pauseBtn.title = 'Resume Timer';
+                timerElement.classList.add('paused');
+                showToast('⏸️ Timer paused', 'warning', 2000);
+            }
+        }
 
         function startExamTimer() {
             examTimeRemaining = 7200;
+            isTimerPaused = false;
             const timerElement = document.getElementById('examTimer');
+            const pauseBtn = document.getElementById('pauseResumeBtn');
             timerElement.classList.add('active');
-            timerElement.classList.remove('warning', 'critical');
+            timerElement.classList.remove('warning', 'critical', 'paused');
+            pauseBtn.textContent = '⏸️';
+            pauseBtn.title = 'Pause Timer';
             
             updateTimerDisplay();
             
             examTimerInterval = setInterval(() => {
-                examTimeRemaining--;
-                updateTimerDisplay();
-                
-                // Update timer state based on remaining time
-                // Remove all state classes first to avoid conflicts
-                timerElement.classList.remove('warning', 'critical');
-                
-                if (examTimeRemaining <= TIMER_CRITICAL_5MIN) {
-                    timerElement.classList.add('critical');
-                } else if (examTimeRemaining <= TIMER_WARNING_30MIN) {
-                    timerElement.classList.add('warning');
-                }
-                
-                // Show alerts at specific times
-                if (examTimeRemaining === TIMER_WARNING_30MIN) {
-                    showTimerAlert('⏰ 30 minutes remaining!');
-                } else if (examTimeRemaining === TIMER_WARNING_10MIN) {
-                    showTimerAlert('⚠️ 10 minutes remaining!');
-                } else if (examTimeRemaining === TIMER_CRITICAL_5MIN) {
-                    showTimerAlert('🚨 Only 5 minutes left!');
-                }
-                
-                if (examTimeRemaining <= 0) {
-                    stopExamTimer();
-                    alert('⏰ Time\'s up! The exam has ended.');
-                    showResults();
+                // Only decrement if not paused
+                if (!isTimerPaused) {
+                    examTimeRemaining--;
+                    updateTimerDisplay();
+                    
+                    // Update timer state based on remaining time
+                    // Remove all state classes first to avoid conflicts
+                    timerElement.classList.remove('warning', 'critical');
+                    
+                    if (examTimeRemaining <= TIMER_CRITICAL_5MIN) {
+                        timerElement.classList.add('critical');
+                    } else if (examTimeRemaining <= TIMER_WARNING_30MIN) {
+                        timerElement.classList.add('warning');
+                    }
+                    
+                    // Show alerts at specific times
+                    if (examTimeRemaining === TIMER_WARNING_30MIN) {
+                        showTimerAlert('⏰ 30 minutes remaining!');
+                    } else if (examTimeRemaining === TIMER_WARNING_10MIN) {
+                        showTimerAlert('⚠️ 10 minutes remaining!');
+                    } else if (examTimeRemaining === TIMER_CRITICAL_5MIN) {
+                        showTimerAlert('🚨 Only 5 minutes left!');
+                    }
+                    
+                    if (examTimeRemaining <= 0) {
+                        stopExamTimer();
+                        alert('⏰ Time\'s up! The exam has ended.');
+                        showResults();
+                    }
                 }
             }, 1000);
         }
