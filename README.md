@@ -13,27 +13,34 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **Beautiful, responsive design** that works on desktop and mobile devices
 - **🌙 Dark Mode** - Eye-friendly dark theme with automatic preference saving
 - **⏱️ Exam Simulator Mode** - Full 2-hour timed test mimicking real exam conditions with pause/resume
-- **⏸️ NEW: Timer Pause/Resume** - Pause and resume the exam timer at any time during practice
-- **🔊 NEW: Sound Effects** - Optional audio feedback for answers, streaks, and bookmarks (toggleable)
-- **📝 NEW: Flexible Quiz Lengths** - Choose from 20, 30, 45, 60, or all 127 questions
-- **⏱️ NEW: Time-per-Question Analytics** - Track and display average time spent on each question
+- **⏸️ Timer Pause/Resume** - Pause and resume the exam timer at any time during practice
+- **🔊 Sound Effects** - Optional audio feedback for answers, streaks, and bookmarks (toggleable)
+- **📝 Flexible Quiz Lengths** - Choose from 20, 30, 45, 60, or all 127 questions
+- **⏱️ Time-per-Question Analytics** - Track and display average time spent on each question
 - **💾 Progress Persistence** - Automatically saves your progress; pick up where you left off
 - **⌨️ Keyboard Navigation** - Use A/B/C/D keys to answer, arrow keys to navigate
+- **📱 NEW: Mobile Swipe Gestures** - Swipe left/right to navigate questions on touch devices
 - **⭐ Bookmark Questions** - Flag questions for later review
 - **📖 Dual Study Modes** - Choose between Practice Mode or Exam Simulator
 - **🔍 Question Search** - Instantly search questions by keyword, topic, or category
 - **💾 Export Progress** - Download your study progress and bookmarks as JSON
+- **🖨️ NEW: Print Summary** - Print your study results with clean, professional formatting
 - **🎨 Toast Notifications** - Modern, non-intrusive feedback messages
 - **♿ Enhanced Accessibility** - Improved focus indicators, reduced motion support, screen reader optimizations
 - **🔒 Robust Error Handling** - Safe localStorage operations with automatic error recovery
 - **🔥 Answer Streak Tracking** - Track consecutive correct answers with milestone celebrations
 - **🔄 Review Mode** - Filter to study only bookmarked or incorrectly answered questions
 - **🔀 Question Randomization Toggle** - Optional shuffling for varied practice sessions
-- **📊 NEW: Session History Tracking** - Track your performance across multiple quiz sessions (last 50)
-- **📈 NEW: Performance Trends** - Visual chart showing score progression over time
-- **⭐ NEW: Question Difficulty Indicators** - Smart badges showing Easy/Medium/Hard based on your performance
-- **💡 NEW: Personalized Study Recommendations** - AI-powered suggestions based on your weak and strong areas
-- **🎯 NEW: Smart Next Steps** - Customized guidance on what to study next based on your score
+- **🎯 NEW: Smart Shuffle Algorithm** - Spaced repetition that prioritizes difficult, bookmarked, and incorrect questions
+- **📊 Session History Tracking** - Track your performance across multiple quiz sessions (last 50)
+- **📈 Performance Trends** - Visual chart showing score progression over time
+- **📉 NEW: Interactive Chart.js Visualizations** - Modern, responsive charts with tooltips and animations
+- **⭐ Question Difficulty Indicators** - Smart badges showing Easy/Medium/Hard based on your performance
+- **💡 Personalized Study Recommendations** - AI-powered suggestions based on your weak and strong areas
+- **🎯 Smart Next Steps** - Customized guidance on what to study next based on your score
+- **📊 NEW: Performance Comparison** - Compare your score against passing standards (70%) and recommended levels (80%+)
+- **📈 NEW: Progress Summary Dashboard** - View total sessions, average score, best score, and improvement rate on start screen
+- **🎓 NEW: Enhanced Category Filtering** - Shuffle within categories with smart or random algorithms
 - **📝 Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
   - Exam format, logistics, and requirements (60 questions, 2 hours, computer-based)
   - Question distribution breakdown by topic
@@ -113,6 +120,67 @@ Each question is designed to match actual FAA exam scenarios where you must:
 - **📚 Additional Resources** - Official FAA materials, video resources, mobile apps
 
 This section is displayed on the start screen before you begin studying, so you can understand exactly what to expect on test day and how to maximize your chances of passing!
+
+## ✨ Latest Enhancements (2026 Update)
+
+### 🎯 Smart Shuffle Algorithm
+- **Spaced repetition learning** - Questions are intelligently prioritized based on:
+  - Question difficulty (Easy/Medium/Hard ratings from your performance)
+  - Bookmarked questions (flagged for review)
+  - Previously incorrect answers
+  - Weighted random sorting for balanced difficulty progression
+- **Optional toggle** on start screen to enable smart shuffle
+- Perfect for targeted practice on challenging material
+
+### 📱 Mobile Swipe Gestures
+- **Touch-friendly navigation** for tablets and phones
+- Swipe **right** to go to previous question
+- Swipe **left** to go to next question (when answer is selected)
+- Visual indicators show swipe direction during gesture
+- Smooth, responsive animations
+- Works seamlessly alongside keyboard and button controls
+
+### 🖨️ Print Study Summary
+- **Print button** on results screen for physical records
+- **Print-optimized CSS** hides buttons and navigation
+- Preserves all charts, tables, and performance data
+- Clean, professional layout suitable for study records
+- Perfect for tracking progress offline
+
+### 📊 Interactive Chart.js Visualizations
+- **Modern, responsive charts** with Chart.js library
+- **Bar chart** for category performance with:
+  - Color-coded scores (green=90%+, yellow-orange=70-89%, red=<70%)
+  - Interactive tooltips showing detailed statistics
+  - Percentage labels on each bar
+- **Donut chart** for overall score distribution
+- **Graceful fallback** to canvas-based charts if Chart.js unavailable
+- Works beautifully in both light and dark modes
+
+### 📈 Progress Summary Dashboard
+- **Start screen statistics** showing your overall progress:
+  - Total sessions completed
+  - Average score across all attempts
+  - Best score achieved
+  - Improvement rate per session
+- Color-coded metrics for quick visual feedback
+- Only appears when you have session history
+
+### 📊 Performance Comparison
+- **Benchmark your score** against exam standards
+- Shows **passing threshold** (70%) and **recommended confidence level** (80%+)
+- Calculates how far above or below passing you are
+- Integrated into personalized study recommendations
+- Helps you gauge exam readiness
+
+### 🎓 Enhanced Category Filtering
+- **Shuffle within categories** when filtering by topic
+- Choose between:
+  - Smart shuffle (prioritizes difficult questions)
+  - Random shuffle (varied practice)
+  - Sequential order (structured learning)
+- Toast notifications show question count per category
+- Maintains your shuffle preferences across filters
 
 ## ✨ Enhanced Features
 

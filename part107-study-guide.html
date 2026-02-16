@@ -6520,7 +6520,24 @@ Your progress is saved automatically. You can close the browser and return anyti
             if (category === 'all') {
                 shuffledQuestions = originalQuestions;
             } else {
-                shuffledQuestions = originalQuestions.filter(q => q.category === category);
+                const filteredQuestions = originalQuestions.filter(q => q.category === category);
+                
+                // Check if we should shuffle within category
+                const smartShuffleToggle = document.getElementById('smartShuffleToggle');
+                const randomizeToggle = document.getElementById('randomizeToggle');
+                const useSmartShuffle = smartShuffleToggle ? smartShuffleToggle.checked : false;
+                const shouldRandomize = randomizeToggle ? randomizeToggle.checked : false;
+                
+                if (useSmartShuffle) {
+                    shuffledQuestions = smartShuffleArray(filteredQuestions);
+                    showToast(`🎯 ${category}: Smart shuffle applied (${filteredQuestions.length} questions)`, 'info', 3000);
+                } else if (shouldRandomize) {
+                    shuffledQuestions = shuffleArray(filteredQuestions);
+                    showToast(`🔀 ${category}: Questions shuffled (${filteredQuestions.length} questions)`, 'info', 3000);
+                } else {
+                    shuffledQuestions = filteredQuestions;
+                    showToast(`📚 ${category}: ${filteredQuestions.length} questions`, 'info', 3000);
+                }
             }
 
             // Reset quiz state
