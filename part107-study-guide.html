@@ -1371,19 +1371,19 @@
 <body>
     <!-- Settings Panel -->
     <div class="settings-panel">
-        <button class="settings-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode" aria-label="Toggle Dark Mode" tabindex="0">
+        <button class="settings-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
             🌙
         </button>
-        <button class="settings-btn" id="bookmarksViewBtn" onclick="toggleBookmarksView()" title="View Bookmarks" aria-label="View Bookmarks" style="display: none;" tabindex="0">
+        <button class="settings-btn" id="bookmarksViewBtn" onclick="toggleBookmarksView()" title="View Bookmarks" aria-label="View Bookmarks" style="display: none;">
             ⭐
         </button>
-        <button class="settings-btn" id="reviewBtn" onclick="showReviewScreen()" title="Review Answers" aria-label="Review Answers" style="display: none;" tabindex="0">
+        <button class="settings-btn" id="reviewBtn" onclick="showReviewScreen()" title="Review Answers" aria-label="Review Answers" style="display: none;">
             📝
         </button>
-        <button class="settings-btn" id="categoryFilterBtn" onclick="toggleCategoryFilter()" title="Filter by Category" aria-label="Filter by Category" style="display: none;" tabindex="0">
+        <button class="settings-btn" id="categoryFilterBtn" onclick="toggleCategoryFilter()" title="Filter by Category" aria-label="Filter by Category" style="display: none;">
             📚
         </button>
-        <button class="settings-btn" onclick="showHelp()" title="Help & Keyboard Shortcuts" aria-label="Help" tabindex="0">
+        <button class="settings-btn" onclick="showHelp()" title="Help & Keyboard Shortcuts" aria-label="Help">
             ❓
         </button>
     </div>
@@ -4390,10 +4390,17 @@ Your progress is saved automatically. You can close the browser and return anyti
                 
                 // Randomize questions at the start of each quiz
                 shuffledQuestions = shuffleArray(questions);
+                
+                // Initialize category filter and save original questions
+                originalQuestions = [...shuffledQuestions];
+                initializeCategoryFilter();
             }
             
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('quizScreen').style.display = 'block';
+            
+            // Show review button
+            document.getElementById('reviewBtn').style.display = 'flex';
             
             // Start exam timer if in exam mode
             if (quizMode === 'exam') {
@@ -4453,7 +4460,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                     }
                 };
                 optionDiv.innerHTML = `
-                    <div class="option-letter" aria-hidden="true">${letters[index]}</div>
+                    <div class="option-letter">${letters[index]}</div>
                     <div class="option-text">${option}</div>
                 `;
                 optionsContainer.appendChild(optionDiv);
@@ -5208,20 +5215,6 @@ Your progress is saved automatically. You can close the browser and return anyti
             // Show bookmarks button
             document.getElementById('bookmarksViewBtn').style.display = 'flex';
         });
-
-        // Modified startQuiz to initialize category filter and show review button
-        const originalStartQuiz = startQuiz;
-        startQuiz = function(mode = 'practice', isResume = false) {
-            originalStartQuiz(mode, isResume);
-            
-            if (!isResume) {
-                originalQuestions = [...shuffledQuestions];
-                initializeCategoryFilter();
-            }
-            
-            // Show review button
-            document.getElementById('reviewBtn').style.display = 'flex';
-        };
     </script>
 </body>
 </html>
