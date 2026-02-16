@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Part 107 FAA Exam Study Guide</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1627,6 +1628,65 @@
         .toast.removing {
             animation: slideOutRight 0.3s ease;
         }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .settings-panel,
+            .mode-selection,
+            .quiz-options,
+            .start-screen button,
+            .btn,
+            .navigation-buttons,
+            .keyboard-hints {
+                display: none !important;
+            }
+            
+            .container {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+            
+            .results-container {
+                page-break-inside: avoid;
+            }
+            
+            .chart-container {
+                page-break-inside: avoid;
+            }
+            
+            .performance-table {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Swipe indicator for mobile */
+        .swipe-indicator {
+            position: fixed;
+            top: 50%;
+            font-size: 3em;
+            color: rgba(211, 47, 47, 0.5);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .swipe-indicator.left {
+            left: 20px;
+        }
+        
+        .swipe-indicator.right {
+            right: 20px;
+        }
+        
+        .swipe-indicator.active {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -1674,6 +1734,13 @@
             <h2>Welcome to Your Interactive Study Guide!</h2>
             <p>This comprehensive guide covers everything you need to know to pass the Part 107 FAA Remote Pilot exam. Answer multiple choice questions, get instant feedback, and track your progress.</p>
             
+            <!-- Your Progress Summary -->
+            <div id="progressSummary" style="display: none; margin: 20px 0; padding: 20px; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 10px; border: 2px solid #4CAF50;">
+                <h3 style="margin: 0 0 10px 0; color: #2E7D32;">📊 Your Progress Summary</h3>
+                <div id="progressSummaryContent" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                </div>
+            </div>
+            
             <!-- Continue Session Banner -->
             <div id="continueSession" class="continue-session">
                 <h3>📚 Continue Your Last Session</h3>
@@ -1701,6 +1768,10 @@
                 <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer; margin-bottom: 15px;">
                     <input type="checkbox" id="randomizeToggle" checked style="width: 20px; height: 20px; cursor: pointer;">
                     <span>🔀 Randomize question order (recommended)</span>
+                </label>
+                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; cursor: pointer; margin-bottom: 15px;">
+                    <input type="checkbox" id="smartShuffleToggle" style="width: 20px; height: 20px; cursor: pointer;">
+                    <span>🎯 Smart shuffle (prioritizes difficult & incorrect questions)</span>
                 </label>
                 <div style="border-top: 1px solid #e0e0e0; padding-top: 15px;">
                     <label style="font-size: 1em; color: #666; margin-bottom: 8px; display: block;">📝 Quiz Length:</label>
@@ -2688,12 +2759,17 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 30px;">
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
                 <button class="btn btn-primary" onclick="restartQuiz()">Try Again 🔄</button>
                 <button class="btn btn-secondary" onclick="showSessionHistoryChart()" style="background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);">View History 📊</button>
+                <button class="btn btn-secondary" onclick="printSummary()" style="background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">Print Summary 🖨️</button>
             </div>
         </div>
     </div>
+
+    <!-- Swipe Indicators for Mobile -->
+    <div class="swipe-indicator left" id="swipeLeft">◀</div>
+    <div class="swipe-indicator right" id="swipeRight">▶</div>
 
     <script>
         // Comprehensive Part 107 Question Bank
@@ -4776,6 +4852,52 @@ Your progress is saved automatically. You can close the browser and return anyti
                 infoText.textContent = `You answered ${answered} questions with a ${score}% score. Continue where you left off?`;
                 continueDiv.classList.add('show');
             }
+            
+            // Display overall progress summary
+            displayProgressSummary();
+        }
+
+        // Display Progress Summary on Start Screen
+        function displayProgressSummary() {
+            const history = getSessionHistory();
+            if (history.length === 0) return;
+            
+            const summaryDiv = document.getElementById('progressSummary');
+            const contentDiv = document.getElementById('progressSummaryContent');
+            
+            if (!summaryDiv || !contentDiv) return;
+            
+            // Calculate statistics
+            const totalSessions = history.length;
+            const avgScore = Math.round(history.reduce((sum, s) => sum + s.score, 0) / totalSessions);
+            const bestScore = Math.max(...history.map(s => s.score));
+            const recentScore = history[0].score;
+            // Calculate improvement per session: (most recent - oldest) / number of sessions
+            const improvementRate = history.length >= 2 ? 
+                ((history[0].score - history[history.length - 1].score) / history.length).toFixed(1) : 0;
+            
+            contentDiv.innerHTML = `
+                <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.5em; font-weight: bold; color: #4CAF50;">${totalSessions}</div>
+                    <div style="font-size: 0.9em; color: #666;">Total Sessions</div>
+                </div>
+                <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.5em; font-weight: bold; color: #2196F3;">${avgScore}%</div>
+                    <div style="font-size: 0.9em; color: #666;">Average Score</div>
+                </div>
+                <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.5em; font-weight: bold; color: #FF9800;">${bestScore}%</div>
+                    <div style="font-size: 0.9em; color: #666;">Best Score</div>
+                </div>
+                <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.5em; font-weight: bold; color: ${improvementRate > 0 ? '#4CAF50' : '#F44336'};">
+                        ${improvementRate > 0 ? '+' : ''}${improvementRate}%
+                    </div>
+                    <div style="font-size: 0.9em; color: #666;">Improvement Rate</div>
+                </div>
+            `;
+            
+            summaryDiv.style.display = 'block';
         }
 
         function continueSession() {
@@ -5198,6 +5320,41 @@ Your progress is saved automatically. You can close the browser and return anyti
             return newArray;
         }
 
+        // Spaced Repetition Smart Shuffle
+        // Prioritizes questions based on difficulty and past performance
+        function smartShuffleArray(array) {
+            // Get question difficulties
+            const weightedQuestions = array.map((q, index) => {
+                const questionIndex = questions.indexOf(q);
+                const difficulty = getQuestionDifficulty(questionIndex);
+                const isBookmarked = bookmarkedQuestions.has(questionIndex);
+                const isIncorrect = incorrectQuestionIndices.has(questionIndex);
+                
+                // Calculate priority weight (higher = more important to review)
+                let weight = 1.0;
+                
+                if (difficulty === 'Hard') weight += 2.0;
+                else if (difficulty === 'Medium') weight += 1.0;
+                
+                if (isBookmarked) weight += 1.5;
+                if (isIncorrect) weight += 2.0;
+                
+                return { question: q, weight, random: Math.random() };
+            });
+            
+            // Sort by weight first (descending), then by random
+            // This ensures harder questions appear earlier while still maintaining some randomness
+            weightedQuestions.sort((a, b) => {
+                const weightDiff = b.weight - a.weight;
+                if (Math.abs(weightDiff) > 0.5) {
+                    return weightDiff;
+                }
+                return a.random - b.random;
+            });
+            
+            return weightedQuestions.map(wq => wq.question);
+        }
+
         // Helper function to get randomization preference
         function getShouldRandomize() {
             // Default to true if toggle doesn't exist
@@ -5225,7 +5382,13 @@ Your progress is saved automatically. You can close the browser and return anyti
                 
                 // Randomize questions if enabled
                 let questionsToUse = questions;
-                if (getShouldRandomize()) {
+                const smartShuffleToggle = document.getElementById('smartShuffleToggle');
+                const useSmartShuffle = smartShuffleToggle ? smartShuffleToggle.checked : false;
+                
+                if (useSmartShuffle) {
+                    questionsToUse = smartShuffleArray(questions);
+                    showToast('🎯 Using smart shuffle - prioritizing challenging questions', 'info', 3000);
+                } else if (getShouldRandomize()) {
                     questionsToUse = shuffleArray(questions);
                 } else {
                     questionsToUse = [...questions];
@@ -5650,6 +5813,22 @@ Your progress is saved automatically. You can close the browser and return anyti
                 recommendations += '• Review official FAA study materials<br>';
                 recommendations += '• Retake the quiz in a few days';
             }
+            
+            // Add Performance Comparison
+            recommendations += '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;"><strong>📊 Performance Comparison:</strong><br>';
+            recommendations += '<div style="margin: 10px 0; padding: 10px; background: #f0f7ff; border-radius: 5px;">';
+            recommendations += `<strong>Your Score:</strong> ${scorePercent}%<br>`;
+            recommendations += `<strong>Passing Score:</strong> 70%<br>`;
+            recommendations += `<strong>Recommended Score:</strong> 80%+ for confidence<br>`;
+            if (scorePercent >= 80) {
+                recommendations += `<strong>Status:</strong> 🎯 Excellent! You're ${scorePercent - 70}% above passing threshold`;
+            } else if (scorePercent >= 70) {
+                recommendations += `<strong>Status:</strong> ✅ Passing, but ${80 - scorePercent}% away from recommended confidence level`;
+            } else {
+                recommendations += `<strong>Status:</strong> ⚠️ ${70 - scorePercent}% below passing - keep studying!`;
+            }
+            recommendations += '</div></div>';
+            
             recommendations += '</div></div>';
             
             // Add to results screen
@@ -5770,6 +5949,15 @@ Your progress is saved automatically. You can close the browser and return anyti
 
         // Initialize Performance Charts (Custom Canvas Implementation)
         function initializePerformanceCharts() {
+            // Try to use Chart.js enhanced charts first
+            if (renderEnhancedCharts()) {
+                // Successfully rendered with Chart.js
+                // Still populate the category table
+                populateCategoryTable();
+                return;
+            }
+            
+            // Fallback to canvas-based charts
             // Calculate performance by category
             const categoryStats = {};
             shuffledQuestions.forEach((q, index) => {
@@ -5917,8 +6105,21 @@ Your progress is saved automatically. You can close the browser and return anyti
                 ctx.fillStyle = '#333';
                 ctx.fillText(`Incorrect: ${incorrect} (${Math.round((incorrect/total)*100)}%)`, 45, legendY + 45);
             }
+        }
 
-            // Populate Category Performance Table
+        // Populate Category Performance Table (Extracted as separate function)
+        function populateCategoryTable() {
+            const categoryStats = {};
+            shuffledQuestions.forEach((q, index) => {
+                if (!categoryStats[q.category]) {
+                    categoryStats[q.category] = { correct: 0, total: 0 };
+                }
+                categoryStats[q.category].total++;
+                if (userAnswers[index] && userAnswers[index].isCorrect) {
+                    categoryStats[q.category].correct++;
+                }
+            });
+            
             const tableBody = document.getElementById('categoryTableBody');
             if (tableBody) {
                 tableBody.innerHTML = '';
@@ -6321,7 +6522,24 @@ Your progress is saved automatically. You can close the browser and return anyti
             if (category === 'all') {
                 shuffledQuestions = originalQuestions;
             } else {
-                shuffledQuestions = originalQuestions.filter(q => q.category === category);
+                const filteredQuestions = originalQuestions.filter(q => q.category === category);
+                
+                // Check if we should shuffle within category
+                const smartShuffleToggle = document.getElementById('smartShuffleToggle');
+                const randomizeToggle = document.getElementById('randomizeToggle');
+                const useSmartShuffle = smartShuffleToggle ? smartShuffleToggle.checked : false;
+                const shouldRandomize = randomizeToggle ? randomizeToggle.checked : false;
+                
+                if (useSmartShuffle) {
+                    shuffledQuestions = smartShuffleArray(filteredQuestions);
+                    showToast(`🎯 ${category}: Smart shuffle applied (${filteredQuestions.length} questions)`, 'info', 3000);
+                } else if (shouldRandomize) {
+                    shuffledQuestions = shuffleArray(filteredQuestions);
+                    showToast(`🔀 ${category}: Questions shuffled (${filteredQuestions.length} questions)`, 'info', 3000);
+                } else {
+                    shuffledQuestions = filteredQuestions;
+                    showToast(`📚 ${category}: ${filteredQuestions.length} questions`, 'info', 3000);
+                }
             }
 
             // Reset quiz state
@@ -6652,7 +6870,229 @@ Your progress is saved automatically. You can close the browser and return anyti
             // Show bookmarks and export buttons
             document.getElementById('bookmarksViewBtn').style.display = 'flex';
             document.getElementById('exportBtn').style.display = 'flex';
+            
+            // Initialize mobile swipe gestures
+            initializeSwipeGestures();
         });
+
+        // Print Study Summary Function
+        function printSummary() {
+            window.print();
+            showToast('📄 Opening print dialog...', 'info', 2000);
+        }
+
+        // Mobile Swipe Gesture Support
+        function initializeSwipeGestures() {
+            const quizScreen = document.getElementById('quizScreen');
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const swipeThreshold = 100; // Minimum swipe distance in pixels
+            
+            const swipeLeftIndicator = document.getElementById('swipeLeft');
+            const swipeRightIndicator = document.getElementById('swipeRight');
+            
+            quizScreen.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            quizScreen.addEventListener('touchmove', (e) => {
+                const currentX = e.changedTouches[0].screenX;
+                const diff = currentX - touchStartX;
+                
+                // Show visual feedback during swipe
+                if (Math.abs(diff) > 30) {
+                    if (diff > 0 && currentQuestionIndex > 0) {
+                        swipeRightIndicator.classList.add('active');
+                    } else if (diff < 0 && currentQuestionIndex < shuffledQuestions.length - 1) {
+                        swipeLeftIndicator.classList.add('active');
+                    }
+                }
+            }, { passive: true });
+            
+            quizScreen.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                
+                // Remove visual feedback
+                swipeLeftIndicator.classList.remove('active');
+                swipeRightIndicator.classList.remove('active');
+                
+                const swipeDistance = touchEndX - touchStartX;
+                
+                // Handle swipe gestures
+                if (Math.abs(swipeDistance) > swipeThreshold) {
+                    if (swipeDistance > 0 && currentQuestionIndex > 0) {
+                        // Swipe right - previous question
+                        previousQuestion();
+                    } else if (swipeDistance < 0 && currentQuestionIndex < shuffledQuestions.length - 1) {
+                        // Swipe left - next question
+                        if (selectedAnswer !== null) {
+                            nextQuestion();
+                        }
+                    }
+                }
+            }, { passive: true });
+        }
+
+        // Enhanced Chart Rendering with Chart.js (if available)
+        function renderEnhancedCharts() {
+            if (typeof Chart === 'undefined') {
+                // Fallback to canvas-based charts if Chart.js is not loaded
+                return false;
+            }
+            
+            try {
+                // Calculate performance by category
+                const categoryStats = {};
+                shuffledQuestions.forEach((q, index) => {
+                    if (!categoryStats[q.category]) {
+                        categoryStats[q.category] = { correct: 0, total: 0 };
+                    }
+                    categoryStats[q.category].total++;
+                    if (userAnswers[index] && userAnswers[index].isCorrect) {
+                        categoryStats[q.category].correct++;
+                    }
+                });
+
+                const categories = Object.keys(categoryStats).sort();
+                const percentages = categories.map(cat => 
+                    ((categoryStats[cat].correct / categoryStats[cat].total) * 100).toFixed(1)
+                );
+                
+                // Performance by Category Bar Chart with Chart.js
+                const perfCanvas = document.getElementById('performanceChart');
+                if (perfCanvas && perfCanvas.getContext) {
+                    // Clear any existing chart
+                    const existingChart = Chart.getChart(perfCanvas);
+                    if (existingChart) {
+                        existingChart.destroy();
+                    }
+                    
+                    const ctx = perfCanvas.getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: categories,
+                            datasets: [{
+                                label: 'Score (%)',
+                                data: percentages,
+                                backgroundColor: percentages.map(p => 
+                                    p >= 90 ? '#4CAF50' :
+                                    p >= 80 ? '#8BC34A' :
+                                    p >= 70 ? '#FFC107' :
+                                    p >= 60 ? '#FF9800' : '#F44336'
+                                ),
+                                borderColor: percentages.map(p => 
+                                    p >= 90 ? '#388E3C' :
+                                    p >= 80 ? '#689F38' :
+                                    p >= 70 ? '#FFA000' :
+                                    p >= 60 ? '#F57C00' : '#D32F2F'
+                                ),
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const cat = categories[context.dataIndex];
+                                            const stats = categoryStats[cat];
+                                            return `${stats.correct}/${stats.total} correct (${context.parsed.y}%)`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    title: {
+                                        display: true,
+                                        text: 'Score (%)'
+                                    },
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + '%';
+                                        }
+                                    },
+                                    grid: {
+                                        color: 'rgba(0, 0, 0, 0.1)'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Category'
+                                    },
+                                    ticks: {
+                                        autoSkip: false,
+                                        maxRotation: 45,
+                                        minRotation: 45
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Score Distribution Donut Chart with Chart.js
+                const scoreCanvas = document.getElementById('scoreDistributionChart');
+                if (scoreCanvas && scoreCanvas.getContext) {
+                    // Clear any existing chart
+                    const existingChart = Chart.getChart(scoreCanvas);
+                    if (existingChart) {
+                        existingChart.destroy();
+                    }
+                    
+                    const ctx = scoreCanvas.getContext('2d');
+                    const correct = correctAnswers;
+                    const incorrect = shuffledQuestions.length - correctAnswers;
+                    
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Correct', 'Incorrect'],
+                            datasets: [{
+                                data: [correct, incorrect],
+                                backgroundColor: ['#4CAF50', '#F44336'],
+                                borderColor: ['#388E3C', '#D32F2F'],
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.parsed || 0;
+                                            const total = correct + incorrect;
+                                            const percentage = ((value / total) * 100).toFixed(1);
+                                            return `${label}: ${value} (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error rendering enhanced charts:', error);
+                return false;
+            }
+        }
     </script>
 </body>
 </html>
