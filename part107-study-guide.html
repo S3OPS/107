@@ -5893,9 +5893,18 @@ Your progress is saved automatically. You can close the browser and return anyti
             const values = Object.values(categoryCount);
             const total = values.reduce((a, b) => a + b, 0);
             
-            // Calculate required height based on number of categories
-            // Chart needs space for: donut (200px) + legend (25px per category) + padding (80px)
-            const requiredHeight = Math.max(400, 200 + categories.length * 25 + 80);
+            // Chart layout constants
+            const CHART_CENTER_Y = 100;           // Donut chart position from top
+            const CHART_RADIUS = 80;              // Donut chart radius
+            const LEGEND_START_Y = 220;           // Legend start position (below chart)
+            const LEGEND_ITEM_HEIGHT = 25;        // Height per legend item
+            const BOTTOM_PADDING = 20;            // Bottom padding
+            const MIN_HEIGHT = 400;               // Minimum canvas height
+            
+            // Calculate required height: chart area + legend items + padding
+            const chartArea = LEGEND_START_Y;
+            const legendArea = categories.length * LEGEND_ITEM_HEIGHT;
+            const requiredHeight = Math.max(MIN_HEIGHT, chartArea + legendArea + BOTTOM_PADDING);
             canvas.style.minHeight = requiredHeight + 'px';
             
             const ctx = canvas.getContext('2d');
@@ -5910,8 +5919,8 @@ Your progress is saved automatically. You can close the browser and return anyti
             
             // Draw donut chart
             const centerX = width / 4;
-            const centerY = 100; // Fixed position from top
-            const radius = 80; // Fixed radius
+            const centerY = CHART_CENTER_Y;
+            const radius = CHART_RADIUS;
             const innerRadius = radius * 0.5;
             
             let currentAngle = -Math.PI / 2;
@@ -5934,10 +5943,9 @@ Your progress is saved automatically. You can close the browser and return anyti
             });
             
             // Draw legend below the chart
-            const legendStartY = 220; // Start legend below the chart
             const legendX = 20;
             categories.forEach((category, i) => {
-                const y = legendStartY + i * 25;
+                const y = LEGEND_START_Y + i * LEGEND_ITEM_HEIGHT;
                 
                 // Color box
                 ctx.fillStyle = colors[i % colors.length];
