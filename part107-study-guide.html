@@ -440,7 +440,8 @@
         }
 
         .chart-canvas {
-            max-height: 300px;
+            width: 100%;
+            display: block;
         }
 
         /* Airspace Visual Diagram */
@@ -5888,24 +5889,37 @@ Your progress is saved automatically. You can close the browser and return anyti
             const canvas = document.getElementById('categoryChart');
             if (!canvas) return;
             
+            const categories = Object.keys(categoryCount);
+            const values = Object.values(categoryCount);
+            const total = values.reduce((a, b) => a + b, 0);
+            
+            // Chart layout constants (all in logical coordinates before scaling)
+            const CHART_Y_POSITION = 100;         // Donut chart Y position from top
+            const CHART_RADIUS = 80;              // Donut chart radius
+            const LEGEND_START_Y = 220;           // Legend start position (below chart)
+            const LEGEND_ITEM_HEIGHT = 25;        // Height per legend item
+            const BOTTOM_PADDING = 20;            // Bottom padding
+            const MIN_HEIGHT = 400;               // Minimum canvas height
+            
+            // Calculate required height: chart area + legend items + padding
+            const chartArea = LEGEND_START_Y;
+            const legendArea = categories.length * LEGEND_ITEM_HEIGHT;
+            const requiredHeight = Math.max(MIN_HEIGHT, chartArea + legendArea + BOTTOM_PADDING);
+            
             const ctx = canvas.getContext('2d');
-            const width = canvas.width = canvas.offsetWidth * 2; // Retina support
-            const height = canvas.height = canvas.offsetHeight * 2;
-            ctx.scale(2, 2);
+            const width = canvas.width = canvas.offsetWidth * 2; // Retina: 2x pixel density
+            const height = canvas.height = requiredHeight * 2;   // Retina: 2x pixel density
+            ctx.scale(2, 2); // Scale context to use logical coordinates
             
             const colors = [
                 '#2196F3', '#FF9800', '#4CAF50', '#F44336', '#9C27B0',
                 '#00BCD4', '#FFC107', '#E91E63', '#795548', '#607D8B'
             ];
             
-            const categories = Object.keys(categoryCount);
-            const values = Object.values(categoryCount);
-            const total = values.reduce((a, b) => a + b, 0);
-            
             // Draw donut chart
             const centerX = width / 4;
-            const centerY = height / 4 - 40;
-            const radius = Math.min(width, height) / 6;
+            const centerY = CHART_Y_POSITION;
+            const radius = CHART_RADIUS;
             const innerRadius = radius * 0.5;
             
             let currentAngle = -Math.PI / 2;
@@ -5927,11 +5941,10 @@ Your progress is saved automatically. You can close the browser and return anyti
                 currentAngle += sliceAngle;
             });
             
-            // Draw legend
-            const legendY = height / 2 - 40;
+            // Draw legend below the chart
             const legendX = 20;
             categories.forEach((category, i) => {
-                const y = legendY + i * 25;
+                const y = LEGEND_START_Y + i * LEGEND_ITEM_HEIGHT;
                 
                 // Color box
                 ctx.fillStyle = colors[i % colors.length];
