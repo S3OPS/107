@@ -5893,7 +5893,7 @@ Your progress is saved automatically. You can close the browser and return anyti
             const values = Object.values(categoryCount);
             const total = values.reduce((a, b) => a + b, 0);
             
-            // Chart layout constants
+            // Chart layout constants (all in logical coordinates before scaling)
             const CHART_Y_POSITION = 100;         // Donut chart Y position from top
             const CHART_RADIUS = 80;              // Donut chart radius
             const LEGEND_START_Y = 220;           // Legend start position (below chart)
@@ -5907,9 +5907,9 @@ Your progress is saved automatically. You can close the browser and return anyti
             const requiredHeight = Math.max(MIN_HEIGHT, chartArea + legendArea + BOTTOM_PADDING);
             
             const ctx = canvas.getContext('2d');
-            const width = canvas.width = canvas.offsetWidth * 2; // Retina support
-            const height = canvas.height = requiredHeight * 2; // Set canvas bitmap height
-            ctx.scale(2, 2);
+            const width = canvas.width = canvas.offsetWidth * 2; // Retina: 2x pixel density
+            const height = canvas.height = requiredHeight * 2;   // Retina: 2x pixel density
+            ctx.scale(2, 2); // Scale context to use logical coordinates
             
             const colors = [
                 '#2196F3', '#FF9800', '#4CAF50', '#F44336', '#9C27B0',
