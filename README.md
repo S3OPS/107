@@ -6,7 +6,7 @@ A comprehensive, interactive HTML-based study guide to help you pass the FAA Par
 
 This study guide provides a game-formatted multiple choice question test covering all topics required for the Part 107 exam. It features:
 
-- **127 comprehensive questions** covering all exam topics
+- **138 comprehensive questions** covering all exam topics (NEW: 10+ advanced chart interpretation questions added)
 - **Interactive multiple choice format** with instant feedback
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
@@ -69,15 +69,16 @@ This study guide provides a game-formatted multiple choice question test coverin
 
 **The real FAA Part 107 exam heavily emphasizes navigational chart interpretation!** This study guide now includes:
 
-### Sectional Chart Questions (22 new questions added!)
+### Sectional Chart Questions (32+ comprehensive questions!)
 - ✈️ **Airspace Boundary Recognition** - Solid vs dashed lines, blue vs magenta coloring
 - 🎨 **Chart Symbol Interpretation** - Airport symbols, obstacle markings, terrain features
 - 📊 **Legend Reading** - Understanding all chart symbology and notations
 - 🏔️ **Terrain & Elevation** - MEF (Maximum Elevation Figures), contour lines, topography
-- 🚫 **Special Use Airspace** - MOAs, Restricted Areas (R-xxxx), Alert Areas (A-xxxx)
-- 🎯 **Airport Details** - Runway lengths, field elevations, lighting indicators
+- 🚫 **Special Use Airspace** - MOAs, Restricted Areas (R-xxxx), Alert Areas (A-xxxx), Warning Areas (W-xxxx)
+- 🎯 **Airport Details** - Runway dimensions, surface types, field elevations, lighting indicators, weight capacity
 - 📡 **Navigation Aids** - VOR symbols, waypoints, reporting points
-- ⚠️ **Obstacle Identification** - Towers, under construction (UC) notations
+- ⚠️ **Obstacle Identification** - Towers with MSL/AGL notation (e.g., "(2157) 432 AGL"), under construction (UC) markings
+- 📐 **Altitude Calculations** - NEW! MSL to AGL conversions, obstacle clearance, TPA calculations, terrain integration
 
 ### Chart Supplement Coverage
 - 📋 **Airport Data Interpretation** - Understanding A/FD format and information
@@ -88,11 +89,11 @@ This study guide provides a game-formatted multiple choice question test coverin
 
 ### Real-World Chart Skills Tested
 Each question is designed to match actual FAA exam scenarios where you must:
-- Identify airspace class by chart symbology
-- Determine if authorization is required based on chart depiction
-- Understand airport capabilities from chart and supplement data
-- Recognize hazardous areas and restrictions
-- Calculate true AGL altitudes using field elevations
+- **✈️ Identify airspace class by chart symbology** - Enhanced with visual examples of Class D/E boundaries, blue scalloped edges, and magenta line interpretations
+- **🔐 Determine if authorization is required based on chart depiction** - Now includes scenario-based questions with chart boundary markings and tick marks
+- **📊 Understand airport capabilities from chart and supplement data** - Expanded with runway notation interpretation (dimensions, surface types, weight limits) and TPA calculations
+- **⚠️ Recognize hazardous areas and restrictions** - NEW coverage of Warning Areas (W-xxxx), Restricted Areas (R-xxxx) with altitude ranges, and hazard identification
+- **📐 Calculate true AGL altitudes using field elevations** - NEW comprehensive altitude conversion problems (MSL↔AGL), obstacle height calculations, and practical scenarios combining terrain with field elevations
 
 ## 📝 Test-Specific Information & Strategies
 
@@ -441,8 +442,14 @@ This study guide has been carefully designed to ensure **complete coverage** of 
 ✅ **Chart Supplement** - NEW! Airport data, frequencies, and facility information  
 ✅ **Airspace Symbols & Legends** - NEW! Complete chart symbology and boundary recognition
 
-### Question Distribution (127 Total Questions)
-- **Airspace Classification & Chart Reading**: 30 questions (EXPANDED - now includes comprehensive sectional chart interpretation, legends, symbols, Chart Supplement usage)
+### Question Distribution (138 Total Questions)
+- **Airspace Classification & Chart Reading**: 40 questions (SIGNIFICANTLY EXPANDED - now includes:
+  - Comprehensive sectional chart interpretation with visual diagrams
+  - Chart legends and symbology with scenario-based problems
+  - Chart Supplement data interpretation (runway specs, TPA calculations, surface types)
+  - Advanced altitude calculations (MSL↔AGL conversions, obstacle clearance)
+  - Special use airspace (Restricted Areas, Warning Areas, Alert Areas, MOAs)
+  - Practical chart reading scenarios matching real FAA exam questions)
 - **Weather Theory**: 10 questions (expanded)
 - **Regulations & Operating Requirements**: 16 questions (expanded with Remote ID, renewals)
 - **Decision Making**: 7 questions
