@@ -5830,7 +5830,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                 }
                 
                 // Pause/Resume Timer (P key)
-                if (key === 'p' && currentMode === 'exam') {
+                if (key === 'p' && quizMode === 'exam') {
                     const pauseBtn = document.querySelector('.timer-control-btn');
                     if (pauseBtn && !pauseBtn.disabled) {
                         pauseBtn.click();
