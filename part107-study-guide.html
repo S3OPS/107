@@ -5006,7 +5006,9 @@
             SOUND_ENABLED: 'part107_sound_enabled',
             QUESTION_TIMES: 'part107_question_times',
             SESSION_HISTORY: 'part107_session_history',
-            QUESTION_DIFFICULTY: 'part107_question_difficulty'
+            QUESTION_DIFFICULTY: 'part107_question_difficulty',
+            MAX_STREAK: 'part107_max_streak',
+            SMART_SHUFFLE: 'part107_smart_shuffle'
         };
 
         // Toast Notification System
@@ -5108,7 +5110,7 @@
 
         // Initialize on page load
         window.onload = function() {
-            console.log(`Loaded ${questions.length} questions for Part 107 study guide`);
+            // Remove debug console.log
             
             // Load dark mode preference
             loadDarkModePreference();
@@ -5121,6 +5123,19 @@
             
             // Load question times
             loadQuestionTimes();
+            
+            // Load max streak
+            loadMaxStreak();
+            
+            // Load smart shuffle preference
+            const smartShuffleToggle = document.getElementById('smartShuffleToggle');
+            if (smartShuffleToggle) {
+                smartShuffleToggle.checked = loadSmartShufflePreference();
+                // Add event listener to save preference when changed
+                smartShuffleToggle.addEventListener('change', (e) => {
+                    saveSmartShufflePreference(e.target.checked);
+                });
+            }
             
             // Check for saved progress
             checkSavedProgress();
@@ -5241,13 +5256,14 @@
 
         // Help/Tutorial Function
         function showHelp() {
-            alert(`📚 Part 107 Study Guide - Help & Keyboard Shortcuts
+            showToast(`📚 Part 107 Study Guide - Help & Keyboard Shortcuts
 
 KEYBOARD SHORTCUTS:
 • A, B, C, D - Select answer options
 • ← / ↓ (Left/Down Arrow) - Previous question
 • → / ↑ (Right/Up Arrow) - Next question  
 • Space - Bookmark current question
+• P - Pause/Resume exam timer
 • Esc - Clear selection (if not answered)
 
 FEATURES:
@@ -5442,6 +5458,41 @@ Your progress is saved automatically. You can close the browser and return anyti
         function saveBookmarks() {
             storage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify([...bookmarkedQuestions]));
         }
+        
+        // Max Streak Functions
+        function loadMaxStreak() {
+            const saved = storage.getItem(STORAGE_KEYS.MAX_STREAK);
+            if (saved) {
+                try {
+                    maxStreak = parseInt(saved, 10) || 0;
+                } catch (e) {
+                    console.error('Error loading max streak:', e);
+                    maxStreak = 0;
+                }
+            }
+        }
+        
+        function saveMaxStreak() {
+            storage.setItem(STORAGE_KEYS.MAX_STREAK, maxStreak.toString());
+        }
+        
+        // Smart Shuffle Preference Functions
+        function loadSmartShufflePreference() {
+            const saved = storage.getItem(STORAGE_KEYS.SMART_SHUFFLE);
+            if (saved) {
+                try {
+                    return saved === 'true';
+                } catch (e) {
+                    console.error('Error loading smart shuffle preference:', e);
+                    return false;
+                }
+            }
+            return false;
+        }
+        
+        function saveSmartShufflePreference(enabled) {
+            storage.setItem(STORAGE_KEYS.SMART_SHUFFLE, enabled ? 'true' : 'false');
+        }
 
         function toggleBookmark() {
             const question = shuffledQuestions[currentQuestionIndex];
@@ -5564,6 +5615,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                 currentStreak++;
                 if (currentStreak > maxStreak) {
                     maxStreak = currentStreak;
+                    saveMaxStreak();
                 }
                 
                 // Show streak milestone notifications
@@ -5725,8 +5777,8 @@ Your progress is saved automatically. You can close the browser and return anyti
                 // Time's up
                 if (remaining === 0) {
                     clearInterval(examTimer);
-                    alert('⏰ Time\'s up! The exam has ended.');
-                    showResults();
+                    showToast('⏰ Time\'s up! The exam has ended.', 'warning', 5000);
+                    setTimeout(showResults, 1000);
                 }
             }, 1000);
         }
@@ -5775,6 +5827,15 @@ Your progress is saved automatically. You can close the browser and return anyti
                 if (key === ' ' && e.target.tagName !== 'BUTTON') {
                     toggleBookmark();
                     e.preventDefault();
+                }
+                
+                // Pause/Resume Timer (P key)
+                if (key === 'p' && currentMode === 'exam') {
+                    const pauseBtn = document.querySelector('.timer-control-btn');
+                    if (pauseBtn && !pauseBtn.disabled) {
+                        pauseBtn.click();
+                        e.preventDefault();
+                    }
                 }
             });
         }
@@ -5842,7 +5903,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                 selectedAnswer = null;
                 userAnswers = [];
                 currentStreak = 0;
-                maxStreak = 0;
+                // Don't reset maxStreak - it should persist across sessions
                 incorrectQuestionIndices.clear(); // Clear incorrect questions from previous quiz
                 
                 // Get quiz length selection
@@ -6317,7 +6378,7 @@ Your progress is saved automatically. You can close the browser and return anyti
             selectedAnswer = null;
             userAnswers = [];
             currentStreak = 0;
-            maxStreak = 0;
+            // Don't reset maxStreak - it should persist across sessions
             incorrectQuestionIndices.clear(); // Clear incorrect questions from previous quiz
             
             // Randomize questions again for the new quiz
@@ -7070,7 +7131,7 @@ Your progress is saved automatically. You can close the browser and return anyti
         function practiceBookmarked() {
             const bookmarks = loadBookmarks();
             if (bookmarks.length === 0) {
-                alert('You have no bookmarked questions to practice.');
+                showToast('You have no bookmarked questions to practice.', 'warning');
                 return;
             }
             
@@ -7103,7 +7164,7 @@ Your progress is saved automatically. You can close the browser and return anyti
             const answered = userAnswers.filter(a => a !== undefined).length;
             
             if (answered === 0) {
-                alert('Please answer some questions first before reviewing.');
+                showToast('Please answer some questions first before reviewing.', 'warning');
                 return;
             }
             
@@ -7244,7 +7305,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                     
                     if (examTimeRemaining <= 0) {
                         stopExamTimer();
-                        alert('⏰ Time\'s up! The exam has ended.');
+                        showToast('⏰ Time\'s up! The exam has ended.', 'warning', 5000);
                         showResults();
                     }
                 }
@@ -7502,7 +7563,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                                         }
                                     },
                                     grid: {
-                                        color: 'rgba(0, 0, 0, 0.1)'
+                                        color: document.body.classList.contains('dark-mode') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
                                     }
                                 },
                                 x: {
