@@ -440,7 +440,8 @@
         }
 
         .chart-canvas {
-            max-height: 300px;
+            width: 100%;
+            display: block;
         }
 
         /* Airspace Visual Diagram */
@@ -5888,9 +5889,18 @@ Your progress is saved automatically. You can close the browser and return anyti
             const canvas = document.getElementById('categoryChart');
             if (!canvas) return;
             
+            const categories = Object.keys(categoryCount);
+            const values = Object.values(categoryCount);
+            const total = values.reduce((a, b) => a + b, 0);
+            
+            // Calculate required height based on number of categories
+            // Chart needs space for: donut (200px) + legend (25px per category) + padding (80px)
+            const requiredHeight = Math.max(400, 200 + categories.length * 25 + 80);
+            canvas.style.minHeight = requiredHeight + 'px';
+            
             const ctx = canvas.getContext('2d');
             const width = canvas.width = canvas.offsetWidth * 2; // Retina support
-            const height = canvas.height = canvas.offsetHeight * 2;
+            const height = canvas.height = requiredHeight * 2; // Use calculated height
             ctx.scale(2, 2);
             
             const colors = [
@@ -5898,14 +5908,10 @@ Your progress is saved automatically. You can close the browser and return anyti
                 '#00BCD4', '#FFC107', '#E91E63', '#795548', '#607D8B'
             ];
             
-            const categories = Object.keys(categoryCount);
-            const values = Object.values(categoryCount);
-            const total = values.reduce((a, b) => a + b, 0);
-            
             // Draw donut chart
             const centerX = width / 4;
-            const centerY = height / 4 - 40;
-            const radius = Math.min(width, height) / 6;
+            const centerY = 100; // Fixed position from top
+            const radius = 80; // Fixed radius
             const innerRadius = radius * 0.5;
             
             let currentAngle = -Math.PI / 2;
@@ -5927,11 +5933,11 @@ Your progress is saved automatically. You can close the browser and return anyti
                 currentAngle += sliceAngle;
             });
             
-            // Draw legend
-            const legendY = height / 2 - 40;
+            // Draw legend below the chart
+            const legendStartY = 220; // Start legend below the chart
             const legendX = 20;
             categories.forEach((category, i) => {
-                const y = legendY + i * 25;
+                const y = legendStartY + i * 25;
                 
                 // Color box
                 ctx.fillStyle = colors[i % colors.length];
