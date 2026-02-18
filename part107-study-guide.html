@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive FAA Part 107 Remote Pilot Exam Study Guide with 138 comprehensive questions, exam simulator, and progress tracking">
+    <meta name="theme-color" content="#b71c1c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUGFydCAxMDcgU3R1ZHkgR3VpZGUiLCJzaG9ydF9uYW1lIjoiUGFydCAxMDciLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxYTFhMWEiLCJ0aGVtZV9jb2xvciI6IiNiNzFjMWMiLCJkZXNjcmlwdGlvbiI6IkZBQSBQYXJ0IDEwNyBSZW1vdGUgUGlsb3QgRXhhbSBTdHVkeSBHdWlkZSIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSXhPVElpSUdobGFXZG9kRDBpTVRreUlqNDhjbVZqZENCM2FXUjBhRDBpTVRreUlpQm9aV2xuYUhROUlqRTVNaUlnWm1sc2JEMGlJMkkyTVdNeE15SXZQanh3WVhSb0lHUTlJazB4TURZZ05EZ3NNVFkyTGpFMllURTRMakUwTERFNExqRTBMREFzTUN3d0xDMHpOaTR4TXl3eE55NHhOMkV4T0M0eE5Dd3hPQzR4TkN3d0xEQXNNQ3d6Tmk0eE15d3hOeTR4TjBnMU5DNDBORGd1TnpZc056VXVOREF5TmpVdU16Z2dNekF1TXpnc01UUXVOekFnTVRRdU56QXNOelV1TkRBZ05UUXVORFFnTVRjdU1UY2dNell1TVRNc01UZ3VNVFFnTVRndU1UUXNNVEF1TkRBZ01UQXVOREF0TXk0TkRBdE5qQXVNemdzTVRRdU56QXRNVGd1TVRRdE1UZ3VNVFF0TXk0d05TMHpOaTR4TXkweE55NHhOMEUwTnk0d01Dd3BOeTR3TUN3d0xEQXNNQ3d5TkM0d016SXNNak11T1RFeU1qUXVNRE15TERJekxqa3hNaXd3TERBc01Dd3ROUzR6TWl3eU15NHhNV0V5Tnk0eE5TdzBOeTR3Tml3d0xEQXNNQ3d4TWk0ME5DMDBPUzR3Tm1neUxqQTBZUzQxTml3dU5UWXNNQ3d3TERFc0xqSTJMQzQwTjI5c05DNHdNaXd5TGpNeGN5NHlOeTQ0TVM0NE1TNDRNUzR3TkNBdU1ESXRNREF1TkRJZ05EUXVNRElnTmpBdU16Z2dNVFF1TnpBZ01UUXVOekFnTmpBdU16Z2dOalF1TmpjZ01qTXVNVEVnTlM0ek1pQXlNeTR4TVNBMk5DNDJOeTBnTVRjdU1UY2dNell1TVRNdE1UZ3VNVFF0TVRndU1UUXRNVEF1TkRBdE1UQXVOREJySWlCbWFXeHNQU0lqWm1abUlpOCtQQzl6ZG1jKyIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
     <title>Part 107 FAA Exam Study Guide</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -1630,6 +1635,92 @@
             animation: slideOutRight 0.3s ease;
         }
 
+        /* Confirmation Dialog Styles */
+        .confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .confirm-dialog {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.3s ease;
+        }
+
+        .confirm-content {
+            text-align: center;
+        }
+
+        .confirm-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .confirm-message {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .confirm-buttons .btn {
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+        }
+
+        body.dark-mode .confirm-dialog {
+            background: #2a2a2a;
+            border: 2px solid #444;
+        }
+
+        body.dark-mode .confirm-message {
+            color: #e0e0e0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { 
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
         /* Print Styles */
         @media print {
             body {
@@ -2761,7 +2852,7 @@
             </div>
 
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
-                <button class="btn btn-primary" onclick="restartQuiz()">Try Again 🔄</button>
+                <button class="btn btn-primary" onclick="confirmRestartQuiz()">Try Again 🔄</button>
                 <button class="btn btn-secondary" onclick="showSessionHistoryChart()" style="background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);">View History 📊</button>
                 <button class="btn btn-secondary" onclick="printSummary()" style="background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">Print Summary 🖨️</button>
             </div>
@@ -4993,6 +5084,7 @@
         const TIMER_CRITICAL_5MIN = 300;  // 5 minutes
 
         // Streak milestone thresholds
+        const STREAK_MILESTONES = [3, 5, 7, 10, 15, 20, 25, 30];
         const STREAK_MILESTONE_SMALL = 5;
         const STREAK_MILESTONE_MEDIUM = 10;
         const STREAK_MILESTONE_LARGE = 20;
@@ -5052,6 +5144,65 @@
             return toast;
         }
 
+        // Confirmation Dialog System
+        function showConfirmDialog(message, onConfirm, onCancel = null) {
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'confirm-overlay';
+            overlay.setAttribute('role', 'dialog');
+            overlay.setAttribute('aria-modal', 'true');
+            overlay.setAttribute('aria-labelledby', 'confirm-message');
+            
+            const dialog = document.createElement('div');
+            dialog.className = 'confirm-dialog';
+            dialog.innerHTML = `
+                <div class="confirm-content">
+                    <div class="confirm-icon">⚠️</div>
+                    <p id="confirm-message" class="confirm-message">${message}</p>
+                    <div class="confirm-buttons">
+                        <button class="btn btn-secondary confirm-cancel" autofocus>Cancel</button>
+                        <button class="btn btn-danger confirm-ok">Confirm</button>
+                    </div>
+                </div>
+            `;
+            
+            overlay.appendChild(dialog);
+            document.body.appendChild(overlay);
+            
+            // Focus the cancel button by default (safer)
+            setTimeout(() => dialog.querySelector('.confirm-cancel').focus(), 100);
+            
+            // Handle confirm
+            dialog.querySelector('.confirm-ok').onclick = () => {
+                overlay.remove();
+                if (onConfirm) onConfirm();
+            };
+            
+            // Handle cancel
+            dialog.querySelector('.confirm-cancel').onclick = () => {
+                overlay.remove();
+                if (onCancel) onCancel();
+            };
+            
+            // Handle Escape key
+            overlay.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    overlay.remove();
+                    if (onCancel) onCancel();
+                }
+            });
+            
+            // Close on overlay click (but not dialog click)
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.remove();
+                    if (onCancel) onCancel();
+                }
+            });
+            
+            return overlay;
+        }
+
         // Safe localStorage wrapper with error handling
         const storage = {
             getItem: function(key) {
@@ -5090,13 +5241,23 @@
             showStorageError: function(type) {
                 let message = '';
                 if (type === 'quota') {
-                    message = '⚠️ Storage limit reached. Some progress may not be saved.';
+                    message = '⚠️ Storage limit reached. Consider exporting your progress or clearing old session history to free up space.';
                 } else if (type === 'write') {
-                    message = '⚠️ Unable to save progress. Check browser settings.';
+                    message = '⚠️ Unable to save progress. Check browser settings or try private browsing mode.';
                 } else {
-                    message = '⚠️ Unable to load saved data.';
+                    message = '⚠️ Unable to load saved data. Your progress will be tracked in this session only.';
                 }
-                showToast(message, 'warning');
+                showToast(message, 'warning', 6000);
+            },
+            isAvailable: function() {
+                try {
+                    const test = '__storage_test__';
+                    localStorage.setItem(test, test);
+                    localStorage.removeItem(test);
+                    return true;
+                } catch (error) {
+                    return false;
+                }
             }
         };
 
@@ -5110,8 +5271,6 @@
 
         // Initialize on page load
         window.onload = function() {
-            // Remove debug console.log
-            
             // Load dark mode preference
             loadDarkModePreference();
             
@@ -5618,15 +5777,19 @@ Your progress is saved automatically. You can close the browser and return anyti
                     saveMaxStreak();
                 }
                 
-                // Show streak milestone notifications
-                if (currentStreak === STREAK_MILESTONE_SMALL) {
-                    showToast('🔥 5 in a row! Keep it up!', 'success', 2000);
-                    playSound('streak');
-                } else if (currentStreak === STREAK_MILESTONE_MEDIUM) {
-                    showToast('🔥🔥 10 streak! Excellent!', 'success', 2000);
-                    playSound('streak');
-                } else if (currentStreak === STREAK_MILESTONE_LARGE) {
-                    showToast('🔥🔥🔥 20 streak! You\'re on fire!', 'success', 2000);
+                // Show streak milestone notifications with granular feedback
+                if (STREAK_MILESTONES.includes(currentStreak)) {
+                    const messages = {
+                        3: '🔥 3 in a row! Good start!',
+                        5: '🔥 5 correct! You\'re getting the hang of this!',
+                        7: '🔥🔥 7 streak! Nice consistency!',
+                        10: '🔥🔥 10 streak! Excellent work!',
+                        15: '🔥🔥🔥 15 streak! Outstanding!',
+                        20: '🔥🔥🔥 20 streak! You\'re on fire!',
+                        25: '🔥🔥🔥🔥 25 streak! Incredible performance!',
+                        30: '🔥🔥🔥🔥🔥 30 streak! You\'re a Part 107 master!'
+                    };
+                    showToast(messages[currentStreak] || `🔥 ${currentStreak} streak!`, 'success', 2500);
                     playSound('streak');
                 }
             } else {
@@ -6372,6 +6535,14 @@ Your progress is saved automatically. You can close the browser and return anyti
         }
 
         // Restart Quiz
+        function confirmRestartQuiz() {
+            showConfirmDialog(
+                'Are you sure you want to start a new quiz? Your current progress will be cleared.',
+                () => restartQuiz(),
+                null
+            );
+        }
+
         function restartQuiz() {
             currentQuestionIndex = 0;
             correctAnswers = 0;
