@@ -28,7 +28,7 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **🎨 Toast Notifications** - Modern, non-intrusive feedback messages
 - **♿ Enhanced Accessibility** - Improved focus indicators, reduced motion support, screen reader optimizations
 - **🔒 Robust Error Handling** - Safe localStorage operations with automatic error recovery
-- **🔥 Answer Streak Tracking** - Track consecutive correct answers with milestone celebrations
+- **🔥 Answer Streak Tracking** - Track consecutive correct answers with milestone celebrations (3, 5, 7, 10, 15, 20, 25, 30 streaks)
 - **🔄 Review Mode** - Filter to study only bookmarked or incorrectly answered questions
 - **🔀 Question Randomization Toggle** - Optional shuffling for varied practice sessions
 - **🎯 NEW: Smart Shuffle Algorithm** - Spaced repetition that prioritizes difficult, bookmarked, and incorrect questions
@@ -39,8 +39,12 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **💡 Personalized Study Recommendations** - AI-powered suggestions based on your weak and strong areas
 - **🎯 Smart Next Steps** - Customized guidance on what to study next based on your score
 - **📊 NEW: Performance Comparison** - Compare your score against passing standards (70%) and recommended levels (80%+)
-- **📈 NEW: Progress Summary Dashboard** - View total sessions, average score, best score, and improvement rate on start screen
+- **📈 NEW: Progress Summary Dashboard** - View total sessions, average score, best score, improvement rate, and total study time on start screen
+- **⏱️ NEW: Study Time Tracking** - Automatically tracks and displays cumulative study time across all sessions
 - **🎓 NEW: Enhanced Category Filtering** - Shuffle within categories with smart or random algorithms
+- **⚠️ NEW: Confirmation Dialogs** - Prevents accidental progress loss with confirmation prompts for destructive actions
+- **📱 NEW: Progressive Web App (PWA)** - Install as a standalone app on mobile devices for offline access
+- **💬 NEW: Enhanced Tooltips** - Contextual help with elegant hover tooltips throughout the interface
 - **📝 Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
   - Exam format, logistics, and requirements (60 questions, 2 hours, computer-based)
   - Question distribution breakdown by topic
@@ -123,6 +127,48 @@ Each question is designed to match actual FAA exam scenarios where you must:
 This section is displayed on the start screen before you begin studying, so you can understand exactly what to expect on test day and how to maximize your chances of passing!
 
 ## ✨ Latest Enhancements (2026 Update)
+
+### ⏱️ Study Time Tracking
+- **Automatic time tracking** - Monitors your total study time across all sessions
+- **Displayed on start screen** - See your cumulative learning investment
+- **Motivational metric** - Track dedication alongside performance
+- **Persistent storage** - Time accumulates across all study sessions
+- **Formatted display** - Shows hours and minutes (e.g., "5h 23m")
+
+### ⚠️ Confirmation Dialogs
+- **Prevents accidental data loss** - Confirms before clearing progress
+- **Beautiful modal design** - Clean, accessible dialog interface
+- **Keyboard support** - Press Escape to cancel
+- **Safe defaults** - Cancel button focused by default
+- **Dark mode compatible** - Works seamlessly in both themes
+
+### 🔥 Enhanced Streak Milestones
+- **8 achievement levels** - Celebrations at 3, 5, 7, 10, 15, 20, 25, and 30 streaks
+- **Dynamic encouragement** - Unique messages for each milestone
+- **Progressive rewards** - Escalating emoji celebrations
+- **Maintains engagement** - More frequent positive feedback
+- **Sound effects** - Optional audio celebration at milestones
+
+### 💬 Enhanced Tooltip System
+- **Contextual help** - Hover over elements for helpful information
+- **Elegant animations** - Smooth fade-in with pointer arrows
+- **Accessibility-focused** - Respects reduced motion preferences
+- **Dark mode support** - Inverted colors in dark theme
+- **Non-intrusive** - Appears only on hover/focus
+
+### 📱 Progressive Web App (PWA)
+- **Install as app** - Add to home screen on mobile devices
+- **Offline capable** - Study without internet connection
+- **Native-like experience** - Full-screen app interface
+- **Theme integration** - Proper system UI colors
+- **Automatic updates** - Always get the latest version
+
+### 🔒 Enhanced Storage Management
+- **Better error messages** - Actionable guidance when storage fails
+- **Quota management** - Helps users free up space when needed
+- **Availability checking** - Detects if localStorage is disabled
+- **Graceful degradation** - Works even with storage issues
+- **Extended toast duration** - Important storage warnings shown longer
 
 ### 🎯 Smart Shuffle Algorithm
 - **Spaced repetition learning** - Questions are intelligently prioritized based on:
