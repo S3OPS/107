@@ -1721,6 +1721,71 @@
             }
         }
 
+        /* Enhanced Tooltip System */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:hover::before,
+        [data-tooltip]:focus::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            z-index: 10002;
+            pointer-events: none;
+            opacity: 0;
+            animation: tooltipFadeIn 0.2s ease forwards;
+        }
+
+        [data-tooltip]:hover::after,
+        [data-tooltip]:focus::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-2px);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+            z-index: 10002;
+            pointer-events: none;
+            opacity: 0;
+            animation: tooltipFadeIn 0.2s ease forwards;
+        }
+
+        @keyframes tooltipFadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            [data-tooltip]:hover::before,
+            [data-tooltip]:focus::before,
+            [data-tooltip]:hover::after,
+            [data-tooltip]:focus::after {
+                animation: none;
+                opacity: 1;
+            }
+        }
+
+        body.dark-mode [data-tooltip]:hover::before,
+        body.dark-mode [data-tooltip]:focus::before {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a1a;
+        }
+
+        body.dark-mode [data-tooltip]:hover::after,
+        body.dark-mode [data-tooltip]:focus::after {
+            border-top-color: rgba(255, 255, 255, 0.95);
+        }
+
         /* Print Styles */
         @media print {
             body {
@@ -5070,6 +5135,8 @@
         let incorrectQuestionIndices = new Set(); // Track indices of incorrectly answered questions
         let questionStartTime = null; // Track when question was loaded
         let questionTimes = {}; // Store time spent on each question (in seconds)
+        let sessionStartTime = null; // Track when study session started
+        let totalActiveStudyTime = 0; // Total active study time in milliseconds
 
         // Constants
         const PROGRESS_EXPIRY_DAYS = 7;
@@ -5100,7 +5167,8 @@
             SESSION_HISTORY: 'part107_session_history',
             QUESTION_DIFFICULTY: 'part107_question_difficulty',
             MAX_STREAK: 'part107_max_streak',
-            SMART_SHUFFLE: 'part107_smart_shuffle'
+            SMART_SHUFFLE: 'part107_smart_shuffle',
+            TOTAL_STUDY_TIME: 'part107_total_study_time'
         };
 
         // Toast Notification System
@@ -5520,6 +5588,10 @@ Your progress is saved automatically. You can close the browser and return anyti
             const improvementRate = history.length >= 2 ? 
                 ((history[0].score - history[history.length - 1].score) / history.length).toFixed(1) : 0;
             
+            // Get total study time
+            const totalStudyTime = getTotalStudyTime();
+            const studyTimeFormatted = formatStudyTime(totalStudyTime);
+            
             contentDiv.innerHTML = `
                 <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <div style="font-size: 1.5em; font-weight: bold; color: #4CAF50;">${totalSessions}</div>
@@ -5539,6 +5611,12 @@ Your progress is saved automatically. You can close the browser and return anyti
                     </div>
                     <div style="font-size: 0.9em; color: #666;">Improvement Rate</div>
                 </div>
+                ${totalStudyTime > 0 ? `
+                <div style="text-align: center; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.5em; font-weight: bold; color: #9C27B0;">⏱️ ${studyTimeFormatted}</div>
+                    <div style="font-size: 0.9em; color: #666;">Total Study Time</div>
+                </div>
+                ` : ''}
             `;
             
             summaryDiv.style.display = 'block';
@@ -6059,6 +6137,11 @@ Your progress is saved automatically. You can close the browser and return anyti
         function startQuiz(mode = 'practice', isResume = false) {
             quizMode = mode;
             
+            // Start tracking session time
+            if (!isResume) {
+                sessionStartTime = Date.now();
+            }
+            
             // Clear any saved progress when starting fresh
             if (!isResume) {
                 currentQuestionIndex = 0;
@@ -6401,6 +6484,13 @@ Your progress is saved automatically. You can close the browser and return anyti
             }
 
             document.getElementById('resultsMessage').textContent = message;
+            
+            // Calculate and save total study time
+            if (sessionStartTime) {
+                const sessionDuration = Date.now() - sessionStartTime;
+                totalActiveStudyTime = sessionDuration;
+                updateTotalStudyTime(sessionDuration);
+            }
             
             // Save session to history
             saveSessionToHistory();
@@ -6923,6 +7013,37 @@ Your progress is saved automatically. You can close the browser and return anyti
                 console.error('Error loading session history:', e);
             }
             return [];
+        }
+        
+        // Study Time Tracking Functions
+        function updateTotalStudyTime(sessionDuration) {
+            try {
+                const saved = storage.getItem(STORAGE_KEYS.TOTAL_STUDY_TIME);
+                let totalTime = saved ? parseInt(saved) : 0;
+                totalTime += sessionDuration;
+                storage.setItem(STORAGE_KEYS.TOTAL_STUDY_TIME, totalTime.toString());
+            } catch (e) {
+                console.error('Error saving study time:', e);
+            }
+        }
+        
+        function getTotalStudyTime() {
+            try {
+                const saved = storage.getItem(STORAGE_KEYS.TOTAL_STUDY_TIME);
+                return saved ? parseInt(saved) : 0;
+            } catch (e) {
+                console.error('Error loading study time:', e);
+                return 0;
+            }
+        }
+        
+        function formatStudyTime(milliseconds) {
+            const hours = Math.floor(milliseconds / 3600000);
+            const minutes = Math.floor((milliseconds % 3600000) / 60000);
+            if (hours > 0) {
+                return `${hours}h ${minutes}m`;
+            }
+            return `${minutes}m`;
         }
         
         function updateQuestionDifficulty() {
