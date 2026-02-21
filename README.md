@@ -6,7 +6,7 @@ A comprehensive, interactive HTML-based study guide to help you pass the FAA Par
 
 This study guide provides a game-formatted multiple choice question test covering all topics required for the Part 107 exam. It features:
 
-- **152 comprehensive questions** covering all exam topics (NEW: 10+ advanced chart interpretation questions added)
+- **162 comprehensive questions** covering all exam topics (NEW: 10+ advanced chart interpretation questions added)
 - **Interactive multiple choice format** with instant feedback
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
@@ -15,7 +15,7 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **⏱️ Exam Simulator Mode** - Full 2-hour timed test mimicking real exam conditions with pause/resume
 - **⏸️ Timer Pause/Resume** - Pause and resume the exam timer at any time during practice
 - **🔊 Sound Effects** - Optional audio feedback for answers, streaks, and bookmarks (toggleable)
-- **📝 Flexible Quiz Lengths** - Choose from 20, 30, 45, 60, or all 127 questions
+- **📝 Flexible Quiz Lengths** - Choose from 20, 30, 45, 60, or all 162 questions
 - **⏱️ Time-per-Question Analytics** - Track and display average time spent on each question
 - **💾 Progress Persistence** - Automatically saves your progress; pick up where you left off
 - **⌨️ Keyboard Navigation** - Use A/B/C/D keys to answer, arrow keys to navigate
@@ -136,11 +136,11 @@ This section is displayed on the start screen before you begin studying, so you 
 - **Clear feedback** - Toast notification tells you exactly which categories and how many questions you'll practice
 - **No wasted time** - Skips categories you already know; focuses effort where it counts
 
-### 📚 Expanded Question Bank (138 → 152 questions)
-- **5 new Weather questions** - Wind shear hazards, temperature inversions, METAR wind reading, microbursts, and structural icing effects
-- **5 new Maintenance & Preflight questions** - LiPo battery storage, firmware updates, compass calibration, post-crash inspection, and maintenance log requirements
-- **3 new Crew Resource Management questions** - Authority gradient, fatigue effects on ADM, and visual observer responsibilities
-- **2 new Regulations questions** - Careless or reckless operations (Part 107.23) and accident reporting requirements (Part 107.9)
+### 📚 Expanded Question Bank (152 → 162 questions)
+- **3 new Decision Making questions** - Hazardous attitudes (invulnerability, macho, anti-authority), IMSAFE personal fitness checklist, and real-world go/no-go decision scenarios
+- **2 new Night Operations questions** - Anti-collision lighting requirements (3 statute mile visibility) and visual hazards during low-light operations
+- **2 new Radio & Airport Operations questions** - CTAF monitoring near uncontrolled airports and ATIS broadcast content
+- **3 new Operations Over People questions** - Moving vehicle rules across all categories, Declaration of Compliance requirements, and Category 4 airworthiness certificate mandate
 
 ### ⏱️ Study Time Tracking
 - **Automatic time tracking** - Monitors your total study time across all sessions
@@ -272,7 +272,7 @@ This section is displayed on the start screen before you begin studying, so you 
 - **Short Test** - 30 questions for focused study
 - **Practice Test** - 45 questions for intermediate practice
 - **Exam Length** - 60 questions matching actual FAA exam
-- **Full Quiz** - All 127 questions for comprehensive review
+- **Full Quiz** - All 162 questions for comprehensive review
 - Perfect for time-constrained study sessions
 
 ### 📖 Practice Mode
@@ -502,7 +502,7 @@ This study guide has been carefully designed to ensure **complete coverage** of 
 ✅ **Chart Supplement** - NEW! Airport data, frequencies, and facility information  
 ✅ **Airspace Symbols & Legends** - NEW! Complete chart symbology and boundary recognition
 
-### Question Distribution (138 Total Questions)
+### Question Distribution (162 Total Questions)
 - **Airspace Classification & Chart Reading**: 40 questions (SIGNIFICANTLY EXPANDED - now includes:
   - Comprehensive sectional chart interpretation with visual diagrams
   - Chart legends and symbology with scenario-based problems
@@ -510,17 +510,17 @@ This study guide has been carefully designed to ensure **complete coverage** of 
   - Advanced altitude calculations (MSL↔AGL conversions, obstacle clearance)
   - Special use airspace (Restricted Areas, Warning Areas, Alert Areas, MOAs)
   - Practical chart reading scenarios matching real FAA exam questions)
-- **Weather Theory**: 10 questions (expanded)
-- **Regulations & Operating Requirements**: 16 questions (expanded with Remote ID, renewals)
-- **Decision Making**: 7 questions
+- **Weather Theory**: 15 questions (expanded)
+- **Regulations & Operating Requirements**: 18 questions (expanded with Remote ID, renewals)
+- **Decision Making**: 10 questions (expanded with hazardous attitudes, IMSAFE checklist)
 - **Operations**: 10 questions (expanded with VLOS, distance requirements)
 - **Loading & Performance**: 11 questions (expanded with stall speed, weight effects)
 - **Emergency Procedures**: 11 questions (comprehensive scenarios)
-- **Crew Resource Management**: 5 questions
-- **Radio & Airport Operations**: 8 questions (traffic patterns, communications)
-- **Maintenance & Preflight**: 5 questions
-- **Night Operations**: 7 questions (NEW - complete lighting and visibility coverage)
-- **Operations Over People**: 7 questions (NEW - all categories and requirements)
+- **Crew Resource Management**: 8 questions (expanded with authority gradient, fatigue, VO roles)
+- **Radio & Airport Operations**: 10 questions (expanded with CTAF monitoring, ATIS)
+- **Maintenance & Preflight**: 10 questions (expanded with LiPo storage, firmware, compass cal)
+- **Night Operations**: 9 questions (complete lighting, visibility, and visual hazard coverage)
+- **Operations Over People**: 10 questions (all categories, moving vehicle rules, DoC requirements)
 
 All questions include detailed explanations based on current FAA regulations and best practices.
 
