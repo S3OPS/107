@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive FAA Part 107 Remote Pilot Exam Study Guide with 138 comprehensive questions, exam simulator, and progress tracking">
+    <meta name="description" content="Interactive FAA Part 107 Remote Pilot Exam Study Guide with 152 comprehensive questions, exam simulator, and progress tracking">
     <meta name="theme-color" content="#b71c1c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2918,6 +2918,7 @@
 
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
                 <button class="btn btn-primary" onclick="confirmRestartQuiz()">Try Again 🔄</button>
+                <button class="btn btn-secondary" id="practiceWeakAreasBtn" onclick="practiceWeakAreas()" style="display: none; background: linear-gradient(135deg, #FF5722 0%, #E64A19 100%);">Practice Weak Areas 🎯</button>
                 <button class="btn btn-secondary" onclick="showSessionHistoryChart()" style="background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);">View History 📊</button>
                 <button class="btn btn-secondary" onclick="printSummary()" style="background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">Print Summary 🖨️</button>
             </div>
@@ -5115,6 +5116,190 @@
                 ],
                 correct: 1,
                 explanation: "Part 107.29 requires anti-collision lighting to be visible for at least 3 statute miles and have a flash rate sufficient to avoid a collision. This ensures other aircraft and people can see your drone during night operations."
+            },
+            // Additional Weather Questions
+            {
+                category: "Weather",
+                question: "How does a temperature inversion affect low-altitude drone operations?",
+                options: [
+                    "It creates turbulence at low altitudes that can destabilize small UAS",
+                    "It traps smoke, haze, and pollutants near the surface, reducing visibility",
+                    "It increases headwinds, reducing battery life",
+                    "It has no effect on Part 107 operations"
+                ],
+                correct: 1,
+                explanation: "A temperature inversion occurs when warm air sits above cooler air, trapping pollutants, smoke, and haze at lower altitudes. This can significantly reduce visibility for drone pilots operating near the surface. Visibility is a critical Part 107 safety factor requiring 3 statute miles minimum."
+            },
+            {
+                category: "Weather",
+                question: "What is wind shear and why is it hazardous for drone operations?",
+                options: [
+                    "A steady, predictable wind that aids navigation",
+                    "A sudden change in wind speed and/or direction over a short distance that can cause loss of control",
+                    "A type of turbulence only found above 10,000 feet MSL",
+                    "Wind that only affects fixed-wing aircraft"
+                ],
+                correct: 1,
+                explanation: "Wind shear is a rapid change in wind speed or direction over a short distance. For small UAS, a sudden unexpected wind shear can cause a rapid altitude loss, uncontrolled drift, or complete loss of control. Wind shear is particularly hazardous at low altitudes where recovery is impossible."
+            },
+            {
+                category: "Weather",
+                question: "What does a METAR wind entry of '27015KT' mean?",
+                options: [
+                    "Wind from 270° (west) at 15 knots",
+                    "Wind from 270° (west) at 15 mph",
+                    "Wind from the west gusting to 270 knots",
+                    "Wind variable at 15 knots from the northwest"
+                ],
+                correct: 0,
+                explanation: "In a METAR, wind is reported as three-digit direction (true north), speed in knots, and units. '27015KT' means wind from 270 degrees (true west) at 15 knots. Wind direction is always given in degrees true and always indicates where the wind is coming FROM."
+            },
+            {
+                category: "Weather",
+                question: "Which condition is most likely to produce a microburst that endangers drone operations?",
+                options: [
+                    "Steady rain over flat terrain",
+                    "Mature thunderstorm with heavy precipitation and a strong downdraft",
+                    "Overcast skies with light winds",
+                    "Morning fog that has not yet burned off"
+                ],
+                correct: 1,
+                explanation: "A microburst is a concentrated downdraft produced by a mature or dissipating thunderstorm. It can produce sudden, powerful downdrafts exceeding 6,000 feet per minute and outflow winds that rapidly change direction. A microburst can overwhelm a small UAS's lift capability, making avoidance essential."
+            },
+            {
+                category: "Weather",
+                question: "How does structural icing affect an unmanned aircraft?",
+                options: [
+                    "Icing only affects piston engines and has no effect on electric drones",
+                    "Ice accumulation increases weight, disrupts aerodynamics, and can jam control surfaces or propellers",
+                    "Ice actually improves propeller efficiency in cold conditions",
+                    "Icing affects only the battery performance with no impact on lift"
+                ],
+                correct: 1,
+                explanation: "Ice accumulation on a UAS increases total weight, disrupts airfoil and propeller blade aerodynamics, reduces lift, increases drag, and can jam propellers or moving parts. Even small amounts of ice can render a drone unflyable. Part 107 operators must avoid icing conditions."
+            },
+            // Additional Maintenance & Preflight Questions
+            {
+                category: "Maintenance & Preflight",
+                question: "How should LiPo (lithium polymer) batteries be stored long-term to maximize lifespan?",
+                options: [
+                    "Fully charged at 100% in a warm location",
+                    "Completely discharged to 0% in a sealed bag",
+                    "At approximately 50–60% charge in a cool, dry location",
+                    "Charge level does not matter for long-term storage"
+                ],
+                correct: 2,
+                explanation: "LiPo batteries should be stored at approximately 50–60% charge (storage voltage ~3.8V per cell) in a cool, dry location. Storing fully charged for extended periods degrades cell chemistry and reduces capacity. Storing fully discharged risks irreversible damage. Most modern drones have an automatic storage discharge feature."
+            },
+            {
+                category: "Maintenance & Preflight",
+                question: "Why should a drone's firmware be updated before conducting commercial operations?",
+                options: [
+                    "Firmware updates are optional and only change the interface colors",
+                    "Updates can patch safety-critical bugs, improve flight controller performance, and add geofence updates",
+                    "Firmware updates are only required for exam simulator mode",
+                    "Firmware only affects the companion app, not flight safety"
+                ],
+                correct: 1,
+                explanation: "Firmware updates often contain critical safety fixes for flight controllers, ESCs, and geofencing databases. Outdated firmware may contain bugs that affect stability, obstacle avoidance, or failsafe behavior. Always review release notes and update firmware before commercial flights."
+            },
+            {
+                category: "Maintenance & Preflight",
+                question: "When should compass calibration be performed on a multi-rotor drone?",
+                options: [
+                    "Only once when the drone is first purchased",
+                    "When flying in a new geographic area, after firmware updates, or when the flight controller prompts you",
+                    "Compass calibration is not necessary for GPS-equipped drones",
+                    "Only after a crash or hard landing"
+                ],
+                correct: 1,
+                explanation: "Compass calibration should be performed when operating in a new geographic area (where magnetic declination differs), after firmware updates that reset calibration, when the manufacturer's app recommends it, or after flying near strong magnetic fields or metal structures. Uncalibrated compass data causes GPS-dependent flight modes to fail."
+            },
+            {
+                category: "Maintenance & Preflight",
+                question: "After a hard landing or crash, which preflight check is most critical before the next flight?",
+                options: [
+                    "Verify the battery indicator light is green",
+                    "Inspect propellers for cracks, chips, or delamination and check motor mounts for looseness",
+                    "Confirm the GPS lock shows more than 3 satellites",
+                    "Check that the controller sticks return to center"
+                ],
+                correct: 1,
+                explanation: "After any impact, propeller integrity and motor mount security are the most critical checks. Cracked or chipped propellers can fail under load causing catastrophic loss of control. Loose motor mounts change vibration patterns and can cause motor failure in flight. Always perform a thorough post-incident inspection before flying again."
+            },
+            {
+                category: "Maintenance & Preflight",
+                question: "What is the purpose of keeping a maintenance log for your UAS?",
+                options: [
+                    "It is only required for aircraft over 55 pounds",
+                    "It documents repairs, modifications, and inspections to support airworthiness and provide accountability",
+                    "Maintenance logs are only required for commercial UAS over $10,000 in value",
+                    "Logs are optional and serve no regulatory or safety function"
+                ],
+                correct: 1,
+                explanation: "Maintenance logs document all repairs, modifications, component replacements, and inspection results. They help identify recurring issues, verify parts history, demonstrate airworthiness to clients and insurers, and provide accountability if an incident occurs. While Part 107 doesn't mandate a specific log format, good record-keeping is a professional standard and supports safe operations."
+            },
+            // Additional Crew Resource Management Questions
+            {
+                category: "Crew Resource Management",
+                question: "What is an 'authority gradient' in a multi-crew UAS operation?",
+                options: [
+                    "A software setting that limits how much authority the autopilot has",
+                    "The perceived difference in authority between the remote pilot in command and visual observers, which can suppress important safety communications",
+                    "The altitude limit programmed into the drone's geofence",
+                    "A regulation requiring all crew members to have equal authority"
+                ],
+                correct: 1,
+                explanation: "An authority gradient describes the difference in perceived authority or experience level between crew members. A steep gradient (e.g., an intimidating RPIC and a reluctant VO) can prevent visual observers from voicing safety concerns. CRM training encourages flat authority gradients and open communication so that any crew member can call out a hazard."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "How does fatigue affect aeronautical decision-making for a remote pilot?",
+                options: [
+                    "Fatigue only affects physical reaction time, not cognitive judgment",
+                    "Fatigue degrades judgment, increases error rates, slows reaction time, and reduces situational awareness",
+                    "Moderate fatigue actually sharpens focus in complex situations",
+                    "Fatigue has no documented effect on drone pilots since they are not physically controlling the aircraft"
+                ],
+                correct: 1,
+                explanation: "Fatigue is a significant human factor that degrades all aspects of pilot performance: judgment, attention, memory, and reaction time. Even mild fatigue increases error rates and reduces the ability to detect and correct mistakes. Part 107 pilots must self-assess fitness before each flight and postpone operations if fatigued."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "What is the primary role of a visual observer (VO) during a Part 107 operation?",
+                options: [
+                    "To operate the camera or payload while the RPIC handles navigation",
+                    "To assist the RPIC in seeing and avoiding other aircraft, people, and hazards while maintaining situational awareness of the UAS",
+                    "To act as a backup RPIC who can take control at any time",
+                    "To handle communications with ATC so the RPIC can focus on flying"
+                ],
+                correct: 1,
+                explanation: "A visual observer (VO) assists the remote pilot in command by maintaining unaided visual contact with the UAS and the surrounding airspace. The VO watches for traffic, obstacles, and hazards, communicating this information to the RPIC. The VO does not control the aircraft — control authority remains with the RPIC. Effective VO–RPIC communication is a key CRM element."
+            },
+            // Additional Regulations Questions
+            {
+                category: "Regulations",
+                question: "Under Part 107, what constitutes 'careless or reckless' operation?",
+                options: [
+                    "Any flight in Class G airspace without a waiver",
+                    "Operating a small UAS in a manner that endangers the life or property of another person",
+                    "Flying at maximum altitude without notifying a FSDO",
+                    "Using an FPV system without a visual observer"
+                ],
+                correct: 1,
+                explanation: "Part 107.23 prohibits careless or reckless operations — specifically, operating a small unmanned aircraft in a manner that endangers the life or property of another. This includes flying over crowds, flying while impaired, flying in poor visibility, or any operation that a reasonable pilot would recognize as creating an unreasonable risk of harm."
+            },
+            {
+                category: "Regulations",
+                question: "When must a remote pilot in command report an accident to the FAA?",
+                options: [
+                    "Only when property damage exceeds $50,000",
+                    "Within 10 days if the accident results in serious injury, loss of consciousness, or property damage (other than the UAS) exceeding $500",
+                    "Within 24 hours for any accident regardless of severity",
+                    "Only when the accident involves a manned aircraft"
+                ],
+                correct: 1,
+                explanation: "Under Part 107.9, a remote pilot must report an accident to the FAA within 10 calendar days if it results in: (1) serious injury to any person or any loss of consciousness, or (2) damage to any property (other than the small unmanned aircraft) totaling more than $500 for repair or fair market value replacement. Reports are made to the FAA within 10 days."
             }
         ];
 
@@ -5137,6 +5322,7 @@
         let questionTimes = {}; // Store time spent on each question (in seconds)
         let sessionStartTime = null; // Track when study session started
         let totalActiveStudyTime = 0; // Total active study time in milliseconds
+        let weakCategoriesFromLastQuiz = []; // Categories where user scored below 70% in last quiz
 
         // Constants
         const PROGRESS_EXPIRY_DAYS = 7;
@@ -6538,6 +6724,13 @@ Your progress is saved automatically. You can close the browser and return anyti
                 }
             });
             
+            // Save weak categories for "Practice Weak Areas" button
+            weakCategoriesFromLastQuiz = weakCategories.map(c => c.category);
+            const weakBtn = document.getElementById('practiceWeakAreasBtn');
+            if (weakBtn) {
+                weakBtn.style.display = weakCategoriesFromLastQuiz.length > 0 ? 'inline-block' : 'none';
+            }
+            
             // Get session history to check for improvement
             const history = getSessionHistory();
             let improvementTrend = 'neutral';
@@ -7448,6 +7641,44 @@ Your progress is saved automatically. You can close the browser and return anyti
             hideBookmarksView();
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('quizScreen').style.display = 'block';
+            
+            loadQuestion();
+        }
+
+        function practiceWeakAreas() {
+            if (weakCategoriesFromLastQuiz.length === 0) {
+                showToast('No weak areas to practice — great job!', 'success');
+                return;
+            }
+            
+            // Filter all questions to only those in weak categories
+            const weakQuestions = shuffleArray(questions.filter(q => weakCategoriesFromLastQuiz.includes(q.category)));
+            
+            if (weakQuestions.length === 0) {
+                showToast('No questions found for your weak categories.', 'warning');
+                return;
+            }
+            
+            // Set up a new practice quiz focused on weak areas
+            shuffledQuestions = weakQuestions;
+            originalQuestions = [...shuffledQuestions];
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            userAnswers = [];
+            selectedAnswer = null;
+            currentStreak = 0;
+            incorrectQuestionIndices.clear();
+            sessionStartTime = Date.now();
+            quizMode = 'practice';
+            
+            document.getElementById('resultsScreen').classList.remove('show');
+            document.getElementById('quizScreen').style.display = 'block';
+            document.getElementById('reviewBtn').style.display = 'flex';
+            document.getElementById('reviewModeBtn').style.display = 'flex';
+            stopExamTimer();
+            
+            const categoryList = weakCategoriesFromLastQuiz.join(', ');
+            showToast(`🎯 Practicing ${weakQuestions.length} questions from weak areas: ${categoryList}`, 'info', 5000);
             
             loadQuestion();
         }
