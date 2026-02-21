@@ -2898,22 +2898,8 @@
                     </div>
                 </div>
                 
-                <!-- Category Performance Table -->
-                <div class="chart-container" style="margin-top: 20px;">
-                    <div class="chart-title">Detailed Category Breakdown</div>
-                    <table class="performance-table" id="categoryPerformanceTable">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Correct</th>
-                                <th>Total</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody id="categoryTableBody">
-                        </tbody>
-                    </table>
-                </div>
+                <!-- Compact Category Score Badges -->
+                <div id="categoryScoreBadges" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;"></div>
             </div>
 
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
@@ -6821,7 +6807,7 @@ Your progress is saved automatically. You can close the browser and return anyti
             initializePerformanceCharts();
         }
         
-        // Display Study Recommendations
+        // Display Study Recommendations (compact summary card)
         function displayStudyRecommendations() {
             // Calculate category performance
             const categoryStats = {};
@@ -6837,14 +6823,11 @@ Your progress is saved automatically. You can close the browser and return anyti
             
             // Find weak categories (< 70%)
             const weakCategories = [];
-            const strongCategories = [];
             Object.keys(categoryStats).forEach(category => {
                 const stats = categoryStats[category];
                 const percentage = (stats.correct / stats.total) * 100;
                 if (percentage < 70) {
                     weakCategories.push({ category, percentage: percentage.toFixed(1) });
-                } else if (percentage >= 90) {
-                    strongCategories.push({ category, percentage: percentage.toFixed(1) });
                 }
             });
             
@@ -6857,95 +6840,47 @@ Your progress is saved automatically. You can close the browser and return anyti
             
             // Get session history to check for improvement
             const history = getSessionHistory();
-            let improvementTrend = 'neutral';
+            let trendIcon = '';
             if (history.length >= 2) {
-                const recent = history[0].score;
-                const previous = history[1].score;
-                if (recent > previous + 5) improvementTrend = 'improving';
-                else if (recent < previous - 5) improvementTrend = 'declining';
+                const diff = history[0].score - history[1].score;
+                if (diff > 5) trendIcon = ' 📈';
+                else if (diff < -5) trendIcon = ' 📉';
             }
             
-            // Build recommendations
-            let recommendations = '<div style="background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%); padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #2196F3;">';
-            recommendations += '<h3 style="margin: 0 0 15px 0; color: #2196F3;">💡 Personalized Study Recommendations</h3>';
-            
-            if (weakCategories.length > 0) {
-                recommendations += '<div style="margin-bottom: 15px;"><strong>📚 Focus Areas:</strong><br>';
-                recommendations += '<ul style="margin: 5px 0; padding-left: 20px;">';
-                weakCategories.forEach(cat => {
-                    recommendations += `<li><strong>${cat.category}</strong> (${cat.percentage}%) - Review FAA materials and retake questions in this category</li>`;
-                });
-                recommendations += '</ul></div>';
-            }
-            
-            if (strongCategories.length > 0) {
-                recommendations += '<div style="margin-bottom: 15px;"><strong>🌟 Strong Areas:</strong><br>';
-                recommendations += '<ul style="margin: 5px 0; padding-left: 20px;">';
-                strongCategories.slice(0, 3).forEach(cat => {
-                    recommendations += `<li><strong>${cat.category}</strong> (${cat.percentage}%) - Great job!</li>`;
-                });
-                recommendations += '</ul></div>';
-            }
-            
-            // Improvement trend
-            if (improvementTrend === 'improving') {
-                recommendations += '<div style="background: #e8f5e9; padding: 10px; border-radius: 5px; margin-bottom: 10px;">📈 <strong>Great progress!</strong> Your scores are improving. Keep up the consistent study routine!</div>';
-            } else if (improvementTrend === 'declining') {
-                recommendations += '<div style="background: #fff3e0; padding: 10px; border-radius: 5px; margin-bottom: 10px;">⚠️ Consider taking a break and reviewing fundamentals. Everyone has off days!</div>';
-            }
-            
-            // Time-based recommendations
-            const avgTime = getAverageTimePerQuestion();
-            if (avgTime > 0) {
-                if (avgTime < 30) {
-                    recommendations += '<div style="margin-bottom: 10px;">⏱️ You\'re answering quickly (avg ' + formatTime(avgTime) + '/question). Make sure you\'re reading questions carefully!</div>';
-                } else if (avgTime > 120) {
-                    recommendations += '<div style="margin-bottom: 10px;">⏱️ Take your time learning (avg ' + formatTime(avgTime) + '/question), but try to build confidence for faster decision-making on exam day.</div>';
-                }
-            }
-            
-            // Next steps
             const totalQuestions = shuffledQuestions.length;
             const scorePercent = Math.round((correctAnswers / totalQuestions) * 100);
-            recommendations += '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;"><strong>🎯 Next Steps:</strong><br>';
-            if (scorePercent >= 80) {
-                recommendations += '• Take the quiz in Exam Mode with the 2-hour timer<br>';
-                recommendations += '• Review the FAA Remote Pilot Study Guide<br>';
-                recommendations += '• Schedule your Part 107 exam!';
-            } else if (scorePercent >= 70) {
-                recommendations += '• Focus on your weak categories<br>';
-                recommendations += '• Use Review Mode to practice incorrect answers<br>';
-                recommendations += '• Retake the quiz tomorrow to reinforce learning';
-            } else {
-                recommendations += '• Study one category at a time using the filter<br>';
-                recommendations += '• Read each explanation carefully<br>';
-                recommendations += '• Review official FAA study materials<br>';
-                recommendations += '• Retake the quiz in a few days';
+            const statusColor = scorePercent >= 80 ? '#4CAF50' : scorePercent >= 70 ? '#FFC107' : '#F44336';
+            const statusText = scorePercent >= 80
+                ? `🎯 Exam-ready! ${scorePercent - 70}% above passing`
+                : scorePercent >= 70
+                ? `✅ Passing — aim for 80%+ for confidence`
+                : `⚠️ ${70 - scorePercent}% below passing — keep studying`;
+
+            let nextStep = scorePercent >= 80
+                ? 'Try Exam Mode with the 2-hour timer, then schedule your test!'
+                : scorePercent >= 70
+                ? 'Practice weak areas and retake to build confidence.'
+                : 'Study one category at a time and review each explanation.';
+
+            let html = `<div style="background:#f0f7ff;border-left:4px solid #2196F3;border-radius:8px;padding:12px 16px;margin-top:15px;font-size:0.92em;">`;
+            html += `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">`;
+            html += `<span style="background:${statusColor};color:white;padding:3px 10px;border-radius:12px;font-weight:bold;">${scorePercent}%${trendIcon}</span>`;
+            html += `<span>${statusText}</span>`;
+            html += `</div>`;
+            if (weakCategories.length > 0) {
+                html += `<div style="margin-top:8px;"><strong>📚 Review:</strong> `;
+                html += weakCategories.map(c => `<span style="display:inline-block;background:#ffeaea;color:#c62828;border-radius:10px;padding:2px 8px;margin:2px;font-size:0.88em;">${c.category} (${c.percentage}%)</span>`).join('');
+                html += `</div>`;
             }
-            
-            // Add Performance Comparison
-            recommendations += '<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;"><strong>📊 Performance Comparison:</strong><br>';
-            recommendations += '<div style="margin: 10px 0; padding: 10px; background: #f0f7ff; border-radius: 5px;">';
-            recommendations += `<strong>Your Score:</strong> ${scorePercent}%<br>`;
-            recommendations += `<strong>Passing Score:</strong> 70%<br>`;
-            recommendations += `<strong>Recommended Score:</strong> 80%+ for confidence<br>`;
-            if (scorePercent >= 80) {
-                recommendations += `<strong>Status:</strong> 🎯 Excellent! You're ${scorePercent - 70}% above passing threshold`;
-            } else if (scorePercent >= 70) {
-                recommendations += `<strong>Status:</strong> ✅ Passing, but ${80 - scorePercent}% away from recommended confidence level`;
-            } else {
-                recommendations += `<strong>Status:</strong> ⚠️ ${70 - scorePercent}% below passing - keep studying!`;
-            }
-            recommendations += '</div></div>';
-            
-            recommendations += '</div></div>';
+            html += `<div style="margin-top:6px;color:#555;">🎯 ${nextStep}</div>`;
+            html += `</div>`;
             
             // Add to results screen
             const resultsMessage = document.getElementById('resultsMessage');
             if (resultsMessage && resultsMessage.nextSibling) {
                 const recommendDiv = document.createElement('div');
                 recommendDiv.id = 'studyRecommendations';
-                recommendDiv.innerHTML = recommendations;
+                recommendDiv.innerHTML = html;
                 resultsMessage.parentNode.insertBefore(recommendDiv, resultsMessage.nextSibling);
             }
         }
@@ -7234,9 +7169,12 @@ Your progress is saved automatically. You can close the browser and return anyti
                 ctx.fillStyle = '#333';
                 ctx.fillText(`Incorrect: ${incorrect} (${Math.round((incorrect/total)*100)}%)`, 45, legendY + 45);
             }
+            
+            // Populate category score badges in canvas fallback path
+            populateCategoryTable();
         }
 
-        // Populate Category Performance Table (Extracted as separate function)
+        // Populate Category Score Badges (compact replacement for detailed table)
         function populateCategoryTable() {
             const categoryStats = {};
             shuffledQuestions.forEach((q, index) => {
@@ -7249,25 +7187,21 @@ Your progress is saved automatically. You can close the browser and return anyti
                 }
             });
             
-            const tableBody = document.getElementById('categoryTableBody');
-            if (tableBody) {
-                tableBody.innerHTML = '';
+            const badgesContainer = document.getElementById('categoryScoreBadges');
+            if (badgesContainer) {
+                badgesContainer.innerHTML = '';
                 Object.keys(categoryStats).sort().forEach(category => {
                     const stats = categoryStats[category];
                     const percentage = ((stats.correct / stats.total) * 100).toFixed(1);
-                    const scoreClass = 
-                        percentage >= 90 ? 'score-excellent' :
-                        percentage >= 80 ? 'score-good' :
-                        percentage >= 70 ? 'score-fair' : 'score-poor';
-                    
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td><span class="category-badge">${category}</span></td>
-                        <td>${stats.correct}</td>
-                        <td>${stats.total}</td>
-                        <td><span class="score-badge ${scoreClass}">${percentage}%</span></td>
-                    `;
-                    tableBody.appendChild(row);
+                    const color = percentage >= 90 ? '#4CAF50' :
+                                  percentage >= 80 ? '#8BC34A' :
+                                  percentage >= 70 ? '#FFC107' :
+                                  percentage >= 60 ? '#FF9800' : '#F44336';
+                    const badge = document.createElement('span');
+                    badge.title = `${stats.correct}/${stats.total} correct`;
+                    badge.style.cssText = `display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:0.8em;font-weight:bold;background:${color};color:${percentage >= 70 && percentage < 90 ? '#333' : 'white'};white-space:nowrap;`;
+                    badge.innerHTML = `${category}: ${percentage}%`;
+                    badgesContainer.appendChild(badge);
                 });
             }
         }
