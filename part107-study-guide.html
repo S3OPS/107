@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive FAA Part 107 Remote Pilot Exam Study Guide with 152 comprehensive questions, exam simulator, and progress tracking">
+    <meta name="description" content="Interactive FAA Part 107 Remote Pilot Exam Study Guide with 162 comprehensive questions, exam simulator, and progress tracking">
     <meta name="theme-color" content="#b71c1c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1937,7 +1937,7 @@
                         <option value="30">Short Test (30 questions)</option>
                         <option value="45">Practice Test (45 questions)</option>
                         <option value="60">Exam Length (60 questions)</option>
-                        <option value="all" selected>Full Quiz (127 questions)</option>
+                        <option value="all" selected>Full Quiz (162 questions)</option>
                     </select>
                 </div>
             </div>
@@ -5300,6 +5300,130 @@
                 ],
                 correct: 1,
                 explanation: "Under Part 107.9, a remote pilot must report an accident to the FAA within 10 calendar days if it results in: (1) serious injury to any person or any loss of consciousness, or (2) damage to any property (other than the small unmanned aircraft) totaling more than $500 for repair or fair market value replacement. Reports are made to the FAA within 10 days."
+            },
+            // Additional Decision Making Questions
+            {
+                category: "Decision Making",
+                question: "Which hazardous attitude describes a pilot who believes 'It won't happen to me'?",
+                options: [
+                    "Impulsivity",
+                    "Invulnerability",
+                    "Macho",
+                    "Resignation"
+                ],
+                correct: 1,
+                explanation: "Invulnerability is the hazardous attitude where a pilot believes accidents happen to others but not to themselves. This false sense of security can lead to unnecessary risk-taking. The antidote is to remind yourself 'It could happen to me' and respect established safety margins."
+            },
+            {
+                category: "Decision Making",
+                question: "What is the 'IMSAFE' checklist used for in aeronautical decision-making?",
+                options: [
+                    "Inspecting the UAS before flight",
+                    "Assessing the pilot's personal fitness to fly",
+                    "Checking weather conditions for the mission",
+                    "Evaluating the airspace for hazards"
+                ],
+                correct: 1,
+                explanation: "IMSAFE is a personal preflight checklist: Illness, Medication, Stress, Alcohol, Fatigue, and Emotion. Remote pilots use it to evaluate their own physical and mental fitness before each operation. If any item raises concern, the flight should be postponed until the condition is resolved."
+            },
+            {
+                category: "Decision Making",
+                question: "A remote pilot is flying a mission when unexpected strong winds develop. The hazardous attitude that would lead the pilot to press on regardless is:",
+                options: [
+                    "Anti-authority",
+                    "Resignation",
+                    "Macho",
+                    "Both A and C are likely"
+                ],
+                correct: 3,
+                explanation: "Both anti-authority ('rules don't apply to me') and macho ('I can handle it') attitudes may cause a pilot to continue despite developing hazardous conditions. The correct response is to recognize these attitudes, apply their antidotes — 'Follow the rules, they are usually right' and 'Taking chances is foolish' — and land or abort the mission."
+            },
+            // Additional Night Operations Questions
+            {
+                category: "Night Operations",
+                question: "What anti-collision lighting is required for Part 107 night operations?",
+                options: [
+                    "Any colored light visible from 1 mile",
+                    "A lighted anti-collision light visible for at least 3 statute miles",
+                    "Strobe lights on all four arms of the UAS",
+                    "A green navigation light on the nose"
+                ],
+                correct: 1,
+                explanation: "Part 107.29 requires that a small unmanned aircraft operating at night be equipped with anti-collision lighting visible for at least 3 statute miles. The color and pattern of the light must be sufficient to indicate the aircraft's position. This helps other aircraft see the UAS and avoid collision."
+            },
+            {
+                category: "Night Operations",
+                question: "What is the greatest visual hazard for a remote pilot during night operations?",
+                options: [
+                    "Bright moonlight creating shadows",
+                    "Loss of spatial orientation and difficulty judging distance and altitude in low-light conditions",
+                    "Increased radio frequency interference at night",
+                    "Cooler temperatures reducing battery efficiency"
+                ],
+                correct: 1,
+                explanation: "Night operations introduce significant visual challenges. Without adequate lighting, remote pilots can lose track of the UAS orientation, misjudge altitude, and fail to detect obstacles. Pilots must maintain visual contact with the UAS at all times, and the required anti-collision lighting helps, but situational awareness is greatly reduced compared to daytime operations."
+            },
+            // Additional Radio & Airport Operations Questions
+            {
+                category: "Radio & Airport Operations",
+                question: "When approaching an uncontrolled airport, a remote pilot operating nearby should monitor which frequency?",
+                options: [
+                    "121.5 MHz (emergency frequency)",
+                    "The Common Traffic Advisory Frequency (CTAF) for that airport",
+                    "122.8 MHz (universal CTAF)",
+                    "The nearest approach control frequency"
+                ],
+                correct: 1,
+                explanation: "Each uncontrolled airport has a designated Common Traffic Advisory Frequency (CTAF) published in the Chart Supplement. Monitoring the CTAF allows the remote pilot to hear manned aircraft reporting their positions and intentions. Although drone pilots are not required to broadcast on CTAF, listening in is a best practice that greatly improves situational awareness near airports."
+            },
+            {
+                category: "Radio & Airport Operations",
+                question: "What does the acronym 'ATIS' stand for, and what information does it provide?",
+                options: [
+                    "Automated Traffic Information System — provides real-time ATC clearances",
+                    "Automatic Terminal Information Service — provides current airport weather, active runways, and NOTAMs",
+                    "Air Traffic Inspection Service — provides safety inspection reports",
+                    "Airport Terminal Instrument System — provides ILS localizer status"
+                ],
+                correct: 1,
+                explanation: "ATIS (Automatic Terminal Information Service) is a continuous broadcast of recorded, non-control information at busy airports. It includes current weather (wind, visibility, ceiling), active runways, NOTAMs, and other pertinent information. Each update is designated by a letter (Alpha, Bravo, etc.). Remote pilots operating near controlled airports should obtain the ATIS to stay informed of conditions."
+            },
+            // Additional Operations Over People Questions
+            {
+                category: "Operations Over People",
+                question: "Under Part 107, which category of UAS is permitted to conduct sustained flight over moving vehicles?",
+                options: [
+                    "Only Category 4 aircraft with FAA approval",
+                    "Categories 1, 2, 3, and 4 may fly over moving vehicles if not over open-air assemblies and notification is given",
+                    "No category is permitted to fly over moving vehicles",
+                    "Only Category 1 aircraft under 0.55 lbs"
+                ],
+                correct: 1,
+                explanation: "All four categories (1–4) may operate over moving vehicles, provided the operations are not over an open-air assembly of human beings. Additionally, people on the ground must have been given prior notice that a UAS may fly over them. Sustained flight over moving vehicles in active roadways requires compliance with these conditions."
+            },
+            {
+                category: "Operations Over People",
+                question: "What does a 'Declaration of Compliance' submitted to the FAA indicate for Category 2 and 3 aircraft?",
+                options: [
+                    "The FAA has inspected and certified the aircraft for flight over people",
+                    "The manufacturer has declared the aircraft meets FAA injury-threshold and safety standards for operations over people",
+                    "The remote pilot promises to fly below 200 feet when over people",
+                    "The aircraft has been registered and insured for over-people operations"
+                ],
+                correct: 1,
+                explanation: "For Category 2 and 3 aircraft, manufacturers or operators must submit a Declaration of Compliance to the FAA's DroneZone. This declaration affirms that the UAS meets the applicable injury threshold (11 ft-lbs for Cat 2, 25 ft-lbs for Cat 3), has no exposed rotating parts that could lacerate skin, and complies with all other requirements. The FAA does not independently test each aircraft; compliance is the manufacturer's responsibility."
+            },
+            {
+                category: "Operations Over People",
+                question: "Which Part 107 provision requires a Category 4 aircraft to have an airworthiness certificate for operations over people?",
+                options: [
+                    "Part 107.115",
+                    "Part 107.140",
+                    "Part 107.145",
+                    "Part 107.160"
+                ],
+                correct: 1,
+                explanation: "Part 107.140 sets the requirements for Category 4 operations over people. Category 4 aircraft must hold an FAA airworthiness certificate issued under applicable airworthiness standards, be operated in accordance with the operating limitations of that certificate, and have Remote ID. This is the strictest category and allows sustained flight over open-air assemblies when all requirements are met."
             }
         ];
 
