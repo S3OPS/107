@@ -3002,7 +3002,7 @@
             <p style="text-align: center; color: #666; margin-bottom: 20px;">Click the card to reveal the answer</p>
 
             <div class="flashcard-progress">
-                <span id="flashcardProgress">Card 1 of 177</span> |
+                <span id="flashcardProgress">Card 1 of ...</span> |
                 <span id="flashcardKnowCount" style="color: #4CAF50;">✓ Know: 0</span> |
                 <span id="flashcardReviewCount" style="color: #FF9800;">↻ Review: 0</span>
             </div>
@@ -8460,14 +8460,15 @@ Your progress is saved automatically. You can close the browser and return anyti
         let flashcardKnownSet = new Set();
         let flashcardReviewSet = new Set();
         let flashcardIsFlipped = false;
+        let flashcardKeyHandler = null; // Module-level reference for keyboard listener cleanup
 
         function fisherYatesShuffle(arr) {
-            const a = [...arr];
-            for (let i = a.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [a[i], a[j]] = [a[j], a[i]];
+            const shuffled = [...arr];
+            for (let currentIndex = shuffled.length - 1; currentIndex > 0; currentIndex--) {
+                const randomIndex = Math.floor(Math.random() * (currentIndex + 1));
+                [shuffled[currentIndex], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[currentIndex]];
             }
-            return a;
+            return shuffled;
         }
 
         function startFlashcards() {
@@ -8579,25 +8580,20 @@ Your progress is saved automatically. You can close the browser and return anyti
 
         function exitFlashcards() {
             // Clean up keyboard listener
-            if (window._flashcardKeyHandler) {
-                document.removeEventListener('keydown', window._flashcardKeyHandler);
-                window._flashcardKeyHandler = null;
+            if (flashcardKeyHandler) {
+                document.removeEventListener('keydown', flashcardKeyHandler);
+                flashcardKeyHandler = null;
             }
             document.getElementById('flashcardScreen').style.display = 'none';
             document.getElementById('startScreen').style.display = 'block';
         }
 
         function setupFlashcardKeyboard() {
-            // Remove existing listener if any
-            if (window._flashcardKeyHandler) {
-                document.removeEventListener('keydown', window._flashcardKeyHandler);
+            // Remove existing listener if any before adding a new one
+            if (flashcardKeyHandler) {
+                document.removeEventListener('keydown', flashcardKeyHandler);
             }
-            window._flashcardKeyHandler = function(e) {
-                const flashcardScreen = document.getElementById('flashcardScreen');
-                if (!flashcardScreen || flashcardScreen.style.display === 'none') {
-                    document.removeEventListener('keydown', window._flashcardKeyHandler);
-                    return;
-                }
+            flashcardKeyHandler = function(e) {
                 if (e.key === 'ArrowRight') {
                     nextFlashcard();
                 } else if (e.key === 'ArrowLeft') {
@@ -8607,7 +8603,7 @@ Your progress is saved automatically. You can close the browser and return anyti
                     flipFlashcard();
                 }
             };
-            document.addEventListener('keydown', window._flashcardKeyHandler);
+            document.addEventListener('keydown', flashcardKeyHandler);
         }
         // ===== END FLASHCARD MODE =====
 
