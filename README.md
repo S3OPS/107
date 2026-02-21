@@ -6,7 +6,7 @@ A comprehensive, interactive HTML-based study guide to help you pass the FAA Par
 
 This study guide provides a game-formatted multiple choice question test covering all topics required for the Part 107 exam. It features:
 
-- **138 comprehensive questions** covering all exam topics (NEW: 10+ advanced chart interpretation questions added)
+- **152 comprehensive questions** covering all exam topics (NEW: 10+ advanced chart interpretation questions added)
 - **Interactive multiple choice format** with instant feedback
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
@@ -45,6 +45,7 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **⚠️ NEW: Confirmation Dialogs** - Prevents accidental progress loss with confirmation prompts for destructive actions
 - **📱 NEW: Progressive Web App (PWA)** - Install as a standalone app on mobile devices for offline access
 - **💬 NEW: Enhanced Tooltips** - Contextual help with elegant hover tooltips throughout the interface
+- **🎯 NEW: Practice Weak Areas** - One-click button on results screen to drill questions from categories where you scored below 70%
 - **📝 Comprehensive Test-Specific Information** - Detailed section about the actual FAA exam including:
   - Exam format, logistics, and requirements (60 questions, 2 hours, computer-based)
   - Question distribution breakdown by topic
@@ -127,6 +128,19 @@ Each question is designed to match actual FAA exam scenarios where you must:
 This section is displayed on the start screen before you begin studying, so you can understand exactly what to expect on test day and how to maximize your chances of passing!
 
 ## ✨ Latest Enhancements (2026 Update)
+
+### 🎯 Practice Weak Areas
+- **One-click targeted drilling** - After completing a quiz, a "Practice Weak Areas" button appears automatically when categories score below 70%
+- **Smart category filtering** - Pulls all questions from your weakest categories into a focused drill session
+- **Instant setup** - Shuffles weak-area questions and launches immediately without returning to the start screen
+- **Clear feedback** - Toast notification tells you exactly which categories and how many questions you'll practice
+- **No wasted time** - Skips categories you already know; focuses effort where it counts
+
+### 📚 Expanded Question Bank (138 → 152 questions)
+- **5 new Weather questions** - Wind shear hazards, temperature inversions, METAR wind reading, microbursts, and structural icing effects
+- **5 new Maintenance & Preflight questions** - LiPo battery storage, firmware updates, compass calibration, post-crash inspection, and maintenance log requirements
+- **3 new Crew Resource Management questions** - Authority gradient, fatigue effects on ADM, and visual observer responsibilities
+- **2 new Regulations questions** - Careless or reckless operations (Part 107.23) and accident reporting requirements (Part 107.9)
 
 ### ⏱️ Study Time Tracking
 - **Automatic time tracking** - Monitors your total study time across all sessions
