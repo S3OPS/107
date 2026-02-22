@@ -1844,6 +1844,169 @@
         .swipe-indicator.active {
             opacity: 1;
         }
+        /* Flashcard Mode */
+        .flashcard-screen {
+            padding: 30px;
+            display: none;
+        }
+
+        .flashcard-container {
+            perspective: 1000px;
+            margin: 20px auto;
+            max-width: 600px;
+            height: 320px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard-inner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border: 3px solid #d32f2f;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, #b71c1c 0%, #1a1a1a 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-question {
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #1a1a1a;
+            line-height: 1.5;
+        }
+
+        .flashcard-category-badge {
+            background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-bottom: 15px;
+        }
+
+        .flashcard-answer {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .flashcard-explanation {
+            font-size: 0.85em;
+            opacity: 0.9;
+            line-height: 1.4;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .flashcard-hint {
+            font-size: 0.8em;
+            color: #999;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .flashcard-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .flashcard-progress {
+            text-align: center;
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .flashcard-result-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-know {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+
+        .btn-review {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+
+        .btn-know:hover, .btn-review:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        body.dark-mode .flashcard-front {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+            border-color: #ff6b6b;
+        }
+
+        body.dark-mode .flashcard-question {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .flashcard-progress {
+            color: #b0b0b0;
+        }
+
+        @media (max-width: 600px) {
+            .flashcard-container {
+                height: 280px;
+            }
+
+            .flashcard-question {
+                font-size: 1em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1918,6 +2081,10 @@
                     <h3>⏱️ Exam Simulator</h3>
                     <p>2-hour timed test mimicking real exam conditions</p>
                 </div>
+                <div class="mode-btn" onclick="startFlashcards()" role="button" tabindex="0" aria-label="Start flashcard mode" onkeydown="handleButtonKeydown(event, startFlashcards)">
+                    <h3>🃏 Flashcard Mode</h3>
+                    <p>Active recall practice—flip cards to test your memory</p>
+                </div>
             </div>
             
             <!-- Quiz Options -->
@@ -1937,7 +2104,7 @@
                         <option value="30">Short Test (30 questions)</option>
                         <option value="45">Practice Test (45 questions)</option>
                         <option value="60">Exam Length (60 questions)</option>
-                        <option value="all" selected>Full Quiz (162 questions)</option>
+                        <option value="all" selected>Full Quiz (177 questions)</option>
                     </select>
                 </div>
             </div>
@@ -2826,6 +2993,48 @@
             
             <div class="keyboard-hint">
                 💡 Tip: Use <strong>A, B, C, D</strong> keys to select answers | <strong>← / ↓</strong> Previous | <strong>→ / ↑</strong> Next | <strong>Space</strong> Bookmark
+            </div>
+        </div>
+
+        <!-- Flashcard Screen -->
+        <div id="flashcardScreen" class="flashcard-screen">
+            <h2 style="text-align: center; color: #d32f2f; margin-bottom: 5px;">🃏 Flashcard Mode</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">Click the card to reveal the answer</p>
+
+            <div class="flashcard-progress">
+                <span id="flashcardProgress">Card 1 of ...</span> |
+                <span id="flashcardKnowCount" style="color: #4CAF50;">✓ Know: 0</span> |
+                <span id="flashcardReviewCount" style="color: #FF9800;">↻ Review: 0</span>
+            </div>
+
+            <div class="flashcard-container" id="flashcardContainer" onclick="flipFlashcard()" role="button" tabindex="0" aria-label="Flashcard - click to flip" onkeydown="handleButtonKeydown(event, flipFlashcard)">
+                <div class="flashcard-inner" id="flashcardInner">
+                    <div class="flashcard-front">
+                        <div class="flashcard-category-badge" id="flashcardCategory">Category</div>
+                        <div class="flashcard-question" id="flashcardQuestion">Question text here</div>
+                        <div class="flashcard-hint">👆 Click to reveal answer</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-answer" id="flashcardAnswer">Answer text here</div>
+                        <div class="flashcard-explanation" id="flashcardExplanation">Explanation here</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flashcard-result-btns" id="flashcardResultBtns" style="display: none;">
+                <button class="btn-know" onclick="flashcardKnow()" aria-label="Mark as known">✓ Know It</button>
+                <button class="btn-review" onclick="flashcardReview()" aria-label="Mark for review">↻ Need Review</button>
+            </div>
+
+            <div class="flashcard-controls">
+                <button class="btn btn-secondary" onclick="prevFlashcard()" id="flashcardPrevBtn" aria-label="Previous flashcard">← Previous</button>
+                <button class="btn btn-secondary" onclick="shuffleFlashcards()" aria-label="Shuffle flashcards">🔀 Shuffle</button>
+                <button class="btn btn-secondary" onclick="exitFlashcards()" aria-label="Exit flashcard mode">✕ Exit</button>
+                <button class="btn btn-secondary" onclick="nextFlashcard()" id="flashcardNextBtn" aria-label="Next flashcard">Next →</button>
+            </div>
+
+            <div style="text-align: center; margin-top: 15px; font-size: 0.85em; color: #888;">
+                💡 Tip: Use <strong>←/→ arrow keys</strong> to navigate | <strong>Space</strong> to flip card
             </div>
         </div>
 
@@ -5410,6 +5619,186 @@
                 ],
                 correct: 1,
                 explanation: "Part 107.140 sets the requirements for Category 4 operations over people. Category 4 aircraft must hold an FAA airworthiness certificate issued under applicable airworthiness standards, be operated in accordance with the operating limitations of that certificate, and have Remote ID. This is the strictest category and allows sustained flight over open-air assemblies when all requirements are met."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "What does CRM (Crew Resource Management) primarily focus on in drone operations?",
+                options: [
+                    "Aircraft performance calculations",
+                    "Effective use of all available resources to ensure safe operations",
+                    "FAA regulatory compliance procedures",
+                    "Equipment maintenance scheduling"
+                ],
+                correct: 1,
+                explanation: "CRM in drone operations focuses on effectively using all available resources—people, equipment, information, and procedures—to achieve safe and efficient operations. This includes communication, decision-making, situational awareness, and workload management between the remote PIC and any visual observers."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "When operating with a visual observer (VO), what is the primary responsibility regarding communication?",
+                options: [
+                    "The VO is responsible for all safety decisions",
+                    "The remote PIC must maintain clear, two-way communication with the VO at all times",
+                    "The VO controls the aircraft when the remote PIC is distracted",
+                    "Communication is only needed when entering controlled airspace"
+                ],
+                correct: 1,
+                explanation: "Under Part 107, the remote PIC must maintain effective communication with any visual observer throughout the operation. The remote PIC retains final authority for all safety decisions, but relies on the VO for visual information about the UAS position and potential hazards."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "Which of the following best describes 'situational awareness' for a remote PIC?",
+                options: [
+                    "Knowing the exact GPS coordinates of the aircraft at all times",
+                    "Understanding what is happening around you, the current state, and what could happen next",
+                    "Having the aircraft's battery percentage visible at all times",
+                    "Maintaining visual contact with the aircraft controller"
+                ],
+                correct: 1,
+                explanation: "Situational awareness is the perception of environmental elements and events, understanding their meaning, and projecting their future status. For a remote PIC, this includes awareness of the UAS position/status, weather, airspace, people, terrain, and potential hazards—and anticipating how these factors may change."
+            },
+            {
+                category: "Crew Resource Management",
+                question: "A remote PIC is asked by a client to fly in marginal weather conditions to complete a lucrative contract. The best CRM response is:",
+                options: [
+                    "Proceed because the contract is financially important",
+                    "Fly lower to avoid the weather effects",
+                    "Decline the operation and explain why it is unsafe, using assertive communication",
+                    "Ask the visual observer to make the final decision"
+                ],
+                correct: 2,
+                explanation: "Effective CRM requires assertiveness to speak up about safety concerns regardless of external pressure. A remote PIC must not yield to schedule pressure, client requests, or financial incentives when safety is compromised. This is known as resisting 'get-there-itis' and using assertive, professional communication to decline unsafe operations."
+            },
+            {
+                category: "Night Operations",
+                question: "Under Part 107, what lighting must be visible on a small UAS during night operations?",
+                options: [
+                    "Anti-collision lighting visible for at least 3 statute miles for 360 degrees",
+                    "Standard aircraft navigation lights (red, green, white)",
+                    "Any lighting the remote PIC deems sufficient",
+                    "No special lighting is required at night"
+                ],
+                correct: 0,
+                explanation: "For night operations under Part 107, the small UAS must have anti-collision lighting visible for at least 3 statute miles. This anti-collision light must be visible for 360 degrees and must have a flash rate sufficient to avoid a collision. The remote PIC may reduce lighting intensity if it would impair the safety of the flight."
+            },
+            {
+                category: "Night Operations",
+                question: "Before conducting night UAS operations, what additional training does Part 107 require?",
+                options: [
+                    "An additional night flight rating on the Part 107 certificate",
+                    "Night-specific recurrent training every 6 months",
+                    "No additional certification—all Part 107 holders may fly at night with required lighting",
+                    "A specific waiver from the FAA for each night flight"
+                ],
+                correct: 2,
+                explanation: "The 2021 FAA rule change (effective April 21, 2021) allows Part 107 remote pilots to fly at night without a waiver, as long as the UAS has anti-collision lighting visible for 3 statute miles. No additional night rating or waiver is needed. Prior to this rule change, a waiver was required."
+            },
+            {
+                category: "Night Operations",
+                question: "What is a primary physiological challenge for remote PICs during night operations?",
+                options: [
+                    "Increased difficulty hearing ATC communications",
+                    "Reduced depth perception and difficulty judging distances in low-light conditions",
+                    "GPS accuracy decreases significantly at night",
+                    "Radio frequencies are less reliable at night"
+                ],
+                correct: 1,
+                explanation: "Night operations significantly affect depth perception and spatial orientation. Humans rely heavily on visual cues for depth judgment, and low-light conditions impair this ability. Remote PICs must be especially aware of their aircraft's distance from obstacles and terrain at night. Additionally, night illusions can cause misperception of altitude and motion."
+            },
+            {
+                category: "Weather",
+                question: "What is a METAR report primarily used for?",
+                options: [
+                    "Forecasting weather 24 hours in advance",
+                    "Providing current observed weather conditions at an airport",
+                    "Describing upper-level wind patterns for navigation",
+                    "Outlining special use airspace weather restrictions"
+                ],
+                correct: 1,
+                explanation: "A METAR (Meteorological Aerodrome Report) is an aviation routine weather observation report that provides current weather conditions at a specific airport. It includes wind speed and direction, visibility, sky condition, temperature, dewpoint, and altimeter setting. Remote PICs should review METARs at the nearest reporting station before and during operations."
+            },
+            {
+                category: "Weather",
+                question: "Which weather phenomenon creates the most hazardous condition for small UAS operations due to unpredictable movement?",
+                options: [
+                    "High pressure systems",
+                    "Thunderstorms with associated wind shear and microbursts",
+                    "Marine layer fog in the morning",
+                    "High altitude cirrus clouds"
+                ],
+                correct: 1,
+                explanation: "Thunderstorms are extremely hazardous for small UAS due to rapid, unpredictable wind changes, microbursts (powerful downdrafts that can exceed 6,000 feet per minute), lightning, heavy rain, hail, and turbulence. Remote PICs must avoid flight operations in or near thunderstorms. Wind shear associated with thunderstorms can cause rapid, uncontrolled altitude changes in small UAS."
+            },
+            {
+                category: "Weather",
+                question: "What does a TAF (Terminal Aerodrome Forecast) provide?",
+                options: [
+                    "Current weather observations at an airport",
+                    "Forecast weather conditions for a specific airport over a 24-48 hour period",
+                    "A history of weather at an airport over the past 30 days",
+                    "Turbulence reports from aircraft in flight"
+                ],
+                correct: 1,
+                explanation: "A TAF (Terminal Aerodrome Forecast) is an aviation weather forecast for the area within 5 statute miles of an airport. TAFs are valid for 24-30 hour periods and are issued four times daily. They include forecast wind, visibility, weather phenomena, and cloud coverage. Remote PICs should review TAFs to understand expected weather changes during planned operations."
+            },
+            {
+                category: "Weather",
+                question: "What is density altitude and how does it affect UAS performance?",
+                options: [
+                    "Density altitude is actual altitude corrected for non-standard temperature; higher density altitude reduces UAS performance",
+                    "Density altitude is the altitude shown on GPS; it has no effect on UAS performance",
+                    "Density altitude only affects manned aircraft, not small UAS",
+                    "Higher density altitude always improves UAS performance due to thinner air"
+                ],
+                correct: 0,
+                explanation: "Density altitude is pressure altitude corrected for non-standard temperature. At high density altitude (hot, humid, high-elevation conditions), air is less dense, which reduces propeller efficiency and motor performance. Small UAS will experience reduced lift, longer flight times to take off, shorter flight times, and reduced payload capacity. This is especially important at high-elevation locations on hot summer days."
+            },
+            {
+                category: "Regulations",
+                question: "Under Part 107, what is the minimum age requirement to obtain a Remote Pilot Certificate?",
+                options: [
+                    "14 years old",
+                    "16 years old",
+                    "18 years old",
+                    "21 years old"
+                ],
+                correct: 1,
+                explanation: "Under 14 CFR Part 107.61, an applicant for a Remote Pilot Certificate must be at least 16 years old. This is one of the basic eligibility requirements along with being able to read, speak, write, and understand English, and being in physical and mental condition to safely operate a small UAS."
+            },
+            {
+                category: "Regulations",
+                question: "How frequently must a Remote Pilot Certificate holder complete recurrent training to remain current?",
+                options: [
+                    "Every 6 months",
+                    "Every 12 months",
+                    "Every 24 months",
+                    "Every 36 months"
+                ],
+                correct: 2,
+                explanation: "Under Part 107.65, a remote pilot in command must have completed either an initial aeronautical knowledge test at an FAA-approved knowledge testing center, or a recurrent online training course, within the preceding 24 calendar months. This recurrent training is available free through FAA Safety (FAAST) online courses."
+            },
+            {
+                category: "Regulations",
+                question: "What does Remote ID require a UAS to broadcast?",
+                options: [
+                    "Only the pilot's name and certificate number",
+                    "The UAS ID, takeoff location, current location and altitude, velocity, and emergency status",
+                    "GPS coordinates of the mission endpoint only",
+                    "Radio frequencies being used during the operation"
+                ],
+                correct: 1,
+                explanation: "Under FAA Remote ID rules (effective September 16, 2023), standard Remote ID UAS must broadcast the UAS ID, takeoff location (latitude, longitude, altitude), current position (latitude, longitude, altitude), velocity, and an emergency status indicator. This information allows authorities and the public to identify UAS operating in the airspace."
+            },
+            {
+                category: "Regulations",
+                question: "Under Part 107, what is required before flying a small UAS over a moving vehicle?",
+                options: [
+                    "No special requirement—moving vehicles are allowed under standard Part 107",
+                    "The vehicle must be part of a controlled or restricted-access site",
+                    "A specific waiver must be obtained from the FAA",
+                    "Verbal permission from the vehicle operator is sufficient"
+                ],
+                correct: 1,
+                explanation: "Under Part 107.145, operations over moving vehicles are only permitted over controlled or restricted-access sites where people within the moving vehicles are not members of the general public (e.g., a closed film set or private testing facility). Operations over moving vehicles with members of the general public require a waiver under Part 107.200."
             }
         ];
 
@@ -8064,6 +8453,159 @@ Your progress is saved automatically. You can close the browser and return anyti
                 }
             }, { passive: true });
         }
+
+        // ===== FLASHCARD MODE =====
+        let flashcardDeck = [];
+        let flashcardIndex = 0;
+        let flashcardKnownSet = new Set();
+        let flashcardReviewSet = new Set();
+        let flashcardIsFlipped = false;
+        let flashcardKeyHandler = null; // Module-level reference for keyboard listener cleanup
+
+        function fisherYatesShuffle(arr) {
+            const shuffled = [...arr];
+            for (let currentIndex = shuffled.length - 1; currentIndex > 0; currentIndex--) {
+                const randomIndex = Math.floor(Math.random() * (currentIndex + 1));
+                [shuffled[currentIndex], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[currentIndex]];
+            }
+            return shuffled;
+        }
+
+        function startFlashcards() {
+            // Build deck from all questions (randomized)
+            flashcardDeck = fisherYatesShuffle(questions);
+            flashcardIndex = 0;
+            flashcardKnownSet = new Set();
+            flashcardReviewSet = new Set();
+            flashcardIsFlipped = false;
+
+            // Hide start screen, show flashcard screen
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('flashcardScreen').style.display = 'block';
+
+            // Show settings buttons appropriate for flashcards
+            document.getElementById('bookmarksViewBtn').style.display = 'none';
+            document.getElementById('reviewBtn').style.display = 'none';
+            document.getElementById('reviewModeBtn').style.display = 'none';
+            document.getElementById('categoryFilterBtn').style.display = 'none';
+            document.getElementById('exportBtn').style.display = 'none';
+
+            renderFlashcard();
+            setupFlashcardKeyboard();
+        }
+
+        function renderFlashcard() {
+            if (flashcardDeck.length === 0) return;
+
+            const card = flashcardDeck[flashcardIndex];
+            const total = flashcardDeck.length;
+
+            // Reset flip state
+            flashcardIsFlipped = false;
+            const inner = document.getElementById('flashcardInner');
+            if (inner) inner.classList.remove('flipped');
+            document.getElementById('flashcardResultBtns').style.display = 'none';
+
+            // Update content
+            document.getElementById('flashcardCategory').textContent = card.category;
+            document.getElementById('flashcardQuestion').textContent = card.question;
+            document.getElementById('flashcardAnswer').textContent = card.options[card.correct];
+            document.getElementById('flashcardExplanation').textContent = card.explanation;
+
+            // Update progress
+            document.getElementById('flashcardProgress').textContent = `Card ${flashcardIndex + 1} of ${total}`;
+            document.getElementById('flashcardKnowCount').textContent = `✓ Know: ${flashcardKnownSet.size}`;
+            document.getElementById('flashcardReviewCount').textContent = `↻ Review: ${flashcardReviewSet.size}`;
+
+            // Update navigation buttons
+            document.getElementById('flashcardPrevBtn').disabled = flashcardIndex === 0;
+            document.getElementById('flashcardNextBtn').disabled = flashcardIndex === total - 1;
+        }
+
+        function flipFlashcard() {
+            flashcardIsFlipped = !flashcardIsFlipped;
+            const inner = document.getElementById('flashcardInner');
+            if (inner) {
+                inner.classList.toggle('flipped', flashcardIsFlipped);
+            }
+            // Show know/review buttons after flip
+            document.getElementById('flashcardResultBtns').style.display = flashcardIsFlipped ? 'flex' : 'none';
+        }
+
+        function flashcardKnow() {
+            flashcardKnownSet.add(flashcardIndex);
+            flashcardReviewSet.delete(flashcardIndex);
+            nextFlashcard();
+        }
+
+        function flashcardReview() {
+            flashcardReviewSet.add(flashcardIndex);
+            flashcardKnownSet.delete(flashcardIndex);
+            nextFlashcard();
+        }
+
+        function nextFlashcard() {
+            if (flashcardIndex < flashcardDeck.length - 1) {
+                flashcardIndex++;
+                renderFlashcard();
+            } else {
+                // End of deck - show summary
+                const total = flashcardDeck.length;
+                const known = flashcardKnownSet.size;
+                const review = flashcardReviewSet.size;
+                const unrated = total - known - review;
+                showToast(
+                    `🃏 Deck complete! Know: ${known} | Need Review: ${review} | Unrated: ${unrated}`,
+                    'success',
+                    TOAST_DURATION_LONG
+                );
+            }
+        }
+
+        function prevFlashcard() {
+            if (flashcardIndex > 0) {
+                flashcardIndex--;
+                renderFlashcard();
+            }
+        }
+
+        function shuffleFlashcards() {
+            flashcardDeck = fisherYatesShuffle(flashcardDeck);
+            flashcardIndex = 0;
+            flashcardKnownSet = new Set();
+            flashcardReviewSet = new Set();
+            renderFlashcard();
+            showToast('🔀 Flashcards shuffled!', 'info');
+        }
+
+        function exitFlashcards() {
+            // Clean up keyboard listener
+            if (flashcardKeyHandler) {
+                document.removeEventListener('keydown', flashcardKeyHandler);
+                flashcardKeyHandler = null;
+            }
+            document.getElementById('flashcardScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+        }
+
+        function setupFlashcardKeyboard() {
+            // Remove existing listener if any before adding a new one
+            if (flashcardKeyHandler) {
+                document.removeEventListener('keydown', flashcardKeyHandler);
+            }
+            flashcardKeyHandler = function(e) {
+                if (e.key === 'ArrowRight') {
+                    nextFlashcard();
+                } else if (e.key === 'ArrowLeft') {
+                    prevFlashcard();
+                } else if (e.key === ' ') {
+                    e.preventDefault();
+                    flipFlashcard();
+                }
+            };
+            document.addEventListener('keydown', flashcardKeyHandler);
+        }
+        // ===== END FLASHCARD MODE =====
 
         // Enhanced Chart Rendering with Chart.js (if available)
         function renderEnhancedCharts() {
