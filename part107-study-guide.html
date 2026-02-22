@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive FAA Part 107 Remote Pilot Exam Study Guide with 162 comprehensive questions, exam simulator, and progress tracking">
+    <meta name="description" content="Interactive FAA Part 107 Remote Pilot Exam Study Guide with 192 comprehensive questions, exam simulator, and progress tracking">
     <meta name="theme-color" content="#b71c1c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2104,7 +2104,7 @@
                         <option value="30">Short Test (30 questions)</option>
                         <option value="45">Practice Test (45 questions)</option>
                         <option value="60">Exam Length (60 questions)</option>
-                        <option value="all" selected>Full Quiz (177 questions)</option>
+                        <option value="all" selected>Full Quiz (192 questions)</option>
                     </select>
                 </div>
             </div>
@@ -5799,6 +5799,196 @@
                 ],
                 correct: 1,
                 explanation: "Under Part 107.145, operations over moving vehicles are only permitted over controlled or restricted-access sites where people within the moving vehicles are not members of the general public (e.g., a closed film set or private testing facility). Operations over moving vehicles with members of the general public require a waiver under Part 107.200."
+            },
+
+            // Additional Weather Questions
+            {
+                category: "Weather",
+                question: "What is a METAR report and when should a remote pilot consult one?",
+                options: [
+                    "A Monthly Experimental Terminal Aerial Report reviewed only for long-range planning",
+                    "An Aviation Routine Weather Report that provides current surface weather observations and should be checked before every flight",
+                    "A Meteorological Extended Trend Analysis Report used only for cross-country planning",
+                    "A Marine Enhanced Terminal Aviation Report used only near coastal areas"
+                ],
+                correct: 1,
+                explanation: "A METAR (Aviation Routine Weather Report) is a standardized format for reporting surface weather conditions at airports. It contains wind speed and direction, visibility, sky conditions, temperature, dew point, and altimeter setting. Remote pilots should check METARs from nearby airports before every flight to understand current weather conditions."
+            },
+            {
+                category: "Weather",
+                question: "What weather condition is indicated by a temperature-dew point spread of 2°C or less?",
+                options: [
+                    "Clear skies and excellent visibility",
+                    "High winds aloft",
+                    "Fog or low clouds are likely to form",
+                    "Thunderstorm development is imminent"
+                ],
+                correct: 2,
+                explanation: "When the temperature and dew point are within 2°C (approximately 4°F) of each other, the air is near saturation. This indicates that fog or low clouds are likely to form, which can rapidly reduce visibility below acceptable limits for drone operations. Remote pilots should monitor this spread closely and be prepared to terminate operations if fog develops."
+            },
+            {
+                category: "Weather",
+                question: "What is a TAF and how does it differ from a METAR?",
+                options: [
+                    "A TAF (Terminal Aerodrome Forecast) is a weather forecast, while a METAR is a current observation",
+                    "A TAF is a historical weather report, while a METAR is a future forecast",
+                    "A TAF covers oceanic areas, while a METAR covers land areas only",
+                    "There is no difference; the terms are interchangeable"
+                ],
+                correct: 0,
+                explanation: "A TAF (Terminal Aerodrome Forecast) is a weather forecast issued for a specific airport, typically valid for 24–30 hours. A METAR is a routine weather observation reporting actual current conditions. Remote pilots should use both: METARs to understand current conditions and TAFs to plan ahead for expected weather changes during a planned operation."
+            },
+
+            // Additional Regulations Questions
+            {
+                category: "Regulations",
+                question: "Under Part 107, what action is required if a remote pilot is involved in a serious injury accident involving the UAS?",
+                options: [
+                    "File a report with local law enforcement only",
+                    "Report the accident to the FAA within 10 calendar days",
+                    "Report the accident to the NTSB within 2 calendar days",
+                    "No report is required for accidents not involving manned aircraft"
+                ],
+                correct: 1,
+                explanation: "Under Part 107.9, the remote PIC must report any accident that results in serious injury to any person or loss of consciousness, or property damage other than the UAS exceeding $500 to the FAA within 10 calendar days of the operation. The report must be submitted through the FAA Drone Zone website."
+            },
+            {
+                category: "Regulations",
+                question: "What does Part 107.51 establish regarding operating limitations?",
+                options: [
+                    "The maximum takeoff weight limit of 55 pounds for small UAS",
+                    "Speed, altitude, visual line of sight, and daylight limitations",
+                    "Registration and marking requirements for small UAS",
+                    "The minimum pilot age and certificate requirements"
+                ],
+                correct: 1,
+                explanation: "Part 107.51 establishes operating limitations including: maximum groundspeed of 87 knots (100 mph), maximum altitude of 400 feet AGL (or 400 feet above a structure), operations must remain within visual line of sight, and operations must occur during daylight or civil twilight with anti-collision lighting."
+            },
+            {
+                category: "Regulations",
+                question: "Under Part 107, which of the following operations requires a waiver from the FAA?",
+                options: [
+                    "Flying in Class G airspace below 400 feet AGL during daylight",
+                    "Flying at night with anti-collision lighting visible for 3 statute miles",
+                    "Flying over a moving vehicle on a public road without a restricted-access site",
+                    "Flying within visual line of sight with a visual observer"
+                ],
+                correct: 2,
+                explanation: "Flying a small UAS over moving vehicles on public roads where the public has access requires a waiver under Part 107.200 because Part 107.145 only permits operations over moving vehicles in controlled or restricted-access sites. Operations like flying at night with proper lighting, in Class G airspace, or with a visual observer are permitted under standard Part 107 rules."
+            },
+
+            // Additional Maintenance & Preflight Questions
+            {
+                category: "Maintenance & Preflight",
+                question: "What is the purpose of a pre-flight checklist for UAS operations?",
+                options: [
+                    "It is only required by the FAA for commercial operations exceeding $500",
+                    "To ensure the aircraft and systems are airworthy and the operation can be conducted safely",
+                    "It is only necessary for operations in controlled airspace",
+                    "To document the route of flight for ATC notification"
+                ],
+                correct: 1,
+                explanation: "A pre-flight checklist ensures the remote pilot systematically verifies that all aircraft systems and components are functioning properly, batteries are adequately charged, GPS has acquired sufficient satellites, the operating area is clear of hazards, and all regulatory requirements are met before flight. Using a checklist reduces the risk of overlooking critical safety items."
+            },
+            {
+                category: "Maintenance & Preflight",
+                question: "What should a remote pilot do if the UAS manufacturer releases a firmware update before a planned flight?",
+                options: [
+                    "Always install all firmware updates immediately before each flight without review",
+                    "Review release notes for safety-critical fixes and test the update before operational flights",
+                    "Firmware updates are only required for exam simulator mode",
+                    "Ignore firmware updates as they can introduce new problems"
+                ],
+                correct: 1,
+                explanation: "Remote pilots should review firmware update release notes to understand what changes are included. Safety-critical updates should be applied, but it is best practice to test the updated UAS in a non-operational environment before relying on it for an important flight. Applying an untested update immediately before a critical operation introduces unnecessary risk."
+            },
+            {
+                category: "Maintenance & Preflight",
+                question: "What is the purpose of checking propellers during pre-flight inspection?",
+                options: [
+                    "To verify propellers are spinning at the correct RPM before takeoff",
+                    "To identify cracks, chips, delamination, or other damage that could cause in-flight failure",
+                    "Propeller inspection is only required after a crash, not during routine pre-flight",
+                    "To ensure propellers are painted with high-visibility markings"
+                ],
+                correct: 1,
+                explanation: "Damaged propellers are a leading cause of UAS accidents and flyaways. Cracks, chips, delamination, nicks, or warping can cause vibration, reduced thrust, or catastrophic propeller failure during flight. Remote pilots must carefully inspect each propeller before every flight and replace any that show signs of damage, regardless of how minor the damage appears."
+            },
+
+            // Additional Decision Making Questions
+            {
+                category: "Decision Making",
+                question: "A remote pilot is operating near a school and notices children gathering in the planned flight path. What is the most appropriate action?",
+                options: [
+                    "Continue the flight but increase altitude to remain above the children",
+                    "Proceed since Part 107 allows flight over non-participating persons",
+                    "Immediately land or divert to avoid flight over the gathering until the area is clear",
+                    "Reduce speed and continue at minimum altitude to minimize risk"
+                ],
+                correct: 2,
+                explanation: "Under Part 107, a remote PIC must not operate a small UAS in a careless or reckless manner that endangers people. Children gathering unexpectedly in the flight path represents a safety hazard that did not exist during pre-flight planning. The correct action is to immediately land or divert the aircraft away from the area until the hazard is resolved—prioritizing safety over mission completion."
+            },
+            {
+                category: "Decision Making",
+                question: "What concept describes the tendency to continue on a planned course of action despite evidence that it should be changed?",
+                options: [
+                    "Spatial disorientation",
+                    "Get-there-itis (or plan continuation bias)",
+                    "Scud running",
+                    "Target fixation"
+                ],
+                correct: 1,
+                explanation: "Get-there-itis (plan continuation bias) is a form of hazardous attitude where a pilot continues with a planned mission despite clear evidence that it should be modified or aborted. It is a common cause of accidents. Remote pilots must recognize this tendency and be willing to postpone or cancel operations when conditions change, even if it means disappointing a client or losing income."
+            },
+            {
+                category: "Decision Making",
+                question: "Under the DECIDE model for aeronautical decision making, what does the first 'D' stand for?",
+                options: [
+                    "Delay the decision until more information is available",
+                    "Detect that a problem or change exists",
+                    "Determine the best available option",
+                    "Designate a visual observer to assist"
+                ],
+                correct: 1,
+                explanation: "The DECIDE model is a structured decision-making process: Detect (recognize that a change or problem exists), Estimate (assess the urgency and nature of the problem), Choose (select an outcome to achieve), Identify (list possible actions), Do (execute the chosen action), Evaluate (determine if the action resolved the problem). Detecting a problem early allows more time for effective decision making."
+            },
+
+            // Additional Emergency Procedures Questions
+            {
+                category: "Emergency Procedures",
+                question: "A remote pilot loses visual contact with their UAS during a flight. What is the correct immediate action?",
+                options: [
+                    "Activate the return-to-home function and wait for the aircraft to land",
+                    "Continue the mission using FPV goggles to maintain situational awareness",
+                    "Immediately cease operations and attempt to regain visual contact or activate return-to-home",
+                    "Notify ATC and ask for radar assistance locating the aircraft"
+                ],
+                correct: 2,
+                explanation: "Maintaining visual line of sight (VLOS) with the UAS is a core requirement of Part 107. If visual contact is lost, the remote PIC must immediately attempt to regain VLOS and may activate return-to-home as a safety measure. Continuing flight without VLOS violates Part 107.31 unless a waiver has been granted. FPV goggles do not substitute for VLOS under standard Part 107."
+            },
+            {
+                category: "Emergency Procedures",
+                question: "What is a 'flyaway' and how should a remote pilot respond?",
+                options: [
+                    "A planned long-range flight mission; respond by activating extended range mode",
+                    "An uncommanded aircraft departure where the UAS fails to respond to control inputs; respond by activating fail-safe and alerting people in the area",
+                    "A voluntary fly-away from the operating area; no special response is required",
+                    "A weather avoidance maneuver; respond by increasing altitude to clear obstacles"
+                ],
+                correct: 1,
+                explanation: "A flyaway occurs when a UAS fails to respond to pilot inputs and departs the operating area on its own—often due to GPS errors, compass interference, or software/hardware failures. The remote PIC should immediately activate any fail-safe or return-to-home function, alert people in the flight path, and be prepared to report the accident to the FAA if the aircraft causes damage or injury. Prevention includes thorough pre-flight checks and compass calibration."
+            },
+            {
+                category: "Emergency Procedures",
+                question: "What should a remote pilot do if the UAS experiences a low-battery warning during flight?",
+                options: [
+                    "Immediately execute an emergency landing at the closest safe location",
+                    "Continue the mission as the warning is a conservative estimate with a significant safety margin",
+                    "Increase throttle to complete the mission faster before the battery depletes",
+                    "Switch to manual mode to reduce power consumption"
+                ],
+                correct: 0,
+                explanation: "When a low-battery warning activates, the remote PIC should immediately begin landing at the nearest safe location. Many UAS have multiple battery warning levels, but pilots should not rely on minimum safe battery reserves being available. Pushing the battery past the warning risks an unexpected power-off mid-flight. The remote PIC is responsible for planning flights so the battery level never reaches the warning stage during normal operations."
             }
         ];
 

@@ -6,7 +6,7 @@ A comprehensive, interactive HTML-based study guide to help you pass the FAA Par
 
 This study guide provides a game-formatted multiple choice question test covering all topics required for the Part 107 exam. It features:
 
-- **177 comprehensive questions** covering all exam topics (NEW: 10+ advanced chart interpretation questions added)
+- **192 comprehensive questions** covering all exam topics (NEW: 10+ advanced chart interpretation questions added)
 - **Interactive multiple choice format** with instant feedback
 - **Encouraging feedback system** that shows correct information on wrong answers
 - **Progress tracking** with live scoring
@@ -15,7 +15,7 @@ This study guide provides a game-formatted multiple choice question test coverin
 - **⏱️ Exam Simulator Mode** - Full 2-hour timed test mimicking real exam conditions with pause/resume
 - **⏸️ Timer Pause/Resume** - Pause and resume the exam timer at any time during practice
 - **🔊 Sound Effects** - Optional audio feedback for answers, streaks, and bookmarks (toggleable)
-- **📝 Flexible Quiz Lengths** - Choose from 20, 30, 45, 60, or all 177 questions
+- **📝 Flexible Quiz Lengths** - Choose from 20, 30, 45, 60, or all 192 questions
 - **⏱️ Time-per-Question Analytics** - Track and display average time spent on each question
 - **💾 Progress Persistence** - Automatically saves your progress; pick up where you left off
 - **⌨️ Keyboard Navigation** - Use A/B/C/D keys to answer, arrow keys to navigate
@@ -137,11 +137,12 @@ This section is displayed on the start screen before you begin studying, so you 
 - **Clear feedback** - Toast notification tells you exactly which categories and how many questions you'll practice
 - **No wasted time** - Skips categories you already know; focuses effort where it counts
 
-### 📚 Expanded Question Bank (162 → 177 questions)
-- **3 new Decision Making questions** - Hazardous attitudes (invulnerability, macho, anti-authority), IMSAFE personal fitness checklist, and real-world go/no-go decision scenarios
-- **2 new Night Operations questions** - Anti-collision lighting requirements (3 statute mile visibility) and visual hazards during low-light operations
-- **2 new Radio & Airport Operations questions** - CTAF monitoring near uncontrolled airports and ATIS broadcast content
-- **3 new Operations Over People questions** - Moving vehicle rules across all categories, Declaration of Compliance requirements, and Category 4 airworthiness certificate mandate
+### 📚 Expanded Question Bank (177 → 192 questions)
+- **3 new Weather questions** - METAR reports, temperature-dew point spread (fog risk), TAF vs METAR differences
+- **3 new Regulations questions** - Accident reporting requirements, Part 107.51 operating limitations, waiver requirements
+- **3 new Maintenance & Preflight questions** - Pre-flight checklist purpose, firmware update best practices, propeller inspection
+- **3 new Decision Making questions** - Hazardous crowd avoidance, get-there-itis/plan continuation bias, DECIDE model
+- **3 new Emergency Procedures questions** - VLOS loss procedures, flyaway response, low-battery emergency landing
 
 ### ⏱️ Study Time Tracking
 - **Automatic time tracking** - Monitors your total study time across all sessions
@@ -273,7 +274,7 @@ This section is displayed on the start screen before you begin studying, so you 
 - **Short Test** - 30 questions for focused study
 - **Practice Test** - 45 questions for intermediate practice
 - **Exam Length** - 60 questions matching actual FAA exam
-- **Full Quiz** - All 177 questions for comprehensive review
+- **Full Quiz** - All 192 questions for comprehensive review
 - Perfect for time-constrained study sessions
 
 ### 📖 Practice Mode
@@ -503,7 +504,7 @@ This study guide has been carefully designed to ensure **complete coverage** of 
 ✅ **Chart Supplement** - NEW! Airport data, frequencies, and facility information  
 ✅ **Airspace Symbols & Legends** - NEW! Complete chart symbology and boundary recognition
 
-### Question Distribution (177 Total Questions)
+### Question Distribution (192 Total Questions)
 - **Airspace Classification & Chart Reading**: 40 questions (SIGNIFICANTLY EXPANDED - now includes:
   - Comprehensive sectional chart interpretation with visual diagrams
   - Chart legends and symbology with scenario-based problems
@@ -511,15 +512,15 @@ This study guide has been carefully designed to ensure **complete coverage** of 
   - Advanced altitude calculations (MSL↔AGL conversions, obstacle clearance)
   - Special use airspace (Restricted Areas, Warning Areas, Alert Areas, MOAs)
   - Practical chart reading scenarios matching real FAA exam questions)
-- **Weather Theory**: 19 questions (expanded with METAR, TAF, thunderstorms, density altitude)
-- **Regulations & Operating Requirements**: 22 questions (expanded with Remote ID, renewals, age requirements, recurrent training)
-- **Decision Making**: 10 questions (expanded with hazardous attitudes, IMSAFE checklist)
+- **Weather Theory**: 22 questions (expanded with METAR, TAF, thunderstorms, density altitude, temperature-dew point spread)
+- **Regulations & Operating Requirements**: 25 questions (expanded with Remote ID, renewals, age requirements, recurrent training, accident reporting, waivers)
+- **Decision Making**: 13 questions (expanded with hazardous attitudes, IMSAFE checklist, DECIDE model, plan continuation bias)
 - **Operations**: 10 questions (expanded with VLOS, distance requirements)
 - **Loading & Performance**: 11 questions (expanded with stall speed, weight effects)
-- **Emergency Procedures**: 11 questions (comprehensive scenarios)
+- **Emergency Procedures**: 14 questions (comprehensive scenarios, flyaways, VLOS loss, low battery)
 - **Crew Resource Management**: 12 questions (expanded with authority gradient, fatigue, VO roles, situational awareness, client pressure)
 - **Radio & Airport Operations**: 10 questions (expanded with CTAF monitoring, ATIS)
-- **Maintenance & Preflight**: 10 questions (expanded with LiPo storage, firmware, compass cal)
+- **Maintenance & Preflight**: 13 questions (expanded with LiPo storage, firmware, compass cal, propeller inspection, checklists)
 - **Night Operations**: 12 questions (complete lighting, visibility, physiological challenges, and visual hazard coverage)
 - **Operations Over People**: 10 questions (all categories, moving vehicle rules, DoC requirements)
 
